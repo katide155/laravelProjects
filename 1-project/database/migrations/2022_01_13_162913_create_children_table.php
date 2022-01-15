@@ -20,8 +20,10 @@ class CreateChildrenTable extends Migration
 			$table->string('child_group_id');
 			$table->string('child_parents_email');
 			$table->string('child_parents_telno');
-			$table->string('child_birthdate');
+			$table->date('child_birthdate');
+			$table->date('deleted_at')->nullable()->default(null);;
             $table->timestamps();
+			
         });
     }
 

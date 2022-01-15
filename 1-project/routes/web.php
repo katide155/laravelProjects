@@ -26,10 +26,26 @@ Route::get('/contact', function () {
 });
 
 Route::prefix('children')->group(function(){
-	Route::get('', 'App\Http\Controllers\ChildController@index')->name('children.index');
-	Route::get('create', 'App\Http\Controllers\ChildController@create')->name('children.create');
-	Route::post('store', 'App\Http\Controllers\ChildController@store')->name('children.store');
-	Route::get('edit', 'App\Http\Controllers\ChildController@edit')->name('children.edit');
+	//Index
+	Route::get('', 'App\Http\Controllers\ChildController@index')->name('child.index');
+	//create
+	Route::get('create', 'App\Http\Controllers\ChildController@create')->name('child.create');
+	Route::post('store', 'App\Http\Controllers\ChildController@store')->name('child.store');
+	//edit
+	Route::get('edit/{child}', 'App\Http\Controllers\ChildController@edit')->name('child.edit');
+	Route::post('update/{child}', 'App\Http\Controllers\ChildController@update')->name('child.update');
+	//delete
+	Route::post('destroy/{child}', 'App\Http\Controllers\ChildController@destroy')->name('child.destroy');
+	//show
+	Route::get('show/{child}', 'App\Http\Controllers\ChildController@show')->name('child.show');	
 });
 
-
+Route::prefix('groups')->group(function(){
+	//index
+	Route::get('', 'App\Http\Controllers\GroupController@index')->name('group.index');
+	//create
+	Route::get('create', 'App\Http\Controllers\GroupController@create')->name('group.create');
+	Route::post('store', 'App\Http\Controllers\GroupController@store')->name('group.store');
+	//edit
+	Route::get('edit/{group}', 'App\Http\Controllers\GroupController@edit')->name('group.edit');
+});

@@ -1,7 +1,9 @@
+<x-head />
+
 <div class="container">
 
 
-	<form action="{{route('children.store')}}" method="POST">
+	<form action="{{route('child.store')}}" method="POST">
 	  <div class="modal-body">
 		<div class="row g-3 align-items-center">
 		  <div class="col-2">
@@ -36,7 +38,7 @@
 				</select>
 			</div>
 		  <div class="col-4">
-			<button class="btn btn-success" type="button" name="" onclick="pop_up('groups.php?group_id=<?php  ?>')">Įvesti naują</button>
+			<button class="btn btn-success" type="button" name="" onclick="pop_up('{{route('group.create')}}')">Įvesti naują</button>
 		  </div>
 		</div>
 	  </div>
@@ -79,3 +81,5 @@
 
 
 </div>
+
+<x-bottom />

@@ -6,6 +6,7 @@ use App\Models\Child;
 use App\Http\Requests\StoreChildRequest;
 use App\Http\Requests\UpdateChildRequest;
 use Illuminate\Http\Request;
+use App\Models\Group;
 
 class ChildController extends Controller
 {
@@ -17,7 +18,8 @@ class ChildController extends Controller
     public function index()
     {
 		$children = Child::all();
-		return view('children.index', ['children'=>$children]);
+		$groups = Group::all();
+		return view('children.index', ['children'=>$children],['groups'=>$groups]);
     }
 
     /**
@@ -45,9 +47,10 @@ class ChildController extends Controller
 		$child->child_parents_email = $request->child_parents_email;
 		$child->child_parents_telno = $request->child_parents_telno;
 		$child->child_birthdate = $request->child_birthdate;
+		$child->deleted_at = null;
 		
 		$child->save();
-		return redirect()->route('children.index');
+		return redirect()->route('child.index');
     }
 
     /**
@@ -58,7 +61,7 @@ class ChildController extends Controller
      */
     public function show(Child $child)
     {
-        //
+        return view('children.show', ['child'=>$child]);
     }
 
     /**
@@ -69,7 +72,7 @@ class ChildController extends Controller
      */
     public function edit(Child $child)
     {
-        return view('children.edit');
+        return view('children.edit', ['child'=>$child]);
     }
 
     /**
@@ -79,9 +82,19 @@ class ChildController extends Controller
      * @param  \App\Models\Child  $child
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateChildRequest $request, Child $child)
+    public function update(Request $request, Child $child)
     {
-        //
+		
+		$child->child_name = $request->child_name;
+		$child->child_surname = $request->child_surname;
+		$child->child_group_id = $request->child_group_id;
+		$child->child_parents_email = $request->child_parents_email;
+		$child->child_parents_telno = $request->child_parents_telno;
+		$child->child_birthdate = $request->child_birthdate;
+		$child->deleted_at = null;
+		
+		$child->save();
+		return redirect()->route('child.index');
     }
 
     /**
@@ -92,6 +105,7 @@ class ChildController extends Controller
      */
     public function destroy(Child $child)
     {
-        //
+        $child->delete();
+		return redirect()->route('child.index');
     }
 }
