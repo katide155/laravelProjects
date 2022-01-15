@@ -14,7 +14,12 @@ class ClientFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'client_name' => $this->faker->firstName(),
+			'client_surname' => $this->faker->lastName(),
+			'client_username' => $this->faker->userName(),
+			'client_company_id' => $this->faker->randomDigitNotNull(1,3),
+			'client_image_url' => $this->faker->url(),
+          
         ];
     }
 }

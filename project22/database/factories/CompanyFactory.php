@@ -13,8 +13,11 @@ class CompanyFactory extends Factory
      */
     public function definition()
     {
-        return [
-            //
+         return [
+            'company_name' => $this->faker->company(),
+			'company_type' => $this->faker->randomLetter(),
+			'company_description' => $this->faker->word(),
+         
         ];
     }
 }
