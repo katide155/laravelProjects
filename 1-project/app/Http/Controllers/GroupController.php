@@ -27,6 +27,7 @@ class GroupController extends Controller
      */
     public function create()
     {
+		$groups = Group::all();
         return view('groups.create');
     }
 
@@ -55,7 +56,7 @@ class GroupController extends Controller
      */
     public function show(Group $group)
     {
-        //
+        return view('groups.show', ['group'=>$group]);
     }
 
     /**
@@ -66,7 +67,8 @@ class GroupController extends Controller
      */
     public function edit(Group $group)
     {
-        return view('groups.edit');
+		
+        return view('groups.edit', ['group'=>$group]);
     }
 
     /**
@@ -76,9 +78,14 @@ class GroupController extends Controller
      * @param  \App\Models\Group  $group
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateGroupRequest $request, Group $group)
+    public function update(Request $request, Group $group)
     {
-        //
+       	$group->group_title = $request->group_title;
+		$group->group_number = $request->group_number;
+		//$group->deleted_at = null;
+		
+		$group->save();
+		return redirect()->route('group.index');
     }
 
     /**
@@ -89,6 +96,7 @@ class GroupController extends Controller
      */
     public function destroy(Group $group)
     {
-        //
+        $group->delete();
+		return redirect()->route('group.index');
     }
 }

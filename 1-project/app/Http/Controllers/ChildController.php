@@ -29,7 +29,8 @@ class ChildController extends Controller
      */
     public function create()
     {
-        return view('children.create');
+		$groups = Group::all();
+        return view('children.create',['groups'=>$groups]);
     }
 
     /**
@@ -61,7 +62,8 @@ class ChildController extends Controller
      */
     public function show(Child $child)
     {
-        return view('children.show', ['child'=>$child]);
+		$groups = Group::all();
+        return view('children.show', ['child'=>$child],['groups'=>$groups]);
     }
 
     /**
@@ -72,7 +74,8 @@ class ChildController extends Controller
      */
     public function edit(Child $child)
     {
-        return view('children.edit', ['child'=>$child]);
+		$groups = Group::all();
+        return view('children.edit', ['child'=>$child],['groups'=>$groups]);
     }
 
     /**

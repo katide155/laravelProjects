@@ -73,7 +73,7 @@ class ClientController extends Controller
     public function edit(Client $client)
     {
 		
-		$companies = Company::all();
+        $companies = Company::all();
         return view('clients.edit', ['client'=>$client],['companies'=>$companies]);
     }
 

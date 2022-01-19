@@ -2,11 +2,15 @@
 
 <div class="container">
 
-
+  <div class="modal-dialog modal-dialog-centered">
+	<div class="modal-content">
+	  <div class="modal-header">
+		<h5 class="modal-title" id="exampleModalLabel">Grupės duomenys</h5>
+	  </div>
 	<form action="{{route('group.store')}}" method="POST">
 	  <div class="modal-body">
 		<div class="row g-3 align-items-center">
-		  <div class="col-2">
+		  <div class="col-4">
 			<label for="group_title" class="col-form-label">Grupės pavadinimas</label>
 		  </div>
 		  <div class="col-6">
@@ -16,7 +20,7 @@
 	  </div>
 	  <div class="modal-body">
 		<div class="row g-3 align-items-center">
-		  <div class="col-2">
+		  <div class="col-4">
 			<label for="group_number" class="col-form-label">Grupės numeris</label>
 		  </div>
 		  <div class="col-6">
@@ -27,11 +31,12 @@
 
 	@csrf  
 	  <div class="modal-footer">
-		<button type="button" class="btn btn-secondary">Uždaryti</button>
+		<a class="btn btn-secondary" href="{{route('group.index')}}">Grįžti</a>
 		<button class="btn btn-success" type="submit" name="save_group">Saugoti</button>
 	  </div>
 	</form>
-
+</div>
+</div>
 
 </div>
 

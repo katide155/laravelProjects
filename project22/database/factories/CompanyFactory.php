@@ -17,7 +17,6 @@ class CompanyFactory extends Factory
             'company_name' => $this->faker->company(),
 			'company_type' => $this->faker->randomLetter(),
 			'company_description' => $this->faker->word(),
-         
         ];
     }
 }

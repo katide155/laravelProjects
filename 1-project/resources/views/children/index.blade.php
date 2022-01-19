@@ -28,7 +28,7 @@
 				<th style="width: 200px;">Tėvų e. pašto adresas</th>
 				<th style="width: 200px;">Tėvų tel. Nr.</th>
 				<th style="width: 200px;">Vaiko gimimo diena</th>
-				<th style="width: 110px;">
+				<th style="width: 180px;">
 					<button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal">Pridėti vaiką</button>
 				</th>
 			  </tr>
@@ -55,13 +55,15 @@
 				<td style="text-align: right;">{{$child->child_parents_telno}}</td>
 				<td style="text-align: right;">{{$child->child_birthdate}}</td>
 				<td style="text-align: right;">
-					<a class="btn btn-success" href="{{route('child.edit',[$child])}}">edit</a>
+					<a class="btn btn-success dbfl" href="{{route('child.edit',[$child])}}">edit</a>
 					<!--<button type="button" class="btn btn-success" data-bs-id="1" data-bs-toggle="modal" data-bs-target="#exampleModal">red</button>-->
-					<form method="post" action="{{route('child.destroy',[$child])}}">
-						@csrf
-						<button type="submit" name="delete_child" class="btn btn-danger"><b>-</b></button>
-					</form>
-					<a class="btn btn-primary" href="{{route('child.show',[$child])}}">rod</a>
+					<div class="dbfl">
+						<form method="post" action="{{route('child.destroy',[$child])}}">
+							@csrf
+							<button type="submit" name="delete_child" class="btn btn-danger"><b>-</b></button>
+						</form>
+					</div>
+					<a class="btn btn-primary dbfl" href="{{route('child.show',[$child])}}">rod</a>
 				</td>
 			  </tr>
 			  
@@ -161,7 +163,8 @@
 				window.open(url, "_blank", "toolbar=yes,scrollbars=yes,resizable=yes,top=200,left=500,width=1000,height=600", true); 
 			}
 			</script>
-
+		</div>
+	</div>	
 
 		</div>
 	</div>	

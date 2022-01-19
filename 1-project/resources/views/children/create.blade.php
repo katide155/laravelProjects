@@ -2,7 +2,11 @@
 
 <div class="container">
 
-
+  <div class="modal-dialog modal-dialog-centered">
+	<div class="modal-content">
+	  <div class="modal-header">
+		<h5 class="modal-title" id="exampleModalLabel">Vaiko duomenys</h5>
+	  </div>
 	<form action="{{route('child.store')}}" method="POST">
 	  <div class="modal-body">
 		<div class="row g-3 align-items-center">
@@ -31,10 +35,9 @@
 		  </div>
 			<div class="col-6">
 				<select class="form-select" aria-label=".form-select-sm example" name="child_group_id">
-					<option selected value="0">Grupės pavadinimas</option>
-					<option selected value="1">Nykstukai</option>
-					<option selected value="2">Pelėdžiukai</option>
-					<option selected value="3">Giliukai</option>
+					@foreach ($groups as $group)
+						<option value="{{$group->id}}">{{$group->group_title}}</option>
+					@endforeach
 				</select>
 			</div>
 		  <div class="col-4">
@@ -74,12 +77,18 @@
 	  </div>
 	@csrf  
 	  <div class="modal-footer">
-		<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Uždaryti</button>
+		<a class="btn btn-secondary" href="{{route('child.index')}}">Grįžti</a>
 		<button class="btn btn-success" type="submit" name="save_child">Saugoti</button>
 	  </div>
 	</form>
-
-
+	
+				<script>
+			function pop_up(url){
+				window.open(url, "_blank", "toolbar=yes,scrollbars=yes,resizable=yes,top=200,left=500,width=1000,height=600", true); 
+			}
+			</script>
+</div>
+</div>
 </div>
 
 <x-bottom />

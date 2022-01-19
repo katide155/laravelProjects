@@ -41,11 +41,16 @@ Route::prefix('children')->group(function(){
 });
 
 Route::prefix('groups')->group(function(){
-	//index
+	//Index
 	Route::get('', 'App\Http\Controllers\GroupController@index')->name('group.index');
 	//create
 	Route::get('create', 'App\Http\Controllers\GroupController@create')->name('group.create');
 	Route::post('store', 'App\Http\Controllers\GroupController@store')->name('group.store');
 	//edit
 	Route::get('edit/{group}', 'App\Http\Controllers\GroupController@edit')->name('group.edit');
+	Route::post('update/{group}', 'App\Http\Controllers\GroupController@update')->name('group.update');
+	//delete
+	Route::post('destroy/{group}', 'App\Http\Controllers\GroupController@destroy')->name('group.destroy');
+	//show
+	Route::get('show/{group}', 'App\Http\Controllers\GroupController@show')->name('group.show');
 });
