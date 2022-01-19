@@ -27,7 +27,13 @@ class CompanyController extends Controller
      */
     public function create()
     {
-        return view('companies.create');
+		$select_values = [];
+		
+		for($i=1; $i<=250;$i++){
+			$select_values[] = $i;
+		}
+		
+        return view('companies.create', ['select_values' => $select_values]);
     }
 
     /**

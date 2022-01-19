@@ -74,7 +74,7 @@ class ClientController extends Controller
     {
 		
         $companies = Company::all();
-        return view('clients.edit', ['client'=>$client],['companies'=>$companies]);
+        return view('clients.edit', ['client'=>$client, 'companies'=>$companies]);
     }
 
     /**
