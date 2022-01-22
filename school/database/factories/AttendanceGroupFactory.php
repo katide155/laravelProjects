@@ -6,6 +6,21 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 
 class AttendanceGroupFactory extends Factory
 {
+	
+	public function groupDifficultyLevel(){
+		
+		$level = array(
+			 'Begginer',
+			  'Middle',
+			 'Advanced'
+		);
+
+		$getRandLevel = array_rand($level,1);
+		
+		return $level[$getRandLevel];
+	}
+	
+	
     /**
      * Define the model's default state.
      *
@@ -16,7 +31,7 @@ class AttendanceGroupFactory extends Factory
         return [
             'attendance_group_name' => $this->faker->lexify('???? group'),
 			'attendance_group_description' => $this->faker->paragraph(15),
-			'attendance_group_difficulty' => $this->faker->randomElements(['Hard', 'Middle', 'Easy']),
+			'attendance_group_difficulty' => $this->groupDifficultyLevel(),
 			'attendance_group_school_id' => rand(1,15),
         ];
     }

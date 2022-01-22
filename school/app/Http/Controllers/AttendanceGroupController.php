@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\AttendanceGroup;
+use App\Models\School;
 use App\Http\Requests\StoreAttendanceGroupRequest;
 use App\Http\Requests\UpdateAttendanceGroupRequest;
+use Illuminate\Http\Request;
 
 class AttendanceGroupController extends Controller
 {
@@ -15,7 +17,9 @@ class AttendanceGroupController extends Controller
      */
     public function index()
     {
-        //
+		$attendanceGroups = AttendanceGroup::all();
+		$schools = School::all();
+		return view('attendance-groups.index', ['attendanceGroups'=>$attendanceGroups],['schools' => $schools]);
     }
 
     /**
@@ -25,7 +29,8 @@ class AttendanceGroupController extends Controller
      */
     public function create()
     {
-        //
+		$schools = School::all();
+        return view('attendance-groups.create', ['schools' => $schools]);
     }
 
     /**
@@ -34,9 +39,16 @@ class AttendanceGroupController extends Controller
      * @param  \App\Http\Requests\StoreAttendanceGroupRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreAttendanceGroupRequest $request)
+    public function store(Request $request)
     {
-        //
+        $attendanceGroup = new AttendanceGroup;
+		$attendanceGroup->attendance_group_name = $request->attendance_group_name;
+		$attendanceGroup->attendance_group_description = $request->attendance_group_description;
+		$attendanceGroup->attendance_group_difficulty = $request->attendance_group_difficulty;
+		$attendanceGroup->attendance_group_school_id = $request->attendance_group_school_id;
+		
+		$attendanceGroup->save();
+		return redirect()->route('attendancegroup.index');
     }
 
     /**

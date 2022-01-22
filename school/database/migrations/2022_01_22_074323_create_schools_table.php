@@ -18,7 +18,7 @@ class CreateSchoolsTable extends Migration
 			$table->string('school_name');
 			$table->longText('school_description');
 			$table->string('school_place');
-			$table->unsignedBigInteger('school_phone');
+			$table->string('school_phone');
             $table->timestamps();
         });
     }

@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use App\Models\AttendanceGroup;
 
 class AttendanceGroupSeeder extends Seeder
 {
@@ -13,6 +14,8 @@ class AttendanceGroupSeeder extends Seeder
      */
     public function run()
     {
-        //
+            AttendanceGroup::factory()
+            ->count(30)
+            ->create();
     }
 }

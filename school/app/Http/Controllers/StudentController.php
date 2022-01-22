@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Student;
 use App\Http\Requests\StoreStudentRequest;
 use App\Http\Requests\UpdateStudentRequest;
+use Illuminate\Http\Request;
+use App\Models\AttendanceGroup;
 
 class StudentController extends Controller
 {
@@ -15,7 +17,9 @@ class StudentController extends Controller
      */
     public function index()
     {
-        //
+		$students = Student::all();
+		$attendanceGroups = AttendanceGroup::all();
+		return view('students.index', ['students'=>$students],['attendanceGroups'=>$attendanceGroups]);
     }
 
     /**
@@ -25,7 +29,8 @@ class StudentController extends Controller
      */
     public function create()
     {
-        //
+		$attendanceGroups = AttendanceGroup::all();
+        return view('students.create',['attendanceGroups'=>$attendanceGroups]);
     }
 
     /**
@@ -34,9 +39,16 @@ class StudentController extends Controller
      * @param  \App\Http\Requests\StoreStudentRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreStudentRequest $request)
+    public function store(Request $request)
     {
-        //
+        $student = new Student;
+		$student->student_name = $request->student_name;
+		$student->student_surname = $request->student_surname;
+		$student->student_attendance_group_id = $request->student_attendance_group_id;
+		$student->student_image_url = $request->student_image_url;
+		
+		$student->save();
+		return redirect()->route('student.index');
     }
 
     /**
@@ -47,7 +59,8 @@ class StudentController extends Controller
      */
     public function show(Student $student)
     {
-        //
+		$attendanceGroups = AttendanceGroup::all();
+        return view('students.show', ['student'=>$student],['attendanceGroups'=>$attendanceGroups]);
     }
 
     /**
@@ -58,7 +71,8 @@ class StudentController extends Controller
      */
     public function edit(Student $student)
     {
-        //
+		$attendanceGroups = AttendanceGroup::all();
+        return view('students.edit', ['student'=>$student],['attendanceGroups'=>$attendanceGroups]);
     }
 
     /**
@@ -68,9 +82,15 @@ class StudentController extends Controller
      * @param  \App\Models\Student  $student
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateStudentRequest $request, Student $student)
+    public function update(Request $request, Student $student)
     {
-        //
+		$student->student_name = $request->student_name;
+		$student->student_surname = $request->student_surname;
+		$student->student_attendance_group_id = $request->student_attendance_group_id;
+		$student->student_image_url = $request->student_image_url;
+		
+		$student->save();
+		return redirect()->route('student.index');
     }
 
     /**
@@ -81,6 +101,7 @@ class StudentController extends Controller
      */
     public function destroy(Student $student)
     {
-        //
+        $student->delete();
+		return redirect()->route('student.index');
     }
 }
