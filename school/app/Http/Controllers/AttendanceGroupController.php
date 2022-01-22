@@ -10,6 +10,11 @@ use Illuminate\Http\Request;
 
 class AttendanceGroupController extends Controller
 {
+	
+	public function groupDifficultyLevels(){
+		$levels = array('Begginer','Middle','Advanced');
+		return $levels;
+	}
     /**
      * Display a listing of the resource.
      *
@@ -17,9 +22,10 @@ class AttendanceGroupController extends Controller
      */
     public function index()
     {
+		$levels = $this->groupDifficultyLevels();
 		$attendanceGroups = AttendanceGroup::all();
 		$schools = School::all();
-		return view('attendance-groups.index', ['attendanceGroups'=>$attendanceGroups],['schools' => $schools]);
+		return view('attendance-groups.index', ['attendanceGroups'=>$attendanceGroups,'schools' => $schools, 'levels' => $levels]);
     }
 
     /**
@@ -29,8 +35,9 @@ class AttendanceGroupController extends Controller
      */
     public function create()
     {
+		$levels = $this->groupDifficultyLevels();
 		$schools = School::all();
-        return view('attendance-groups.create', ['schools' => $schools]);
+        return view('attendance-groups.create', ['schools' => $schools, 'levels' => $levels]);
     }
 
     /**
@@ -59,7 +66,9 @@ class AttendanceGroupController extends Controller
      */
     public function show(AttendanceGroup $attendanceGroup)
     {
-        //
+		$levels = $this->groupDifficultyLevels();
+		$schools = School::all();
+        return view('attendance-groups.show', ['attendanceGroup'=>$attendanceGroup, 'schools' => $schools, 'levels' => $levels]);
     }
 
     /**
@@ -70,7 +79,9 @@ class AttendanceGroupController extends Controller
      */
     public function edit(AttendanceGroup $attendanceGroup)
     {
-        //
+		$levels = $this->groupDifficultyLevels();
+		$schools = School::all();
+        return view('attendance-groups.edit', ['attendanceGroup'=>$attendanceGroup, 'schools' => $schools, 'levels' => $levels]);
     }
 
     /**
@@ -80,9 +91,15 @@ class AttendanceGroupController extends Controller
      * @param  \App\Models\AttendanceGroup  $attendanceGroup
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateAttendanceGroupRequest $request, AttendanceGroup $attendanceGroup)
+    public function update(Request $request, AttendanceGroup $attendanceGroup)
     {
-        //
+		$attendanceGroup->attendance_group_name = $request->attendance_group_name;
+		$attendanceGroup->attendance_group_description = $request->attendance_group_description;
+		$attendanceGroup->attendance_group_difficulty = $request->attendance_group_difficulty;
+		$attendanceGroup->attendance_group_school_id = $request->attendance_group_school_id;
+		
+		$attendanceGroup->save();
+		return redirect()->route('attendancegroup.index');
     }
 
     /**
@@ -93,6 +110,11 @@ class AttendanceGroupController extends Controller
      */
     public function destroy(AttendanceGroup $attendanceGroup)
     {
-        //
+		$students = $attendanceGroup->attendanceGroupStudents;
+		if(count($students) != 0){
+			return redirect()->route('attendancegroup.index')->with('error_message', 'Trinti negalima, grupė turi studentų');
+		}
+        $attendanceGroup->delete();
+		return redirect()->route('attendancegroup.index')->with('success_message', 'Sėkmingai ištrinta');
     }
 }
