@@ -15,8 +15,8 @@ class CompanyFactory extends Factory
     {
          return [
             'company_name' => $this->faker->company(),
-			'company_type' => $this->faker->randomLetter(),
-			'company_description' => $this->faker->word(),
+			'company_type_id' => rand(1,2),
+			'company_description' => $this->faker->paragraph(15),
         ];
     }
 }

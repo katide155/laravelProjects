@@ -46,3 +46,34 @@ Route::prefix('companies')->group(function(){
 	//show
 	Route::get('show/{company}', 'App\Http\Controllers\CompanyController@show')->name('company.show');	
 });
+
+Route::prefix('companies-types')->group(function(){
+	//Index
+	Route::get('', 'App\Http\Controllers\CompanyTypeController@index')->name('companytype.index');
+	//create
+	Route::get('create', 'App\Http\Controllers\CompanyTypeController@create')->name('companytype.create');
+	Route::post('store', 'App\Http\Controllers\CompanyTypeController@store')->name('companytype.store');
+	//edit
+	Route::get('edit/{companyType}', 'App\Http\Controllers\CompanyTypeController@edit')->name('companytype.edit');
+	Route::post('update/{companyType}', 'App\Http\Controllers\CompanyTypeController@update')->name('companytype.update');
+	//delete
+	Route::post('destroy/{companyType}', 'App\Http\Controllers\CompanyTypeController@destroy')->name('companytype.destroy');
+	//show
+	Route::get('show/{companyType}', 'App\Http\Controllers\CompanyTypeController@show')->name('companytype.show');	
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

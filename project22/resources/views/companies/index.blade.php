@@ -5,6 +5,17 @@
 			<h2>Kompanijų sąrašas</h2>
 		</div>
 	</div>
+	
+	@if(session()->has('error_message'))
+		<div class="alert alert-danger">
+			{{session()->get('error_message')}}
+		</div>
+	@endif
+	@if(session()->has('success_message'))
+		<div class="alert alert-success">
+			{{session()->get('success_message')}}
+		</div>
+	@endif
 	<div class="row">
 		
 		<div class="col-12">
@@ -18,6 +29,7 @@
 				<th style="width: 200px;">Kompanijos pavadinimas</th>
 				<th style="width: 200px;">Kompanijos tipas</th>
 				<th >Kompanijos aprašymas</th>
+				<th >Kompanijos klientų kiekis</th>
 				<th style="width: 180px;">
 					<button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal">Pridėti kompaniją</button>
 				</th>
@@ -29,8 +41,9 @@
 			  <tr>
 				<td>{{ $i++; }}</td>
 				<td style="text-align: left;">{{$company->company_name}}</td>
-				<td style="text-align: left;">{{$company->company_type}}</td>
+				<td style="text-align: left;">{{$company->companyType->company_type_short_name}}</td>
 				<td style="text-align: left;">{{$company->company_description}}</td>
+				<td>{{count($company->companyClients)}}</td>
 				<td style="text-align: right;">
 					<a class="btn btn-success dbfl" href="{{route('company.edit',[$company])}}">edit</a>
 					<div class="dbfl">
@@ -71,7 +84,11 @@
 								<label for="company_type" class="col-form-label">Kompanijos tipas</label>
 							  </div>
 							  <div class="col-6">
-								<input type="text" id="company_type" name="company_type" class="form-control">
+								<select class="form-select" aria-label=".form-select-sm example" name="company_type_id">
+								@foreach ($companiesTypes as $companyType)
+									<option value="{{$companyType->id}}">{{$companyType->company_type_name}}</option>
+								@endforeach
+								</select>
 							  </div>
 							</div>
 						  </div>

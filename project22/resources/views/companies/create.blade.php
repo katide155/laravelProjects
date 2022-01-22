@@ -24,7 +24,11 @@
 			<label for="company_type" class="col-form-label">Kompanijos tipas</label>
 		  </div>
 		  <div class="col-6">
-			<input type="text" id="company_type" name="company_type" class="form-control">
+			<select class="form-select" aria-label=".form-select-sm example" name="company_type_id">
+			@foreach ($companiesTypes as $companyType)
+				<option value="{{$companyType->id}}">{{$companyType->company_type_name}}</option>
+			@endforeach
+			</select>
 		  </div>
 		</div>
 	  </div>

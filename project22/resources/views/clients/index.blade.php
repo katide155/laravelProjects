@@ -43,11 +43,7 @@
 				<td style="text-align: left;">{{$client->client_surname}}</td>
 				<td style="text-align: right;">{{$client->client_username}}</td>
 				<td style="text-align: right;">
-				@foreach ($companies as $company)
-					@if($client->client_company_id == $company->id)
-						{{$company->company_name}}
-					@endif
-				@endforeach
+				{{$client->clientCompany->company_name}}
 				</td>
 				<td style="text-align: right;">{{$client->client_image_url}}</td>
 				<td style="text-align: right;">
