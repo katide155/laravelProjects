@@ -17,7 +17,7 @@ class ChildController extends Controller
      */
     public function index()
     {
-		$children = Child::all();
+		$children = Child::orderBy('child_surname')->get();
 		$groups = Group::all();
 		return view('children.index', ['children'=>$children],['groups'=>$groups]);
     }
@@ -109,6 +109,6 @@ class ChildController extends Controller
     public function destroy(Child $child)
     {
         $child->delete();
-		return redirect()->route('child.index');
+		return redirect()->route('child.index')->with('success_message', 'Sėkmingai ištrinta');
     }
 }

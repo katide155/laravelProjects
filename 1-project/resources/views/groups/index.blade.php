@@ -6,7 +6,16 @@
 		</div>
 	</div>
 	<div class="row">
-		
+		@if(session()->has('error_message'))
+		<div class="alert alert-danger">
+			{{session()->get('error_message')}}
+		</div>
+	@endif
+	@if(session()->has('success_message'))
+		<div class="alert alert-success">
+			{{session()->get('success_message')}}
+		</div>
+	@endif	
 		<div class="col-6">
 
 
@@ -18,7 +27,7 @@
 				<th style="width: 200px;">Grupės numeris</th>
 				<th>Grupės pavadinimas</th>
 				<th style="width: 180px;">
-					<button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal">Pridėti grupę</button>
+					<button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="clearValues()">Pridėti grupę</button>
 				</th>
 			  </tr>
 			</thead>
@@ -27,13 +36,13 @@
 			@foreach ($groups as $group)
 			  <tr>
 				<td>{{ $i++; }}</td>
-				<td style="text-align: center;">{{$group->group_number}}</td>
-				<td style="text-align: left;">{{$group->group_title}}</td>
+				<td style="text-align: center;"><div id="group_number_{{$group->id}}">{{$group->group_number}}</td>
+				<td style="text-align: left;"><div id="group_title_{{$group->id}}">{{$group->group_title}}</td>
 				<td style="text-align: center;">
-					<a class="btn btn-success dbfl" href="{{route('group.edit',[$group])}}">edit</a>
-					<!--<button type="button" class="btn btn-success" data-bs-id="1" data-bs-toggle="modal" data-bs-target="#exampleModal">red</button>-->
+					<!--<a class="btn btn-success dbfl" href="{{route('group.edit',[$group])}}">edit</a>-->
+					<button type="button" class="btn btn-success dbfl" data-bs-id="1" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="setIdToEdit({{$group->id}})">red</button>
 					<div class="dbfl">
-						<form method="post" action="{{route('group.destroy',[$group])}}">
+						<form method="post" action="{{route('group.destroy',[$group,$page='index'])}}">
 							@csrf
 							<button type="submit" name="delete_child" class="btn btn-danger"><b>-</b></button>
 						</form>
@@ -53,7 +62,7 @@
 						<h5 class="modal-title" id="exampleModalLabel">Grupės duomenys</h5>
 						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 					  </div>
-						<form action="{{route('group.store')}}" method="POST">
+						<form action="{{route('group.store')}}" method="POST" id="group_form">
 						  <div class="modal-body">
 							<div class="row g-3 align-items-center">
 							  <div class="col-4">
@@ -88,6 +97,27 @@
 			<script>
 			function pop_up(url){
 				window.open(url, "_blank", "toolbar=yes,scrollbars=yes,resizable=yes,top=200,left=500,width=1000,height=600", true); 
+			}
+			
+			
+			function clearValues(){
+				setElementValue('group_title', '');
+				setElementValue('group_number', '');
+				changeFormAction2('group_form');
+			}
+			
+
+			
+			function setIdToEdit(id){
+				
+				if(id){
+					let group_title = getElementInner('group_title_' + id);
+					setElementValue('group_title', group_title);
+					let group_number = getElementInner('group_number_' + id);
+					setElementValue('group_number', group_number);
+					changeFormAction2('group_form', id);
+				}
+				
 			}
 			</script>
 

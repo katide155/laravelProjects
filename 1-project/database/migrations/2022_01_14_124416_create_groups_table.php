@@ -16,8 +16,8 @@ class CreateGroupsTable extends Migration
         Schema::create('groups', function (Blueprint $table) {
             $table->id();
 			$table->string('group_title');
-			$table->string('group_number');
-			$table->date('deleted_at')->nullable()->default(null);;
+			$table->unsignedBigInteger('group_number');
+			$table->date('deleted_at')->nullable()->default(null);
             $table->timestamps();
 			
         });

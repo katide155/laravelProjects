@@ -15,7 +15,7 @@ class GroupFactory extends Factory
     {
         return [
             'group_title' => $this->faker->lexify('???????????'),
-			'group_number' => $this->faker->numberBetween(0, 15),
+			'group_number' => $this->faker->numberBetween(1, 5),
 			'deleted_at' => null,
         ];
     }

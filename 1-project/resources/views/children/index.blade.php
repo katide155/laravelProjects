@@ -8,6 +8,16 @@
 	<div class="row">
 		
 		<div class="col-12">
+			@if(session()->has('error_message'))
+		<div class="alert alert-danger">
+			{{session()->get('error_message')}}
+		</div>
+		@endif
+		@if(session()->has('success_message'))
+			<div class="alert alert-success">
+				{{session()->get('success_message')}}
+			</div>
+		@endif
 			
 			@if(count($children) == 0)
 				
@@ -29,7 +39,7 @@
 				<th style="width: 200px;">Tėvų tel. Nr.</th>
 				<th style="width: 200px;">Vaiko gimimo diena</th>
 				<th style="width: 180px;">
-					<button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal">Pridėti vaiką</button>
+					<button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="clearValues()">Pridėti vaiką</button>
 				</th>
 			  </tr>
 			</thead>
@@ -40,23 +50,24 @@
 			@foreach ($children as $child)
 			  <tr>
 				<td>{{ $i++; }}</td>
-				<td style="text-align: left;">{{$child->child_name}}</td>
-				<td style="text-align: left;">{{$child->child_surname}}</td>
+				<td style="text-align: left;"><div id="child_name_{{$child->id}}">{{$child->child_name}}</div></td>
+				<td style="text-align: left;"><div id="child_surname_{{$child->id}}">{{$child->child_surname}}</div></td>
 				
 				<td style="text-align: right;">
 				@foreach ($groups as $group)
 					@if($child->child_group_id == $group->id)
-						{{$group->group_title}}
+						<input type="hidden" id="child_group_id_{{$child->id}}" value="{{$child->child_group_id}}">
+						<a href="{{route('group.show',[$group])}}">{{$group->group_title}}</a>
 					@endif
 				@endforeach
 				</td>
 				
-				<td style="text-align: right;">{{$child->child_parents_email}}</td>
-				<td style="text-align: right;">{{$child->child_parents_telno}}</td>
-				<td style="text-align: right;">{{$child->child_birthdate}}</td>
+				<td style="text-align: right;"><div id="child_parents_email_{{$child->id}}">{{$child->child_parents_email}}</div></td>
+				<td style="text-align: right;"><div id="child_parents_telno_{{$child->id}}">{{$child->child_parents_telno}}</div></td>
+				<td style="text-align: right;"><div id="child_birthdate_{{$child->id}}">{{$child->child_birthdate}}</div></td>
 				<td style="text-align: right;">
-					<a class="btn btn-success dbfl" href="{{route('child.edit',[$child])}}">edit</a>
-					<!--<button type="button" class="btn btn-success" data-bs-id="1" data-bs-toggle="modal" data-bs-target="#exampleModal">red</button>-->
+					<!--<a class="btn btn-success dbfl" href="{{route('child.edit',[$child])}}">edit</a>-->
+					<button type="button" class="btn btn-success dbfl" data-bs-id="1" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="setIdToEdit({{$child->id}})">red</button>
 					<div class="dbfl">
 						<form method="post" action="{{route('child.destroy',[$child])}}">
 							@csrf
@@ -80,24 +91,24 @@
 						<h5 class="modal-title" id="exampleModalLabel">Vaiko duomenys</h5>
 						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 					  </div>
-							<form action="{{route('child.store')}}" method="POST">
+							<form action="{{route('child.store')}}" method="POST" id='child_form'>
 							  <div class="modal-body">
 								<div class="row g-3 align-items-center">
 								  <div class="col-2">
-									<label for="name" class="col-form-label">Vardas</label>
+									<label for="child_name" class="col-form-label">Vardas</label>
 								  </div>
 								  <div class="col-6">
-									<input type="text" id="name" name="child_name" class="form-control" aria-describedby="passwordHelpInline">
+									<input type="text" id="child_name" name="child_name" class="form-control" aria-describedby="passwordHelpInline">
 								  </div>
 								</div>
 							  </div>
 							  <div class="modal-body">
 								<div class="row g-3 align-items-center">
 								  <div class="col-2">
-									<label for="surname" class="col-form-label">Pavardė</label>
+									<label for="child_surname" class="col-form-label">Pavardė</label>
 								  </div>
 								  <div class="col-6">
-									<input type="text" id="surname" name="child_surname" class="form-control" aria-describedby="passwordHelpInline">
+									<input type="text" id="child_surname" name="child_surname" class="form-control" aria-describedby="passwordHelpInline">
 								  </div>
 								</div>
 							  </div>
@@ -107,9 +118,9 @@
 									<label for="group" class="col-form-label">Grupė</label>
 								  </div>
 									<div class="col-6">
-										<select class="form-select" aria-label=".form-select-sm example" name="child_group_id">
+										<select id="child_group_id" class="form-select" aria-label=".form-select-sm example" name="child_group_id">
 											@foreach ($groups as $group)
-											<option selected value="{{$group->id}}">{{$group->group_title}}</option>
+											<option value="{{$group->id}}">{{$group->group_title}}</option>
 											@endforeach
 										</select>
 									</div>
@@ -121,20 +132,20 @@
 							  <div class="modal-body">
 								<div class="row g-3 align-items-center">
 								  <div class="col-5">
-									<label for="parents_email" class="col-form-label">Tevų e. pašto adresas</label>
+									<label for="child_parents_email" class="col-form-label">Tevų e. pašto adresas</label>
 								  </div>
 								  <div class="col-7">
-									<input type="email" id="parents_email" name="child_parents_email" class="form-control" aria-describedby="passwordHelpInline">
+									<input type="email" id="child_parents_email" name="child_parents_email" class="form-control" aria-describedby="passwordHelpInline">
 								  </div>
 								</div>
 							  </div>
 							  <div class="modal-body">
 								<div class="row g-3 align-items-center">
 								  <div class="col-5">
-									<label for="parents_telno" class="col-form-label">Tėvų telefono numeris</label>
+									<label for="child_parents_telno" class="col-form-label">Tėvų telefono numeris</label>
 								  </div>
 								  <div class="col-7">
-									<input type="text" id="parents_telno" name="child_parents_telno" class="form-control" aria-describedby="passwordHelpInline">
+									<input type="text" id="child_parents_telno" name="child_parents_telno" class="form-control" aria-describedby="passwordHelpInline">
 								  </div>
 								</div>
 							  </div>
@@ -162,11 +173,45 @@
 			function pop_up(url){
 				window.open(url, "_blank", "toolbar=yes,scrollbars=yes,resizable=yes,top=200,left=500,width=1000,height=600", true); 
 			}
+			
+			
+			
+			function clearValues(){
+				setElementValue('child_name', '');
+				setElementValue('child_surname', '');
+				setElementValue('child_group_id', '');
+				document.getElementById('child_group_id').selected = false;
+				setElementValue('child_parents_email', '');
+				setElementValue('child_parents_telno', '');
+				setElementValue('child_birthdate', '');
+				changeFormAction('child_form');
+			}
+			
+
+			
+			function setIdToEdit(id){
+				
+				if(id){
+					let child_name = getElementInner('child_name_' + id);
+					setElementValue('child_name', child_name);
+					let child_surname = getElementInner('child_surname_' + id);
+					setElementValue('child_surname', child_surname);
+					let child_group_id = getElementValue('child_group_id_' + id);
+					document.getElementById('child_group_id').value = child_group_id;
+					let child_parents_email = getElementInner('child_parents_email_' + id);
+					setElementValue('child_parents_email', child_parents_email);
+					let child_parents_telno = getElementInner('child_parents_telno_' + id);
+					setElementValue('child_parents_telno', child_parents_telno);
+					let child_birthdate = getElementInner('child_birthdate_' + id);
+					setElementValue('child_birthdate', child_birthdate);
+					changeFormAction('child_form', id);
+				}
+				
+			}
 			</script>
 		</div>
 	</div>	
 
-		</div>
-	</div>	
-</div>	
+</div>
+	
 <x-bottom />

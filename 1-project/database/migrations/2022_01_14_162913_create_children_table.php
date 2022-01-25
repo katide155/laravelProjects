@@ -17,7 +17,8 @@ class CreateChildrenTable extends Migration
             $table->id();
 			$table->string('child_name');
 			$table->string('child_surname');
-			$table->bigInteger('child_group_id');
+			$table->unsignedBigInteger('child_group_id');
+			$table->foreign('child_group_id')->references('id')->on('groups');
 			$table->string('child_parents_email');
 			$table->string('child_parents_telno');
 			$table->date('child_birthdate');
