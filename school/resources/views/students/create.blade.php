@@ -1,4 +1,6 @@
-<x-head />
+@extends('layouts.app')
+
+@section('content')
 
 <div class="container">
   <div class="modal-dialog modal-dialog-centered">
@@ -72,4 +74,4 @@
 
 </div>
 
-<x-bottom />
+@endsection

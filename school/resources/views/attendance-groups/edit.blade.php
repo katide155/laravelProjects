@@ -1,4 +1,6 @@
-<x-head />
+@extends('layouts.app')
+
+@section('content')
 
 <div class="container">
 
@@ -83,4 +85,4 @@
 });
 </script>
 
-<x-bottom />
+@endsection
