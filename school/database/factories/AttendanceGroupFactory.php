@@ -33,6 +33,7 @@ class AttendanceGroupFactory extends Factory
 			'attendance_group_description' => $this->faker->paragraph(15),
 			'attendance_group_difficulty' => $this->groupDifficultyLevel(),
 			'attendance_group_school_id' => rand(1,15),
+			'attendance_group_logo' => $this->faker->imageUrl(640, 480, 'animals', true),
         ];
     }
 }

@@ -38,11 +38,19 @@ class SchoolController extends Controller
      */
     public function store(Request $request)
     {
+		
+
         $school = new School;
 		$school->school_name = $request->school_name;
 		$school->school_description = $request->school_description;
 		$school->school_place = $request->school_place;
 		$school->school_phone = $request->school_phone;
+		
+        //$imageName = time().'.'.$request->image->extension();  
+
+        //$request->image->move(public_path('images/shoolLogos'), $imageName);
+		
+		$school->school_logo = $request->file('school_logo')->store('images/shoolLogos');
 		
 		$school->save();
 		return redirect()->route('school.index');

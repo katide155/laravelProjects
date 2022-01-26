@@ -50,6 +50,16 @@
 		  </div>
 		</div>
 	  </div>
+	  <div class="modal-body">
+		<div class="row g-3 align-items-center">
+		  <div class="col-2">
+			<label for="school_logo" class="col-form-label">Mokyklos logo</label>
+		  </div>
+		  <div class="col-10">
+			<input type="file" name="school_logo" placeholder="Pasirinkite paveikslėlį" id="school_logo">
+		  </div>
+		</div>
+	  </div>
 	@csrf  
 	  <div class="modal-footer">
 		<a class="btn btn-secondary" href="{{route('school.index')}}">Grįžti</a>

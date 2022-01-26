@@ -49,7 +49,7 @@ Route::prefix('attendance-groups')->group(function(){
 
 Route::prefix('schools')->group(function(){
 	//Index
-	Route::get('', 'App\Http\Controllers\SchoolController@index')->name('school.index')->middleware('auth')->middleware('auth');
+	Route::get('', 'App\Http\Controllers\SchoolController@index')->name('school.index')->middleware('auth');
 	//create
 	Route::get('create', 'App\Http\Controllers\SchoolController@create')->name('school.create')->middleware('auth');
 	Route::post('store', 'App\Http\Controllers\SchoolController@store')->name('school.store')->middleware('auth');

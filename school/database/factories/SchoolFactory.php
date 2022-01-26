@@ -18,7 +18,7 @@ class SchoolFactory extends Factory
 			'school_description' => $this->faker->paragraph(15),
 			'school_place' => $this->faker->address(),
 			'school_phone' => $this->faker->phoneNumber(),
-			
+			'school_logo' => $this->faker->imageUrl(640, 480, 'animals', true),
         ];
     }
 }
