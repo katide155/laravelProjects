@@ -6,6 +6,7 @@ use App\Models\School;
 use App\Http\Requests\StoreSchoolRequest;
 use App\Http\Requests\UpdateSchoolRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 
 class SchoolController extends Controller
 {
@@ -96,7 +97,11 @@ class SchoolController extends Controller
 		
         $request->file('school_logo')->move(public_path('images/school-logos'), $target_file);
 		
-		$school->school_logo = '/images/school-logos/'.$target_file;		
+		if (File::exists(public_path($school->school_logo))) {
+			File::delete(public_path($school->school_logo));
+		}		
+		$school->school_logo = '/images/school-logos/'.$target_file;	
+		
 		$school->save();
 		return redirect()->route('school.index');
     }

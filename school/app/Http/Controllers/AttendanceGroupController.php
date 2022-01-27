@@ -7,6 +7,7 @@ use App\Models\School;
 use App\Http\Requests\StoreAttendanceGroupRequest;
 use App\Http\Requests\UpdateAttendanceGroupRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 
 class AttendanceGroupController extends Controller
 {
@@ -103,6 +104,10 @@ class AttendanceGroupController extends Controller
 		$attendanceGroup->attendance_group_description = $request->attendance_group_description;
 		$attendanceGroup->attendance_group_difficulty = $request->attendance_group_difficulty;
 		$attendanceGroup->attendance_group_school_id = $request->attendance_group_school_id;
+		
+		if (File::exists(public_path($attendanceGroup->attendance_group_logo))) {
+			File::delete(public_path($attendanceGroup->attendance_group_logo));
+		}
 		
 		$target_file = basename($_FILES["attendance_group_logo"]["name"]);
 		
