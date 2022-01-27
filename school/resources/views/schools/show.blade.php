@@ -59,6 +59,12 @@
 				  </div>
 				</div>
 			  </div>	
+			  <div class="modal-body">
+				<div class="row g-3 align-items-center">
+				  <div class="col-4">Mokyklos logo:</div>
+				  <div class="col-6"><img width="100px" src="{{$school->school_logo}}"/></div>
+				</div>
+			  </div>
 			<div class="modal-footer">
 	 
 				<a class="btn btn-secondary" href="{{route('school.index')}}">Grįžti</a>

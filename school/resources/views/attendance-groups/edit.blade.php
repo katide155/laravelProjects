@@ -9,7 +9,7 @@
 	  <div class="modal-header">
 		<h5 class="modal-title" id="exampleModalLabel">Grupės duomenys</h5>
 	  </div>
-	<form action="{{route('attendancegroup.update', [$attendanceGroup])}}" method="POST">
+	<form action="{{route('attendancegroup.update', [$attendanceGroup])}}" method="POST" enctype="multipart/form-data">
 	  <div class="modal-body">
 		<div class="row g-3 align-items-center">
 		  <div class="col-2">
@@ -65,6 +65,17 @@
 			<textarea id="summernote" type="textarea" id="attendance_group_description" name="attendance_group_description" class="form-control" rows="4" cols="50">
 			{{$attendanceGroup->attendance_group_description}}
 			</textarea>
+		  </div>
+		</div>
+	  </div>
+	  <div class="modal-body">
+		<div class="row g-3 align-items-center">
+		  <div class="col-2">
+			<label for="attendance_group_logo" class="col-form-label">Grupės logo</label>
+		  </div>
+		  <div class="col-10">
+			<img width="100px" src="{{$attendanceGroup->attendance_group_logo}}"/>
+			<input type="file" name="attendance_group_logo" placeholder="Pasirinkite paveikslėlį" id="attendance_group_logo">
 		  </div>
 		</div>
 	  </div>

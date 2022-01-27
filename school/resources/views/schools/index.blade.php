@@ -33,9 +33,11 @@
 				<th style="width: 200px;">Mokyklos Tel. Nr.</th>
 				<th >Mokyklos aprašymas</th>
 				<th >Grupių kiekis</th>
+				<th style="width: 200px;">Mokyklos logo</th>
 				<th style="width: 180px;">
 					<button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal">Pridėti mokyklą</button>
 				</th>
+				
 			  </tr>
 			</thead>
 			<tbody>
@@ -48,6 +50,7 @@
 				<td style="text-align: left;">{{$school->school_phone}}</td>
 				<td style="text-align: left;">{{$school->school_description}}</td>
 				<td>{{count($school->schoolAttendanceGroups)}}</td>
+				<td style="text-align: left;"><img width="100px" src="{{$school->school_logo}}"/></td>
 				<td style="text-align: right;">
 					<a class="btn btn-success dbfl" href="{{route('school.edit',[$school])}}">edit</a>
 					<div class="dbfl">
@@ -58,6 +61,7 @@
 					</div>
 					<a class="btn btn-primary dbfl" href="{{route('school.show',[$school])}}">rod</a>
 				</td>
+				
 			  </tr>
 			  
 			@endforeach
@@ -71,7 +75,7 @@
 						<h5 class="modal-title" id="exampleModalLabel">Mokyklos duomenys</h5>
 						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 					  </div>
-						<form action="{{route('school.store')}}" method="POST">
+						<form action="{{route('school.store')}}" method="POST" enctype="multipart/form-data">
 						  <div class="modal-body">
 							<div class="row g-3 align-items-center">
 							  <div class="col-4">
@@ -109,6 +113,16 @@
 							  </div>
 							  <div class="col-8">
 								<textarea type="textarea" id="school_description" name="school_description" class="form-control"></textarea>
+							  </div>
+							</div>
+						  </div>
+						  <div class="modal-body">
+							<div class="row g-3 align-items-center">
+							  <div class="col-4">
+								<label for="school_logo" class="col-form-label">Mokyklos logo</label>
+							  </div>
+							  <div class="col-8">
+								<input type="file" name="school_logo" placeholder="Pasirinkite paveikslėlį" id="school_logo">
 							  </div>
 							</div>
 						  </div>

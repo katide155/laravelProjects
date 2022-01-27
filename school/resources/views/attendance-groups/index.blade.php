@@ -33,6 +33,7 @@
 				<th style="width: 200px;">Mokykla</th>
 				<th >Grupės aprašymas</th>
 				<th >Grupės studentų kiekis</th>
+				<th >Grupės logo</th>
 				<th style="width: 180px;">
 					<button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal">Pridėti grupę</button>
 				</th>
@@ -48,6 +49,7 @@
 				<td style="text-align: left;">{{$attendanceGroup->attendanceGroupSchool->school_name}}</td>
 				<td style="text-align: left;">{{$attendanceGroup->attendance_group_description}}</td>
 				<td>{{count($attendanceGroup->attendanceGroupStudents)}}</td>
+				<td><img width="100px" src="{{$attendanceGroup->attendance_group_logo}}"/></td>
 				<td style="text-align: right;">
 					<a class="btn btn-success dbfl" href="{{route('attendancegroup.edit',[$attendanceGroup])}}">edit</a>
 					<div class="dbfl">
@@ -71,7 +73,7 @@
 						<h5 class="modal-title" id="exampleModalLabel">Grupės duomenys</h5>
 						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 					  </div>
-						<form action="{{route('attendancegroup.store')}}" method="POST">
+						<form action="{{route('attendancegroup.store')}}" method="POST" enctype="multipart/form-data">
 						  <div class="modal-body">
 							<div class="row g-3 align-items-center">
 							  <div class="col-4">
@@ -120,7 +122,16 @@
 							  </div>
 							</div>
 						  </div>
-
+						  <div class="modal-body">
+							<div class="row g-3 align-items-center">
+							  <div class="col-4">
+								<label for="attendance_group_logo" class="col-form-label">Grupės logo</label>
+							  </div>
+							  <div class="col-6">
+								<input type="file" name="attendance_group_logo" placeholder="Pasirinkite paveikslėlį" id="attendance_group_logo">
+							  </div>
+							</div>
+						  </div>
 						@csrf  
 						  <div class="modal-footer">
 							<button type="button" class="btn btn-secondary">Uždaryti</button>

@@ -46,11 +46,12 @@ class SchoolController extends Controller
 		$school->school_place = $request->school_place;
 		$school->school_phone = $request->school_phone;
 		
-        //$imageName = time().'.'.$request->image->extension();  
-
-        //$request->image->move(public_path('images/shoolLogos'), $imageName);
+		$target_file = basename($_FILES["school_logo"]["name"]);
 		
-		$school->school_logo = $request->file('school_logo')->store('images/shoolLogos');
+        $request->file('school_logo')->move(public_path('images/school-logos'), $target_file);
+		
+		$school->school_logo = '/images/school-logos/'.$target_file;
+		
 		
 		$school->save();
 		return redirect()->route('school.index');
@@ -91,7 +92,11 @@ class SchoolController extends Controller
 		$school->school_description = $request->school_description;
 		$school->school_place = $request->school_place;
 		$school->school_phone = $request->school_phone;
+		$target_file = basename($_FILES["school_logo"]["name"]);
 		
+        $request->file('school_logo')->move(public_path('images/school-logos'), $target_file);
+		
+		$school->school_logo = '/images/school-logos/'.$target_file;		
 		$school->save();
 		return redirect()->route('school.index');
     }

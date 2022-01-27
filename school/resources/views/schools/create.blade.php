@@ -9,7 +9,7 @@
 	  <div class="modal-header">
 		<h5 class="modal-title" id="exampleModalLabel">Mokyklos duomenys</h5>
 	  </div>
-	<form action="{{route('school.store')}}" method="POST">
+	<form action="{{route('school.store')}}" method="POST" enctype="multipart/form-data">
 	  <div class="modal-body">
 		<div class="row g-3 align-items-center">
 		  <div class="col-2">
