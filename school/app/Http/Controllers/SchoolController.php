@@ -49,7 +49,7 @@ class SchoolController extends Controller
 		
 		$target_file = basename($_FILES["school_logo"]["name"]);
 		
-        $request->file('school_logo')->move(public_path('images/school-logos'), $target_file);
+                $request->file('school_logo')->move(public_path('images/school-logos'), $target_file);
 		
 		$school->school_logo = '/images/school-logos/'.$target_file;
 		

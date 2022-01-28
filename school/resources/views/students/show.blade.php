@@ -28,11 +28,7 @@
 				<div class="row g-3 align-items-center">
 				  <div class="col-4">Grupė:</div>
 					<div class="col-6">
-					@foreach ($attendanceGroups as $attendanceGroup)
-						@if($student->student_attendance_group_id == $attendanceGroup->id)
-							{{$attendanceGroup->attendance_group_name}}
-						@endif
-					@endforeach
+						{{$studentGroup}}
 					</div>
 				</div>
 			  </div>

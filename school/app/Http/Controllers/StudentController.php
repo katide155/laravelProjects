@@ -59,8 +59,9 @@ class StudentController extends Controller
      */
     public function show(Student $student)
     {
+		$studentGroup = $student->studentAttendanceGroup->attendance_group_name;
 		$attendanceGroups = AttendanceGroup::all();
-        return view('students.show', ['student'=>$student],['attendanceGroups'=>$attendanceGroups]);
+        return view('students.show', ['student'=>$student],['studentGroup'=>$studentGroup]);
     }
 
     /**
