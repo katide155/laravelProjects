@@ -6,6 +6,7 @@ use App\Models\ProfileImage;
 use App\Http\Requests\StoreProfileImageRequest;
 use App\Http\Requests\UpdateProfileImageRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 
 class ProfileImageController extends Controller
 {
@@ -56,7 +57,7 @@ class ProfileImageController extends Controller
 		$profileImage->class = $request->image_class;
 	
 		$profileImage->save();
-		//return redirect()->route('profileimage.index');
+		return redirect()->route('profileimage.index');
     }
 
     /**
@@ -78,7 +79,7 @@ class ProfileImageController extends Controller
      */
     public function edit(ProfileImage $profileImage)
     {
-        //
+         return view('profileimages.edit', ['profileImage'=>$profileImage]);
     }
 
     /**
@@ -88,9 +89,26 @@ class ProfileImageController extends Controller
      * @param  \App\Models\ProfileImage  $profileImage
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateProfileImageRequest $request, ProfileImage $profileImage)
+    public function update(Request $request, ProfileImage $profileImage)
     {
-        //
+		if($request->has('image_src')){ //if isset(post[image_src] && ar netuscia)
+			if (File::exists(public_path('images/profile-images/'.$profileImage->src))) {
+				File::delete(public_path('images/profile-images/'.$profileImage->src));
+			}
+			
+			$imageName = 'image'.time().'.'.$request->image_src->extension();
+			$request->image_src->move(public_path('images/profile-images'),$imageName);
+			$profileImage->src = $imageName;
+
+		}
+
+		$profileImage->alt = $request->image_alt;
+		$profileImage->width = $request->image_width;
+		$profileImage->height = $request->image_height;
+		$profileImage->class = $request->image_class;
+	
+		$profileImage->save();
+		return redirect()->route('profileimage.index');
     }
 
     /**

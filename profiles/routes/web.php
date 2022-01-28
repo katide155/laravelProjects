@@ -29,8 +29,8 @@ Route::prefix('profileimages')->group(function(){
 	 Route::get('create', 'App\Http\Controllers\ProfileImageController@create')->name('profileimage.create')->middleware('auth');
 	 Route::post('store', 'App\Http\Controllers\ProfileImageController@store')->name('profileimage.store')->middleware('auth');
 	//edit
-	// Route::get('edit/{child}', 'App\Http\Controllers\ChildController@edit')->name('child.edit')->middleware('auth');
-	// Route::post('update/{child}', 'App\Http\Controllers\ChildController@update')->name('child.update')->middleware('auth');
+	Route::get('edit/{profileImage}', 'App\Http\Controllers\ProfileImageController@edit')->name('profileimage.edit')->middleware('auth');
+	Route::post('update/{profileImage}', 'App\Http\Controllers\ProfileImageController@update')->name('profileimage.update')->middleware('auth');
 	//delete
 	// Route::post('destroy/{child}', 'App\Http\Controllers\ChildController@destroy')->name('child.destroy')->middleware('auth');
 	//show
