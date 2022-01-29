@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Author;
+use App\Models\AuthorImage;
 use App\Http\Requests\StoreAuthorRequest;
 use App\Http\Requests\UpdateAuthorRequest;
 use Illuminate\Http\Request;
@@ -16,7 +17,9 @@ class AuthorController extends Controller
      */
     public function index()
     {
-        return view('authors.index');
+		$authors = Author::all();
+		
+        return view('authors.index', ['authors'=>$authors]);
     }
 
     /**
@@ -41,6 +44,21 @@ class AuthorController extends Controller
 		$author->name = $request->name;
 		$author->surname = $request->surname;
 		//$author->image_url = $request->image_url;
+		
+		
+		$authorImage = new AuthorImage;
+		$authorImage->alt = $request->image_alt;
+		
+		$imageName = 'image'.time().'.'.$request->image_src->extension();
+		
+		$request->image_src->move(public_path('images/author-images'),$imageName);
+		
+		$authorImage->src = $imageName;
+		$authorImage->width = $request->image_width;
+		$authorImage->height = $request->image_height;
+		$authorImage->class = $request->image_class;
+	
+		$authorImage->save();
 		
 		$author->save();
 		return redirect()->route('author.index');

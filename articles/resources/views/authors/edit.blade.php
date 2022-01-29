@@ -41,6 +41,51 @@
 		  </div>
 		</div>
 	  </div>
+	  
+		<div class="row mb-3">
+			<label for="image_alt" class="col-md-4 col-form-label text-md-end">Image Alt</label>
+
+			<div class="col-md-6">
+				<input id="image_alt" type="text" class="form-control" name="image_alt" required autofocus value="{{$authorImage->alt}}">
+
+			</div>
+		</div>
+
+		<div class="row mb-3">
+			<label for="image_src" class="col-md-4 col-form-label text-md-end">Image Src</label>
+
+			<div class="col-md-6">
+				<input id="image_src" type="file" class="form-control" name="image_src" >
+
+			</div>
+		</div>
+
+		<div class="row mb-3">
+			<label for="image_width" class="col-md-4 col-form-label text-md-end">Image Width</label>
+
+			<div class="col-md-6">
+				<input id="image_width" min="0" max="200" step="10" type="number" class="form-control" name="image_width" required autofocus value="{{$authorImage->width}}">
+
+			</div>
+		</div>
+
+		<div class="row mb-3">
+			<label for="image_height" class="col-md-4 col-form-label text-md-end">Image Height</label>
+
+			<div class="col-md-6">
+				<input id="image_height" min="0" max="200" step="10" type="number" class="form-control" name="image_height" required autofocus value="{{$authorImage->height}}">
+
+			</div>
+		</div>
+
+		<div class="row mb-3">
+			<label for="image_class" class="col-md-4 col-form-label text-md-end">Image Class</label>
+
+			<div class="col-md-6">
+				<input id="image_class" type="text" class="form-control" name="image_class" required autofocus value="{{$authorImage->class}}">
+
+			</div>
+		</div>
 	@csrf  
 	  <div class="modal-footer">
 		<a class="btn btn-secondary" href="{{route('author.index')}}">Grįžti</a>

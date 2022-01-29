@@ -8,4 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class AuthorImage extends Model
 {
     use HasFactory;
+	
 }

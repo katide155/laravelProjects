@@ -42,14 +42,9 @@ class AuthorImageController extends Controller
         $authorImage = new AuthorImage;
 		$authorImage->alt = $request->image_alt;
 		
-		//paveiksliuko pavadinimo sudarymas turi būti unikalus time();
-		
 		$imageName = 'image'.time().'.'.$request->image_src->extension();
 		
-		//talpinimas į serverį
 		$request->image_src->move(public_path('images/author-images'),$imageName);
-		
-		
 		
 		$authorImage->src = $imageName;
 		$authorImage->width = $request->image_width;
