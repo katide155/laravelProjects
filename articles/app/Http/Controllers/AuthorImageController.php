@@ -39,7 +39,25 @@ class AuthorImageController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $authorImage = new AuthorImage;
+		$authorImage->alt = $request->image_alt;
+		
+		//paveiksliuko pavadinimo sudarymas turi būti unikalus time();
+		
+		$imageName = 'image'.time().'.'.$request->image_src->extension();
+		
+		//talpinimas į serverį
+		$request->image_src->move(public_path('images/author-images'),$imageName);
+		
+		
+		
+		$authorImage->src = $imageName;
+		$authorImage->width = $request->image_width;
+		$authorImage->height = $request->image_height;
+		$authorImage->class = $request->image_class;
+	
+		$authorImage->save();
+		return redirect()->route('authorimage.index');
     }
 
     /**
@@ -61,7 +79,7 @@ class AuthorImageController extends Controller
      */
     public function edit(AuthorImage $authorImage)
     {
-        //
+        return view('authorimages.edit', ['authorImage'=>$authorImage]);
     }
 
     /**
@@ -71,9 +89,26 @@ class AuthorImageController extends Controller
      * @param  \App\Models\AuthorImage  $authorImage
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateAuthorImageRequest $request, AuthorImage $authorImage)
+    public function update(Request $request, AuthorImage $authorImage)
     {
-        //
+		if($request->has('image_src')){ 
+			if (File::exists(public_path('images/author-images/'.$authorImage->src))) {
+				File::delete(public_path('images/author-images/'.$authorImage->src));
+			}
+			
+			$imageName = 'image'.time().'.'.$request->image_src->extension();
+			$request->image_src->move(public_path('images/author-images'),$imageName);
+			$authorImage->src = $imageName;
+
+		}
+
+		$authorImage->alt = $request->image_alt;
+		$authorImage->width = $request->image_width;
+		$authorImage->height = $request->image_height;
+		$authorImage->class = $request->image_class;
+	
+		$authorImage->save();
+		return redirect()->route('authorimage.index');
     }
 
     /**

@@ -7,15 +7,15 @@
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card">
-                    <div class="card-header">Profile Image</div>
+                    <div class="card-header">Authors Images</div>
     
                     <div class="card-body">
     
                             <div class="row mb-3">
     
                                 <div class="col-md-12">
-									@foreach($profilemages as $profilemage)
-									<img src="{{'/images/profile-images/'.$profilemage->src}}" width="{{$profilemage->width}}" height="{{$profilemage->height}}" alt="{{$profilemage->alt}}"/>
+									@foreach($authorimages as $authorimage)
+									<img src="{{'/images/author-images/'.$authorimage->src}}" width="{{$authorimage->width}}" height="{{$authorimage->height}}" alt="{{$authorimage->alt}}"/>
 									@endforeach
                                 </div>
                             </div>
