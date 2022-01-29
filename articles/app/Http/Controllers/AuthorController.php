@@ -7,6 +7,7 @@ use App\Models\AuthorImage;
 use App\Http\Requests\StoreAuthorRequest;
 use App\Http\Requests\UpdateAuthorRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 
 class AuthorController extends Controller
 {
@@ -43,8 +44,7 @@ class AuthorController extends Controller
         $author = new Author;
 		$author->name = $request->name;
 		$author->surname = $request->surname;
-		//$author->image_url = $request->image_url;
-		
+	
 		
 		$authorImage = new AuthorImage;
 		$authorImage->alt = $request->image_alt;
@@ -57,8 +57,10 @@ class AuthorController extends Controller
 		$authorImage->width = $request->image_width;
 		$authorImage->height = $request->image_height;
 		$authorImage->class = $request->image_class;
-	
 		$authorImage->save();
+		
+		
+		$author->author_image_id = $authorImage->id;
 		
 		$author->save();
 		return redirect()->route('author.index');
@@ -97,7 +99,27 @@ class AuthorController extends Controller
     {
 		$author->name = $request->name;
 		$author->surname = $request->surname;
-		//$author->image_url = $request->image_url;
+		$authorImage = $author->authorImage;
+		
+		if($request->has('image_src')){ 
+			if (File::exists(public_path('images/author-images/'.$authorImage->src))) {
+				File::delete(public_path('images/author-images/'.$authorImage->src));
+			}
+			
+			$imageName = 'image'.time().'.'.$request->image_src->extension();
+			$request->image_src->move(public_path('images/author-images'),$imageName);
+			$authorImage->src = $imageName;
+
+		}
+
+		$authorImage->alt = $request->image_alt;
+		$authorImage->width = $request->image_width;
+		$authorImage->height = $request->image_height;
+		$authorImage->class = $request->image_class;
+		$authorImage->save();
+		
+		
+		$author->author_image_id = $authorImage->id;
 		
 		$author->save();
 		return redirect()->route('author.index');

@@ -30,6 +30,7 @@
 				<th style="width: 40px;">Eil. Nr.</th>
 				<th style="width: 200px;">Autoriaus vardas, pavardė</th>
 				<th style="width: 200px;">Autoriaus foto</th>
+				<th><a class="btn btn-success dbfl" href="{{route('author.create')}}">Sukurti autorių</a></th>
 			  </tr>
 			</thead>
 			<tbody>

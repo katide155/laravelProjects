@@ -37,7 +37,7 @@
 			<label for="author_image" class="col-form-label">Autoriaus nuotrauka</label>
 		  </div>
 		  <div class="col-10">
-			<input type="file" name="author_image" placeholder="Pasirinkite foto" id="author_image">
+					<img src="{{'/images/author-images/'.$author->authorImage->src}}" width="{{$author->authorImage->width}}" height="{{$author->authorImage->height}}" alt="{{$author->authorImage->alt}}"/>
 		  </div>
 		</div>
 	  </div>
@@ -46,7 +46,7 @@
 			<label for="image_alt" class="col-md-4 col-form-label text-md-end">Image Alt</label>
 
 			<div class="col-md-6">
-				<input id="image_alt" type="text" class="form-control" name="image_alt" required autofocus value="{{$authorImage->alt}}">
+				<input id="image_alt" type="text" class="form-control" name="image_alt" required autofocus value="{{$author->authorImage->alt}}">
 
 			</div>
 		</div>
@@ -64,7 +64,7 @@
 			<label for="image_width" class="col-md-4 col-form-label text-md-end">Image Width</label>
 
 			<div class="col-md-6">
-				<input id="image_width" min="0" max="200" step="10" type="number" class="form-control" name="image_width" required autofocus value="{{$authorImage->width}}">
+				<input id="image_width" min="0" max="200" step="10" type="number" class="form-control" name="image_width" required autofocus value="{{$author->authorImage->width}}">
 
 			</div>
 		</div>
@@ -73,7 +73,7 @@
 			<label for="image_height" class="col-md-4 col-form-label text-md-end">Image Height</label>
 
 			<div class="col-md-6">
-				<input id="image_height" min="0" max="200" step="10" type="number" class="form-control" name="image_height" required autofocus value="{{$authorImage->height}}">
+				<input id="image_height" min="0" max="200" step="10" type="number" class="form-control" name="image_height" required autofocus value="{{$author->authorImage->height}}">
 
 			</div>
 		</div>
@@ -82,7 +82,7 @@
 			<label for="image_class" class="col-md-4 col-form-label text-md-end">Image Class</label>
 
 			<div class="col-md-6">
-				<input id="image_class" type="text" class="form-control" name="image_class" required autofocus value="{{$authorImage->class}}">
+				<input id="image_class" type="text" class="form-control" name="image_class" required autofocus value="{{$author->authorImage->class}}">
 
 			</div>
 		</div>
