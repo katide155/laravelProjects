@@ -37,7 +37,7 @@ class AuthorImageController extends Controller
      * @param  \App\Http\Requests\StoreAuthorImageRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, $fromAuthorController = 1)
     {
         $authorImage = new AuthorImage;
 		$authorImage->alt = $request->image_alt;
@@ -52,6 +52,10 @@ class AuthorImageController extends Controller
 		$authorImage->class = $request->image_class;
 	
 		$authorImage->save();
+		
+		if($fromAuthorController != 1) {
+			return $authorImage->id;
+		}
 		return redirect()->route('authorimage.index');
     }
 
