@@ -18,11 +18,34 @@ class AuthorController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-		$authors = Author::all();
+		//$authors = Author::all();
 		
-        return view('authors.index', ['authors'=>$authors]);
+		//$authors = Author::all()->sortBy('surname', SORT_REGULAR, false);
+		
+		$sortCol = $request->sortCol;
+		$sortOrd = $request->sortOrd;
+
+		if(empty($sortCol) || empty($sortOrd)){
+			$authors = Author::all();
+		}
+		else{	
+			$authors = Author::orderBy($sortCol, $sortOrd)->get();
+		}
+		
+		$authorius = $authors->first();
+	
+		$selectArray = array('id', 'name', 'surname');
+		
+		
+		//$paramarray = [];
+		//foreach($authorius as $param){
+		//	$paramarray[] = $param;
+		//}
+		
+		//print_r($paramarray);
+        return view('authors.index', ['authors'=>$authors,'sortOrd'=>$sortOrd, 'sortCol'=>$sortCol, 'authorius'=>$authorius, 'selectArray'=>$selectArray]);
     }
 
     /**
@@ -49,7 +72,7 @@ class AuthorController extends Controller
 	
 		
 		//$authorImage = new AuthorImage;
-		$authorImage_id = (new AuthorImageController)->store($request, 2); //sita vieta, ji viska ok padaro, bet ko ji nesugeba sugrazinti id
+		$authorImage_id = (new AuthorImageController)->store($request, 2); 
 		
 		//SItoje vietoje kreipiesi i kito controllerio funkcija kuri gali patalpinti tau paveiksliu
 		//taciau sita funkcija tau grazina redirect
