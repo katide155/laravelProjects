@@ -18,45 +18,11 @@
 			{{session()->get('success_message')}}
 		</div>
 	@endif
-	<div class="row">
-		<div class="col-6">
-				<form action="{{route('author.index')}}" method="get"> 
-				@csrf
-				<select name="sortCol">
-					@foreach($selectArray as $key=>$item)
-						@if($item == $sortCol || (empty($sortCol) && $key==0))
-						<option value="{{$item}}" selected>{{$item}}</option>
-						@else
-						<option value="{{$item}}">{{$item}}</option>
-						@endif
-					@endforeach
-				</select>
-				<select name="sortOrd">
-					@if ($sortOrd == 'asc' || empty($sortOrd))
-					<option value="asc" selected>Didėjimo</option>
-					<option value="desc">Mažėjimo</option>
-					@else
-					<option value="asc">Didėjimo</option>
-					<option value="desc" selected>Mažėjimo</option>
-					@endif
-				</select>
-				<button type="submit">Rikiuoti</button>
-			</form>
-		</div>
-		<div class="col-6">
-			<form action="{{route('author.search')}}" method="get"> 
-				@csrf
-				<input type="text" name="search_key" placeholder="Ieškoma frazė..."/>
-				<button type="submit">Ieškoti</button>
-			</form>
-		</div>
-	</div>
+
 	<div class="row">
 	
 		<div class="col-12">
 
-
-	{{$sortCol}} {{$sortOrd}}
 			<table class="table table-success table-striped">
 
 			<thead>

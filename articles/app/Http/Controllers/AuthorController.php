@@ -9,7 +9,7 @@ use App\Http\Requests\StoreAuthorRequest;
 use App\Http\Requests\UpdateAuthorRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
-
+use Illuminate\Support\Facades\DB;
 
 class AuthorController extends Controller
 {
@@ -36,15 +36,12 @@ class AuthorController extends Controller
 		
 		$authorius = $authors->first();
 	
-		$selectArray = array('id', 'name', 'surname');
+		$selectArray = DB::getSchemaBuilder()->getColumnListing('authors');
+		//$selectArray = array_keys($authors->first()->getAttributes()); arba šis
 		
-		
-		//$paramarray = [];
-		//foreach($authorius as $param){
-		//	$paramarray[] = $param;
-		//}
-		
-		//print_r($paramarray);
+		//paieška, filter
+
+
         return view('authors.index', ['authors'=>$authors,'sortOrd'=>$sortOrd, 'sortCol'=>$sortCol, 'authorius'=>$authorius, 'selectArray'=>$selectArray]);
     }
 
@@ -172,4 +169,19 @@ class AuthorController extends Controller
     {
         //
     }
+	
+	
+	public function search(Request $request){
+		
+		//$authors = Author::where('id', '=', 34)->get(); id=34
+		$search_key = $request->search_key;
+		
+		$authors = Author::where('surname', 'LIKE', '%'.$search_key.'%')
+		->orWhere('name', 'LIKE', '%'.$search_key.'%')
+		->orWhere('id', 'LIKE', '%'.$search_key.'%')
+		->get(); // id turi 3; 
+		
+		return view('authors.search', ['authors'=>$authors]);
+		
+	}
 }

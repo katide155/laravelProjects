@@ -4,23 +4,13 @@
 <div class="container">
 	<div class="row">
 		<div class="col-12">
-			<h2>Autorių sąrašas</h2>
+			<h2>Knygų sąrašas</h2>
 		</div>
 	</div>
-	
-	@if(session()->has('error_message'))
-		<div class="alert alert-danger">
-			{{session()->get('error_message')}}
-		</div>
-	@endif
-	@if(session()->has('success_message'))
-		<div class="alert alert-success">
-			{{session()->get('success_message')}}
-		</div>
-	@endif
+
 	<div class="row">
 		<div class="col-6">
-				<form action="{{route('author.index')}}" method="get"> 
+				<form action="{{route('book.index')}}" method="get"> 
 				@csrf
 				<select name="sortCol">
 					@foreach($selectArray as $key=>$item)
@@ -44,49 +34,51 @@
 			</form>
 		</div>
 		<div class="col-6">
-			<form action="{{route('author.search')}}" method="get"> 
+		<form action="{{route('book.filter')}}" method="get"> 
 				@csrf
-				<input type="text" name="search_key" placeholder="Ieškoma frazė..."/>
+				<select name="author_id">
+					@foreach($authors as $author)
+					<option value="{{$author->id}}">{{$author->name}} {{$author->surname}}</option>
+					@endforeach
+				</select>
 				<button type="submit">Ieškoti</button>
-			</form>
+		</form>
 		</div>
 	</div>
 	<div class="row">
 	
 		<div class="col-12">
 
-
-	{{$sortCol}} {{$sortOrd}}
 			<table class="table table-success table-striped">
 
 			<thead>
 			  <tr>
 				<th style="width: 40px;">Eil. Nr.</th>
 				<th style="width: 40px;">ID</th>
+				<th style="width: 200px;">Knygos pavadinimas</th>
 				<th style="width: 200px;">Autoriaus vardas, pavardė</th>
-				<th style="width: 200px;">Autoriaus foto</th>
-				<th><a class="btn btn-success dbfl" href="{{route('author.create')}}">Sukurti autorių</a></th>
+				<th style="width: 200px;">Knygos aprašymas</th>
+				<th><a class="btn btn-success dbfl" href="{{route('book.create')}}">Sukurti autorių</a></th>
 			  </tr>
 			</thead>
 			<tbody>
 			<?php $i=1; ?>
-			@foreach ($authors as $author)
+			@foreach ($books as $book)
 			  <tr>
 				<td>{{ $i++; }}</td>
-				<td>{{$author->id}}</td>
-				<td style="text-align: left;">{{$author->name}} {{$author->surname}}</td>
-				<td>
-					<img src="{{'/images/author-images/'.$author->authorImage->src}}" width="{{$author->authorImage->width}}" height="{{$author->authorImage->height}}" alt="{{$author->authorImage->alt}}"/>
-				</td>
+				<td>{{$book->id}}</td>
+				<td style="text-align: left;">{{$book->title}}</td>
+				<td>{{$book->bookAuthor->name}} {{$book->bookAuthor->surname}}</td>
+				<td>{{$book->description}}</td>
 				<td style="text-align: right;">
-					<a class="btn btn-success dbfl" href="{{route('author.edit',[$author])}}">edit</a>
+					<a class="btn btn-success dbfl" href="{{route('book.edit',[$book])}}">edit</a>
 					<div class="dbfl">
-					<form method="post" action="{{route('author.destroy',[$author])}}">
+					<form method="post" action="{{route('book.destroy',[$book])}}">
 						@csrf
 						<button type="submit" name="delete_type" class="btn btn-danger"><b>-</b></button>
 					</form>
 					</div>
-					<a class="btn btn-primary dbfl" href="{{route('author.show',[$author])}}">rod</a>
+					<a class="btn btn-primary dbfl" href="{{route('book.show',[$book])}}">rod</a>
 				</td>
 				
 			  </tr>

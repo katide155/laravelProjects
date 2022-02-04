@@ -64,7 +64,9 @@ Route::prefix('authors')->group(function(){
 	//delete
 	 Route::post('destroy/{author}', 'App\Http\Controllers\AuthorController@destroy')->name('author.destroy')->middleware('auth');
 	//show
-	 Route::get('show/{author}', 'App\Http\Controllers\AuthorController@show')->name('author.show')->middleware('auth');	
+	 Route::get('show/{author}', 'App\Http\Controllers\AuthorController@show')->name('author.show')->middleware('auth');
+	//search
+	 Route::get('search', 'App\Http\Controllers\AuthorController@search')->name('author.search')->middleware('auth');
 });
 
 Route::prefix('authorimages')->group(function(){
@@ -80,4 +82,21 @@ Route::prefix('authorimages')->group(function(){
 	Route::post('destroy/{authorImage}', 'App\Http\Controllers\AuthorImageController@destroy')->name('authorimage.destroy')->middleware('auth');
 	//show
 	Route::get('show/{authorImage}', 'App\Http\Controllers\AuthorImageController@show')->name('authorimage.show')->middleware('auth');	
+});
+
+Route::prefix('books')->group(function(){
+	//Index
+	Route::get('', 'App\Http\Controllers\BookController@index')->name('book.index')->middleware('auth');
+	//create
+	 Route::get('create', 'App\Http\Controllers\BookController@create')->name('book.create')->middleware('auth');
+	 Route::post('store', 'App\Http\Controllers\BookController@store')->name('book.store')->middleware('auth');
+	//edit
+	Route::get('edit/{book}', 'App\Http\Controllers\BookController@edit')->name('book.edit')->middleware('auth');
+	Route::post('update/{book}', 'App\Http\Controllers\BookController@update')->name('book.update')->middleware('auth');
+	//delete
+	 Route::post('destroy/{book}', 'App\Http\Controllers\BookController@destroy')->name('book.destroy')->middleware('auth');
+	//show
+	 Route::get('show/{book}', 'App\Http\Controllers\BookController@show')->name('book.show')->middleware('auth');
+	//search
+	 Route::get('filter', 'App\Http\Controllers\BookController@filter')->name('book.filter')->middleware('auth');
 });
