@@ -9,6 +9,7 @@ use App\Http\Requests\UpdateProductRequest;
 use Illuminate\Http\Request;
 use App\Http\Controllers\ProductImageController;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\DB;
 
 class ProductController extends Controller
 {
@@ -27,7 +28,7 @@ class ProductController extends Controller
 		//$prod_columns = array_keys($temp_cat->first()->getAttributes());
 
 		if(empty($sortCol) || empty($sortOrd)){
-			$products = Product::all();
+			$products = Product::paginate(15);
 		}
 		else{	
 			//
@@ -41,7 +42,7 @@ class ProductController extends Controller
 			
 			$products = Product::get()->sortBy(function($query){
 					return $query->productCategory->title;
-			}, SORT_REGULAR, $sortBool)->all();
+			}, SORT_REGULAR, $sortBool)->paginate(15);
 			//}else{
 				//$products = Product::orderBy($sortCol, $sortOrd)->get();
 			//}
