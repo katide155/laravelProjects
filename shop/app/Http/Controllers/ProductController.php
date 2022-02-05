@@ -24,7 +24,7 @@ class ProductController extends Controller
 
 
 		$temp_cat = Product::all();
-		$prod_columns = array_keys($temp_cat->first()->getAttributes());
+		//$prod_columns = array_keys($temp_cat->first()->getAttributes());
 
 		if(empty($sortCol) || empty($sortOrd)){
 			$products = Product::all();
@@ -32,7 +32,7 @@ class ProductController extends Controller
 		else{	
 			//
 			
-			if($sortCol == 'category_id'){
+			//if($sortCol == 'category_id'){
 				$sortBool = true;
 				
 				if($sortOrd == 'asc'){
@@ -42,13 +42,13 @@ class ProductController extends Controller
 			$products = Product::get()->sortBy(function($query){
 					return $query->productCategory->title;
 			}, SORT_REGULAR, $sortBool)->all();
-			}else{
-				$products = Product::orderBy($sortCol, $sortOrd)->get();
-			}
+			//}else{
+				//$products = Product::orderBy($sortCol, $sortOrd)->get();
+			//}
 		}
 		
 	
-		$selectArray =  $prod_columns;
+		$selectArray = array('category_id');// $prod_columns;
 		
 		$categories = ProductCategory::orderBy('title','asc')->get();
 	
