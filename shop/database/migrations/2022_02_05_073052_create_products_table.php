@@ -21,6 +21,8 @@ class CreateProductsTable extends Migration
 			$table->unsignedBigInteger('category_id');
 			$table->foreign('category_id')->references('id')->on('product_categories');
 			$table->string('image_url');
+			$table->unsignedBigInteger('image_id');
+			$table->foreign('image_id')->references('id')->on('product_images');
             $table->timestamps();
         });
     }
