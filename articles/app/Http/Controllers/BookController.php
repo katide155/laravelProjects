@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Book;
 use App\Models\Author;
+use App\Models\PaginationSettings;
 use App\Http\Requests\StoreBookRequest;
 use App\Http\Requests\UpdateBookRequest;
 use Illuminate\Http\Request;
@@ -126,5 +127,81 @@ class BookController extends Controller
 		
 		//$books = Book::all();
 		return view('books.filter', ['books'=>$books]);
+	}
+	
+	public function pagination(Request $request){
+		
+		$sortCol = $request->sortCol;
+		$sortOrd = $request->sortOrd;
+		
+		$authors = Author::all()->sortBy('name');
+		$tem_book = Book::all();
+		$book_columns = array_keys($tem_book->first()->getAttributes());
+
+		if(empty($sortCol) || empty($sortOrd)){
+			$books = Book::paginate(15);
+		}
+		else{	
+			$books = Book::orderBy($sortCol, $sortOrd)->paginate(10);
+
+		}
+		
+	
+		$selectArray =  $book_columns;
+	
+
+		//$books =  Book::simplePaginate(15); //paprastas puslapiavimas (prev, next)
+		//$books =  Book::paginate(15); //pilnas puslapiavimas
+		//$books = Book::orderBy('id', 'DESC')->paginate(15);
+		
+		return view('books.pagination', ['books'=>$books,'sortOrd'=>$sortOrd, 'sortCol'=>$sortCol, 'selectArray'=>$selectArray, 'authors'=>$authors]);
+	}
+	
+		public function sortfilter(Request $request){
+		
+		$sortCol = $request->sortCol;
+		$sortOrd = $request->sortOrd;
+		$author_id = $request->author_id;
+		$authors = Author::all()->sortBy('name');
+		$tem_book = Book::all();
+		$book_columns = array_keys($tem_book->first()->getAttributes());
+			
+		$pages_in_sheet = $request->pages_in_sheet;
+			
+		if($request->pages_in_sheet == 1)
+			$pages_in_sheet = count($tem_book);
+			
+		if(empty($sortCol) || empty($sortOrd) || empty($author_id)){
+			$books = Book::paginate($pages_in_sheet);
+		}
+		else{	
+			if($author_id == 'all'){
+				$books = Book::orderBy($sortCol, $sortOrd)->paginate($pages_in_sheet);
+			}
+			else{
+				$books = Book::where('author_id', '=', $author_id)->orderBy($sortCol, $sortOrd)->paginate($pages_in_sheet);
+			}
+		}
+		$pagination = PaginationSettings::where('visible', '=', 1)->get();
+		$selectArray =  $book_columns;
+		
+		return view('books.sortfilter', [
+			'books'=>$books,
+			'sortOrd'=>$sortOrd, 
+			'sortCol'=>$sortCol, 
+			'selectArray'=>$selectArray, 
+			'authors'=>$authors, 
+			'author_id'=>$author_id,
+			'pages_in_sheet'=>$request->pages_in_sheet,
+			'pagination'=>$pagination]);
+	}
+	
+	public function sortable(){
+		
+		
+		
+		$books = Book::where('author_id'
+		, '=', 1)->sortable()->paginate();
+		return view('books.sortable', ['books'=>$books] );
 	}
 }

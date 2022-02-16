@@ -99,4 +99,7 @@ Route::prefix('books')->group(function(){
 	 Route::get('show/{book}', 'App\Http\Controllers\BookController@show')->name('book.show')->middleware('auth');
 	//search
 	 Route::get('filter', 'App\Http\Controllers\BookController@filter')->name('book.filter')->middleware('auth');
+	 Route::get('pagination', 'App\Http\Controllers\BookController@pagination')->name('book.pagination')->middleware('auth');
+	 Route::get('sortfilter', 'App\Http\Controllers\BookController@sortfilter')->name('book.sortfilter')->middleware('auth');
+	 Route::get('sortable', 'App\Http\Controllers\BookController@sortable')->name('book.sortable')->middleware('auth');
 });

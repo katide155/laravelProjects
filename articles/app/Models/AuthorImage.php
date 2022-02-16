@@ -9,4 +9,8 @@ class AuthorImage extends Model
 {
     use HasFactory;
 	
+	public function imageAuthor(){
+
+		return $this->belongsTo(Author::class, 'author_id', 'id');
+	}
 }
