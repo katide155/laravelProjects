@@ -168,7 +168,7 @@ class BookController extends Controller
 			
 		$pages_in_sheet = $request->pages_in_sheet;
 			
-		if($request->pages_in_sheet == 1)
+		if($pages_in_sheet == 1)
 			$pages_in_sheet = count($tem_book);
 			
 		if(empty($sortCol) || empty($sortOrd) || empty($author_id)){
@@ -176,12 +176,18 @@ class BookController extends Controller
 		}
 		else{	
 			if($author_id == 'all'){
-				$books = Book::orderBy($sortCol, $sortOrd)->paginate($pages_in_sheet);
+				//$books = Book::orderBy($sortCol, $sortOrd)->paginate($pages_in_sheet);
+				if($sortCol == 'author_id')
+					$sortCol = 'name';
+				
+				$books = Book::select('books.*')->join('authors', 'books.author_id', '=', 'authors.id')->orderBy($sortCol, $sortOrd)->paginate($pages_in_sheet);
 			}
 			else{
 				$books = Book::where('author_id', '=', $author_id)->orderBy($sortCol, $sortOrd)->paginate($pages_in_sheet);
 			}
 		}
+		
+		$sortCol = $request->sortCol;
 		$pagination = PaginationSettings::where('visible', '=', 1)->get();
 		$selectArray =  $book_columns;
 		
@@ -196,12 +202,47 @@ class BookController extends Controller
 			'pagination'=>$pagination]);
 	}
 	
-	public function sortable(){
+	public function sortable(Request $request){
+
+        $author_id = $request->author_id;
+        $pages_in_sheet = $request->pages_in_sheet;
+        
+        $sort  = $request->sort;
+        $direction  = $request->direction;
+
+        $authors = Author::all();
+        $paginationSettings = PaginationSettings::where('visible', '=', 1)->get();
+
+        if(empty($author_id) || $author_id == 'all') {
+            if($pages_in_sheet == 1) {
+                $books = Book::sortable()->get();
+            } else {
+                $books = Book::sortable()->paginate($pages_in_sheet);
+            }
+        } else {
+            if($pages_in_sheet == 1) {
+                $books = Book::where('author_id', '=', $author_id)->sortable()->get();
+            } else {
+                $books = Book::where('author_id', '=', $author_id)->sortable()->paginate($pages_in_sheet);
+            }
+        }   
+        return view('books.sortable', [
+            'books'=> $books,
+            'authors' => $authors,
+            'paginationSettings' => $paginationSettings,
+            'author_id'=> $author_id,
+            'pages_in_sheet' => $pages_in_sheet,
+            'sort' => $sort,
+            'direction' => $direction,
+        ]);
+	}
+	
+	public function advancedsort(Request $request){
+		$sortCol = 'name';//$request->sortCol;
+		$sortOrd = 'asc';//$request->sortOrd;		
 		
+		$books = Book::select('*')->join('authors', 'books.author_id', '=', 'authors.id')->orderBy($sortCol, $sortOrd)->paginate(15);
+		return view('books.advancedsort', ['books'=>$books] );		
 		
-		
-		$books = Book::where('author_id'
-		, '=', 1)->sortable()->paginate();
-		return view('books.sortable', ['books'=>$books] );
 	}
 }

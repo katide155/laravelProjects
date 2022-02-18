@@ -102,4 +102,22 @@ Route::prefix('books')->group(function(){
 	 Route::get('pagination', 'App\Http\Controllers\BookController@pagination')->name('book.pagination')->middleware('auth');
 	 Route::get('sortfilter', 'App\Http\Controllers\BookController@sortfilter')->name('book.sortfilter')->middleware('auth');
 	 Route::get('sortable', 'App\Http\Controllers\BookController@sortable')->name('book.sortable')->middleware('auth');
+	 Route::get('advancedsort', 'App\Http\Controllers\BookController@advancedsort')->name('book.advancedsort')->middleware('auth');
+});
+
+Route::prefix('ratings')->group(function(){
+	//Index
+	Route::get('', 'App\Http\Controllers\RatingController@index')->name('rating.index')->middleware('auth');
+	//create
+	 Route::get('create', 'App\Http\Controllers\RatingController@create')->name('rating.create')->middleware('auth');
+	 Route::get('createjs', 'App\Http\Controllers\RatingController@createjs')->name('rating.createjs')->middleware('auth');
+	 Route::post('store', 'App\Http\Controllers\RatingController@store')->name('rating.store')->middleware('auth');
+	 Route::post('storejs', 'App\Http\Controllers\RatingController@storejs')->name('rating.storejs')->middleware('auth');
+	//edit
+	Route::get('edit/{rating}', 'App\Http\Controllers\RatingController@edit')->name('rating.edit')->middleware('auth');
+	Route::post('update/{rating}', 'App\Http\Controllers\RatingController@update')->name('rating.update')->middleware('auth');
+	//delete
+	 Route::post('destroy/{rating}', 'App\Http\Controllers\RatingController@destroy')->name('rating.destroy')->middleware('auth');
+	//show
+	 Route::get('show/{rating}', 'App\Http\Controllers\RatingController@show')->name('rating.show')->middleware('auth');	
 });

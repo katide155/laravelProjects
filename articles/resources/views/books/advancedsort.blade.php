@@ -1,4 +1,3 @@
-
 @extends('layouts.app')
 
 @section('content')
@@ -13,8 +12,26 @@
 	<div class="row">
 		<div class="row">
 		<div class="col-12">
-			<form action="{{route('book.sortable')}}" method="get"> 
+		{{--<form action="{{route('book.sortfilter')}}" method="get"> 
 				@csrf
+				<select name="sortCol">
+					@foreach($selectArray as $key=>$item)
+						@if($item == $sortCol || (empty($sortCol) && $key==0))
+						<option value="{{$item}}" selected>{{$item}}</option>
+						@else
+						<option value="{{$item}}">{{$item}}</option>
+						@endif
+					@endforeach
+				</select>
+				<select name="sortOrd">
+					@if ($sortOrd == 'asc' || empty($sortOrd))
+					<option value="asc" selected>Didėjimo</option>
+					<option value="desc">Mažėjimo</option>
+					@else
+					<option value="asc">Didėjimo</option>
+					<option value="desc" selected>Mažėjimo</option>
+					@endif
+				</select>
 				<select name="author_id">
 					<option value="all">Pasirinkite autorių</option>
 					@foreach($authors as $author)
@@ -26,7 +43,7 @@
 					@endforeach
 				</select>
 				<select name="pages_in_sheet">
-					@foreach ($paginationSettings as $pagin)
+					@foreach ($pagination as $pagin)
 						@if($pagin->value == $pages_in_sheet)
 						<option value="{{$pagin->value}}" selected>{{$pagin->title}}</option>
 						@else
@@ -36,22 +53,21 @@
 				</select>
 				<button type="submit">Ieškoti</button>
 			</form>
-			<a href="{{route('book.sortable')}}" class="btn btn-success">išvalyti</a>
+			<a href="{{route('book.sortfilter')}}" class="btn btn-success">išvalyti</a>
+		--}}
 		</div>
 	</div>
 		<div class="col-12">
-    @if($pages_in_sheet != 1)
-        {!! $books->appends(Request::except('page'))->render() !!}
-    @endif
+		
 			<table class="table table-success table-striped">
 
 			<thead>
 			  <tr>
 				<th style="width: 40px;">Eil. Nr.</th>
-				<th style="width: 100px;">@sortablelink('id', 'ID')</th>
-				<th style="width: 200px;">@sortablelink('title', 'Knygos pavadinimas')</th>
-				<th style="width: 300px;">@sortablelink('bookAuthor.name', 'Autoriaus vardas, pavardė')</th>
-				<th >@sortablelink('description', 'Knygos aprašymas')</th>
+				<th style="width: 40px;">ID</th>
+				<th style="width: 100px;">Knygos pavadinimas</th>
+				<th style="width: 150px;">Autoriaus vardas, pavardė</th>
+				<th >Knygos aprašymas</th>
 				{{--<th><a class="btn btn-success dbfl" href="{{route('book.create')}}">Sukurti autorių</a></th>--}}
 			  </tr>
 			</thead>
@@ -62,7 +78,7 @@
 				<td>{{ $i++; }}</td>
 				<td>{{$book->id}}</td>
 				<td style="text-align: left;">{{$book->title}}</td>
-				<td>{{$book->bookAuthor->name}} {{$book->bookAuthor->surname}}</td>
+				<td>{{$book->name}} {{$book->surname}}</td>
 				<td>{{$book->description}}</td>
 					{{--<td style="text-align: right;">
 					<a class="btn btn-success dbfl" href="{{route('book.edit',[$book])}}">edit</a>
@@ -79,9 +95,7 @@
 			@endforeach
 				</tbody>
 			</table>
-    @if($pages_in_sheet != 1)
-        {!! $books->appends(Request::except('page'))->render() !!}
-    @endif
+
 		</div>
 	</div>	
 </div>	
