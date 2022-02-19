@@ -16,7 +16,7 @@ class Category extends Model
 	public $sortable = ['id', 'title', 'description'];
 
 	
-	public function categoryPost(){
+	public function categoryPosts(){
 		
 		return $this->hasMany(Post::class, 'category_id', 'id');
 

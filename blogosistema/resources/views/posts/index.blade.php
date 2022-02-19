@@ -49,7 +49,11 @@
 					{{session()->get('success_message')}}
 				</div>
 			@endif
-			
+			@if(session()->has('error_message'))
+			<div class="alert alert-danger">
+				{{session()->get('error_message')}}
+			</div>
+			@endif			
 			@if(count($posts) == 0)
 				
 			<p>Nėra jokių įrašų</p>

@@ -6,50 +6,41 @@
 <div class="container">
 
 
-  <div class="modal-dialog big-modal modal-dialog-centered">
+  <div class="modal-dialog big-modal modal-dialog-centered" style="min-width: 900px">
 	<div class="modal-content">
 	  <div class="modal-header">
-		<h5 class="modal-title" id="exampleModalLabel">Grupės duomenys</h5>
+		<h5 class="modal-title" id="exampleModalLabel">Kategorijos duomenys</h5>
 	  </div>
 
 			  <div class="modal-body">
 				<div class="row g-3 align-items-center">
 				  <div class="col-2">Pavadinimas:</div>
-				  <div class="col-10">{{$attendanceGroup->attendance_group_name}}</div>
+				  <div class="col-10">{{$category->title}}</div>
 				</div>
 			  </div>
 			  <div class="modal-body">
 				<div class="row g-3 align-items-center">
-				  <div class="col-2">Lygis:</div>
-				  <div class="col-10">{{$attendanceGroup->attendance_group_difficulty}}</div>
+				  <div class="col-2">aprašymas:</div>
+				  <div class="col-10">{{$category->description}}</div>
 				</div>
 			  </div>
 			  <div class="modal-body">
 				<div class="row g-3 align-items-center">
-				  <div class="col-2">Mokykla:</div>
-				  <div class="col-10">{{$attendanceGroup->attendanceGroupSchool->school_name}}</div>
+				  <div class="col-2">Matomumas:</div>
+				  <div class="col-10">{{$category->visibility}}</div>
 				</div>
 			  </div>
 			  <div class="modal-body">
 				<div class="row g-3 align-items-center">
-				  <div class="col-2">Aprašymas:</div>
-				  <div class="col-10">{{$attendanceGroup->attendance_group_description}}</div>
-				</div>
-			  </div>
-			  <div class="modal-body">
-				<div class="row g-3 align-items-center">
-				  <div class="col-2">Grupės studentai:</div>
-				  <div class="col-10">
-						@foreach($attendanceGroup->attendanceGroupStudents as $student)
+				  <div class="col-12">Kategorijai priklausantys postai:</div>
+				  <div class="col-12">
+						@foreach($category->categoryPosts as $post)
 							<div class="row g-3 align-items-center">
-								<div class="col-1">{{$student->id}}</div>
-								<div class="col-2">{{$student->student_name}}</div>
-								<div class="col-2">{{$student->student_surname}}</div>
-								<div class="col-2">
-								<img width="80px" height="30px" src="{{$student->student_image_url}}"/>
-								</div>
-								<div class="col-2">
-								<form method="post" action="{{route('student.destroy', [$student])}}">
+								<div class="col-1">{{$post->id}}</div>
+								<div class="col-2">{{$post->title}}</div>
+								<div class="col-8">{{$post->description}}</div>
+								<div class="col-1">
+								<form method="post" action="{{route('post.destroy', [$post])}}">
 									@csrf
 									<button class="btn btn-danger" type="submit">Trinti</button>
 								</form>	
@@ -59,21 +50,16 @@
 				  </div>
 				</div>
 			  </div>	
-			  <div class="modal-body">
-				<div class="row g-3 align-items-center">
-				  <div class="col-4">Grupės logo:</div>
-				  <div class="col-6"><img width="100px" src="{{$attendanceGroup->attendance_group_logo}}"/></div>
-				</div>
-			  </div>
+
 			<div class="modal-footer">
 	 
-				<a class="btn btn-secondary" href="{{route('attendancegroup.index')}}">Grįžti</a>
+				<a class="btn btn-secondary" href="{{route('category.index')}}">Grįžti</a>
 				
-			    <form method="post" action="{{route('attendancegroup.destroy', [$attendanceGroup])}}">
+			    <form method="post" action="{{route('category.destroy', [$category])}}">
 					@csrf
 					<button class="btn btn-danger" type="submit">Trinti</button>
 				</form>
-				<a class="btn btn-success" href="{{route('attendancegroup.edit',[$attendanceGroup])}}">Redaguoti</a>
+				<a class="btn btn-success" href="{{route('category.edit',[$category])}}">Redaguoti</a>
 			</div>
 	</div>
   </div>

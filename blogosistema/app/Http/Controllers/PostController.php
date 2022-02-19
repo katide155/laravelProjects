@@ -136,7 +136,8 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        //
+        $post->delete();
+		return redirect()->route('post.index')->with('success_message', 'Sėkmingai ištrinta');
     }
 	
 	public function filter(Request $request){

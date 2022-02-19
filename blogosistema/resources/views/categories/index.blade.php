@@ -41,6 +41,12 @@
 				</div>
 			@endif
 			
+			@if(session()->has('error_message'))
+			<div class="alert alert-danger">
+				{{session()->get('error_message')}}
+			</div>
+			@endif
+			
 			@if(count($categories) == 0)
 				
 			<p>Nėra jokių įrašų</p>

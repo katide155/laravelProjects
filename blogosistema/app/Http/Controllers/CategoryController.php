@@ -18,7 +18,8 @@ class CategoryController extends Controller
     public function index(Request $request)
     {
 		
-        $pages_in_sheet = $request->pages_in_sheet;
+        $pages_in_sheet = $request->pages_in_sheet ?? 5;
+		
         
         $sort  = $request->sort;
         $direction  = $request->direction;
@@ -95,7 +96,7 @@ class CategoryController extends Controller
      */
     public function show(Category $category)
     {
-        //
+			return view('categories.show', ['category'=>$category]);
     }
 
     /**
@@ -129,6 +130,11 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
-        //
+       	$categoryPosts = $category->categoryPosts;
+		if(count($categoryPosts) != 0){
+			return redirect()->route('category.index')->with('error_message', 'Trinti negalima, kategorija turi postų');
+		}
+        $category->delete();
+		return redirect()->route('category.index')->with('success_message', 'Sėkmingai ištrinta');
     }
 }
