@@ -15,6 +15,10 @@
 		<div class="col-12">
 			<form action="{{route('book.sortable')}}" method="get"> 
 				@csrf
+				
+				
+				<input type="hidden" name="sort" value="{{$sort}}">
+				<input type="hidden" name="direction" value="{{$direction}}" />
 				<select name="author_id">
 					<option value="all">Pasirinkite autorių</option>
 					@foreach($authors as $author)

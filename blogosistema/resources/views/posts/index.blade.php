@@ -12,6 +12,10 @@
 		<div class="col-12">
 			<form action="{{route('post.index')}}" method="get"> 
 				@csrf
+				
+				<input type="hidden" name="sort" value="{{$sort}}">
+				<input type="hidden" name="direction" value="{{$direction}}" />
+				
 				<select name="category_id">
 					<option value="all">Pasirinkite kategoriją</option>
 					@foreach($categories as $category)

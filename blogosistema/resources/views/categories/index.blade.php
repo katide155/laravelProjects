@@ -4,61 +4,88 @@
 <div class="container">
 	<div class="row">
 		<div class="col-12">
-			<h2>Grupių sąrašas</h2>
+			<h2>Kategorijos</h2>
 		</div>
 	</div>
 	
-	@if(session()->has('error_message'))
-		<div class="alert alert-danger">
-			{{session()->get('error_message')}}
+		<div class="row">
+		<div class="col-12">
+			<form action="{{route('category.index')}}" method="get"> 
+			
+			
+			    <input type="hidden" name="sort" value="{{$sort}}">
+				<input type="hidden" name="direction" value="{{$direction}}" />
+				
+				@csrf
+				<select name="pages_in_sheet">
+					@foreach ($paginationSettings as $key => $pagin)
+						@if($pagin == $pages_in_sheet)
+						<option value="{{$pagin}}" selected>{{$key}}</option>
+						@else
+						<option value="{{$pagin}}">{{$key}}</option>	
+						@endif
+					@endforeach
+				</select>
+				<button type="submit">Pasirinkti</button>
+			</form>
+			<a href="{{route('post.index')}}" class="btn btn-success">išvalyti</a>
 		</div>
-	@endif
-	@if(session()->has('success_message'))
-		<div class="alert alert-success">
-			{{session()->get('success_message')}}
-		</div>
-	@endif
+	</div>
 	<div class="row">
 		
 		<div class="col-12">
+		
+			@if(session()->has('success_message'))
+				<div class="alert alert-success">
+					{{session()->get('success_message')}}
+				</div>
+			@endif
+			
+			@if(count($categories) == 0)
+				
+			<p>Nėra jokių įrašų</p>
+			
+			<p><a href="{{route('category.create')}}">Sukurti naują įrašą</a></p>
+			
+			@else
 
+
+    @if($pages_in_sheet != 1)
+        {!! $categories->appends(Request::except('page'))->render() !!}
+    @endif
 
 			<table class="table table-success table-striped">
 
 			<thead>
 			  <tr>
 				<th style="width: 40px;">Eil. Nr.</th>
-				<th style="width: 200px;">Grupės pavadinimas</th>
-				<th style="width: 200px;">Grupės lygis</th>
-				<th style="width: 200px;">Mokykla</th>
-				<th >Grupės aprašymas</th>
-				<th >Grupės studentų kiekis</th>
-				<th >Grupės logo</th>
-				<th style="width: 180px;">
-					<button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal">Pridėti grupę</button>
+				<th style="width: 40px;">@sortablelink('id', 'ID')</th>
+				<th style="width: 200px;">@sortablelink('title', 'Pavadinimas')</th>
+				<th>@sortablelink('description', 'Aprašymas')</th>
+				<th style="width: 160px;">
+					<a class="btn btn-success" href="{{route('category.create')}}">Pridėti kategoriją</a>
 				</th>
 			  </tr>
 			</thead>
 			<tbody>
+			
+			
 			<?php $i=1; ?>
-			@foreach ($attendanceGroups as $attendanceGroup)
+			@foreach ($categories as $category)
 			  <tr>
 				<td>{{ $i++; }}</td>
-				<td style="text-align: left;">{{$attendanceGroup->attendance_group_name}}</td>
-				<td style="text-align: left;">{{$attendanceGroup->attendance_group_difficulty}}</td>
-				<td style="text-align: left;">{{$attendanceGroup->attendanceGroupSchool->school_name}}</td>
-				<td style="text-align: left;">{{$attendanceGroup->attendance_group_description}}</td>
-				<td>{{count($attendanceGroup->attendanceGroupStudents)}}</td>
-				<td><img width="100px" src="{{$attendanceGroup->attendance_group_logo}}"/></td>
-				<td style="text-align: right;">
-					<a class="btn btn-success dbfl" href="{{route('attendancegroup.edit',[$attendanceGroup])}}">edit</a>
+				<td>{{$category->id}}</td>
+				<td style="text-align: center;">{{$category->title}}</td>
+				<td>{{$category->description}}</td>
+				<td style="text-align: center;">
+					<a class="btn btn-success dbfl" href="{{route('category.edit',[$category])}}">edit</a>
 					<div class="dbfl">
-					<form method="post" action="{{route('attendancegroup.destroy',[$attendanceGroup])}}">
+					<form method="post" action="{{route('category.destroy',[$category])}}">
 						@csrf
-						<button type="submit" name="delete_group" class="btn btn-danger"><b>-</b></button>
+						<button type="submit" name="delete_client" class="btn btn-danger"><b>-</b></button>
 					</form>
 					</div>
-					<a class="btn btn-primary dbfl" href="{{route('attendancegroup.show',[$attendanceGroup])}}">rod</a>
+					<a class="btn btn-primary dbfl" href="{{route('category.show',[$category])}}">rod</a>
 				</td>
 			  </tr>
 			  
@@ -66,88 +93,13 @@
 
 			</tbody>
 			</table>
-				<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-				  <div class="modal-dialog modal-dialog-centered">
-					<div class="modal-content">
-					  <div class="modal-header">
-						<h5 class="modal-title" id="exampleModalLabel">Grupės duomenys</h5>
-						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-					  </div>
-						<form action="{{route('attendancegroup.store')}}" method="POST" enctype="multipart/form-data">
-						  <div class="modal-body">
-							<div class="row g-3 align-items-center">
-							  <div class="col-4">
-								<label for="attendance_group_name" class="col-form-label">Grupės pavadinimas</label>
-							  </div>
-							  <div class="col-6">
-								<input type="text" id="attendance_group_name" name="attendance_group_name" class="form-control">
-							  </div>
-							</div>
-						  </div>
-						  <div class="modal-body">
-							<div class="row g-3 align-items-center">
-							  <div class="col-4">
-								<label for="attendance_group_difficulty" class="col-form-label">Grupės lygis</label>
-							  </div>
-							  <div class="col-6">
-								<select class="form-select" aria-label=".form-select-sm example" name="attendance_group_difficulty">
-								@foreach ($levels as $level)
-									<option value="{{$level}}">{{$level}}</option>
-								@endforeach
-								</select>
-							  </div>
-							</div>
-						  </div>
-						  <div class="modal-body">
-							<div class="row g-3 align-items-center">
-							  <div class="col-4">
-								<label for="attendance_group_school_id" class="col-form-label">Mokykla</label>
-							  </div>
-							  <div class="col-6">
-								<select class="form-select" aria-label=".form-select-sm example" name="attendance_group_school_id">
-								@foreach ($schools as $school)
-									<option value="{{$school->id}}">{{$school->school_name}}</option>
-								@endforeach
-								</select>
-							  </div>
-							</div>
-						  </div>
-						  <div class="modal-body">
-							<div class="row g-3 align-items-center">
-							  <div class="col-4">
-								<label for="attendance_group_description" class="col-form-label">Grupės aprašymas</label>
-							  </div>
-							  <div class="col-6">
-								<textarea type="textarea" id="attendance_group_description" name="attendance_group_description" class="form-control"></textarea>
-							  </div>
-							</div>
-						  </div>
-						  <div class="modal-body">
-							<div class="row g-3 align-items-center">
-							  <div class="col-4">
-								<label for="attendance_group_logo" class="col-form-label">Grupės logo</label>
-							  </div>
-							  <div class="col-6">
-								<input type="file" name="attendance_group_logo" placeholder="Pasirinkite paveikslėlį" id="attendance_group_logo">
-							  </div>
-							</div>
-						  </div>
-						@csrf  
-						  <div class="modal-footer">
-							<button type="button" class="btn btn-secondary">Uždaryti</button>
-							<button class="btn btn-success" type="submit" name="save_group">Saugoti</button>
-						  </div>
-						</form>
-					</div>
-				  </div>
-				</div>
-		
-			<script>
-			function pop_up(url){
-				window.open(url, "_blank", "toolbar=yes,scrollbars=yes,resizable=yes,top=200,left=500,width=1000,height=600", true); 
-			}
-			</script>
+			
+			@endif
 
+		
+	    @if($pages_in_sheet != 1)
+        {!! $categories->appends(Request::except('page'))->render() !!}
+    @endif		
 
 		</div>
 	</div>	

@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\Post;
 use App\Http\Requests\StoreCategoryRequest;
 use App\Http\Requests\UpdateCategoryRequest;
+use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
@@ -13,9 +15,32 @@ class CategoryController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+		
+        $pages_in_sheet = $request->pages_in_sheet;
+        
+        $sort  = $request->sort;
+        $direction  = $request->direction;
+
+
+        $paginationSettings = ['5'=>5, '10'=>10, 'all'=>1];
+
+ 
+            if($pages_in_sheet == 1) {
+                $categories = Category::sortable()->get();
+            } else {
+                $categories = Category::sortable()->paginate($pages_in_sheet);
+            }
+
+      
+        return view('categories.index', [
+            'categories'=> $categories,
+            'paginationSettings' => $paginationSettings,
+            'pages_in_sheet' => $pages_in_sheet,
+            'sort' => $sort,
+            'direction' => $direction,
+        ]);
     }
 
     /**
@@ -25,7 +50,7 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        //
+        return view('categories.create');
     }
 
     /**
@@ -34,9 +59,32 @@ class CategoryController extends Controller
      * @param  \App\Http\Requests\StoreCategoryRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreCategoryRequest $request)
+    public function store(Request $request)
     {
-        //
+        $category = new Category;
+		
+		$category->title = $request->category_title;
+		$category->description = $request->category_description;
+		$category->visibility = $request->category_visibility; 
+		
+		$category->save();
+		
+		if($request->category_newpost){
+			$post_title = $request->post_title; 
+			$total = count($post_title); 
+		  
+			for($i=0; $i<$total; $i++) {
+			
+				   $post = new Post;
+				   $post->title = $request->post_title[$i];
+				   $post->description = $request->post_description[$i];
+				   $post->visibility = $request->post_visibility[$i];
+					$post->category_id = $category->id;
+					
+				   $post->save();
+			}
+		}
+		return redirect()->route('category.index');
     }
 
     /**
