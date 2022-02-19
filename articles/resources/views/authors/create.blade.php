@@ -100,7 +100,7 @@
 					</div>
 					<div class="col-md-6">
 						<label for="book_description" class="col-form-label">Aprašymas</label>
-						<textarea class="form-control" name="book_description[]"></textarea>
+						<textarea class="form-control" name="book_description[]" id="book_description"></textarea>
 					</div>
 				</div>
 				
@@ -119,13 +119,16 @@
 <script>
 
 	$(document).ready(
-	
+		
 		function(){
-			
+			$('#author_newbook').prop( "checked", false );
 			$('#author_newbook').click(
 				function(){
 					
 					$('.books-info').toggleClass('d-none');
+					$('.vidus').remove();
+					$('#book_title').val('');
+					$('#book_description').val('');
 				}
 			);
 			

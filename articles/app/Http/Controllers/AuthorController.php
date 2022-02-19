@@ -102,19 +102,21 @@ class AuthorController extends Controller
 		$author->author_image_id = $authorImage_id; 
 		$author->save();
 		
-		$book_title = $request->book_title; //6, MASYVAS
-        $total = count($book_title); //6
-      
-        for($i=0; $i<$total; $i++) {
-        
-		//$book = (new BookController)->store($request);
-               $book = new Book;
-               $book->title = $request->book_title[$i];
-               $book->description = $request->book_description[$i];
-				$book->author_id = $author->id;
-				
-               $book->save();
-        }
+		if($request->author_newbook){
+			$book_title = $request->book_title; //6, MASYVAS
+			$total = count($book_title); //6
+		  
+			for($i=0; $i<$total; $i++) {
+			
+			//$book = (new BookController)->store($request);
+				   $book = new Book;
+				   $book->title = $request->book_title[$i];
+				   $book->description = $request->book_description[$i];
+					$book->author_id = $author->id;
+					
+				   $book->save();
+			}
+		}
 		return redirect()->route('author.index');
     }
 
