@@ -85,7 +85,27 @@
 			<div class="col-md-6">
 				<input id="image_class" type="text" class="form-control" name="image_class" required autofocus >
 			</div>
-		</div>	  
+		</div>	
+			<div class="form-group">
+				<label for="author_newbook" class="col-form-label">Pridėti autoriaus knygų</label>
+				<input type="checkbox" name="author_newbook" id="author_newbook">
+			</div>
+			<div class="books-info d-none">
+				<button class="btn btn-success" id="add_field">Add</button>
+				<button class="btn btn-danger" id="remove_field">Remove</button>
+				<div class="row g-3" id="liux">
+					<div class="col-md-6">
+						<label for="book_title" class="col-form-label">Knygos pavadinimas</label>
+						<input type="text" id="book_title" name="book_title[]" class="form-control">
+					</div>
+					<div class="col-md-6">
+						<label for="book_description" class="col-form-label">Aprašymas</label>
+						<textarea class="form-control" name="book_description[]"></textarea>
+					</div>
+				</div>
+				
+				<div class="info"></div>
+			</div>
 	@csrf  
 	  <div class="modal-footer">
 		<a class="btn btn-secondary" href="{{route('author.index')}}">Grįžti</a>
@@ -96,5 +116,56 @@
   </div>
 
 </div>
+<script>
 
+	$(document).ready(
+	
+		function(){
+			
+			$('#author_newbook').click(
+				function(){
+					
+					$('.books-info').toggleClass('d-none');
+				}
+			);
+			
+			$('#add_field').click(
+				function(){
+					
+					$('.info').append('<div class="vidus row g-3">'+$('#liux').html()+'</div>');
+				
+				}
+			);		
+			
+			$('#remove_field').click(
+				function(){
+					
+					$('.vidus:last-child').remove();
+				
+				}
+			);	
+
+			$('#submit_number').click(
+				function(){
+					
+					let input_count;
+					input_count = $('#input_count').val();
+					
+					for(let i=0; i<input_count; i++){
+						$('.info').append('<div class="vidus row g-3">'+$('#liux').html()+'</div>');
+					}
+					
+				
+				}			
+			
+			)
+			console.log('veikia');
+			
+		}
+	
+	);
+	
+	
+	
+</script>
 @endsection

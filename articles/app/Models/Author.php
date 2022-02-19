@@ -15,4 +15,10 @@ class Author extends Model
 		return $this->hasOne(AuthorImage::class, 'id', 'author_image_id');
 
 	}
+	
+	public function authorBooks(){
+		
+		return $this->hasMany(Books::class, 'author_id', 'id');
+
+	}
 }

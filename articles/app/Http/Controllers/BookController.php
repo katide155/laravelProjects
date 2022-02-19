@@ -60,7 +60,8 @@ class BookController extends Controller
      */
     public function create()
     {
-        //
+        $authors = Author::all()->sortBy('name');
+		return view('books.create', ['authors'=>$authors] );
     }
 
     /**
@@ -69,9 +70,24 @@ class BookController extends Controller
      * @param  \App\Http\Requests\StoreBookRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreBookRequest $request)
+    public function store(Request $request)
     {
-        //
+        $book = new Book;
+		$book->title = $request->book_title;
+		$book->description = $request->book_description;
+		if($request->book_newauthor){
+			$author = new Author;
+			
+			$author->name = $request->author_name;
+			$author->surname = $request->author_surname;
+			$author->author_image_id = 1;//$request->author_image_id;
+			$author->save();
+			$book->author_id = $author->id;
+		}else{
+			$book->author_id = $request->book_author_id;
+		}
+		
+		$book->save();
     }
 
     /**

@@ -30,7 +30,7 @@
 			$('#add_field').click(
 				function(){
 					
-					$('.info').append('<div class="vidus">'+$('#liux').first().html()+'</div>');
+					$('.info').append('<div class="vidus">'+$('#liux').html()+'</div>');
 				
 				}
 			);		
@@ -50,7 +50,7 @@
 					input_count = $('#input_count').val();
 					
 					for(let i=0; i<input_count; i++){
-						$('.info').append('<div class="vidus">'+$('#liux').first().html()+'</div>');
+						$('.info').append('<div class="vidus">'+$('#liux').html()+'</div>');
 					}
 					
 				
