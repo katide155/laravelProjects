@@ -38,7 +38,10 @@
 							<div class="row g-3 align-items-center">
 								<div class="col-1">{{$post->id}}</div>
 								<div class="col-2">{{$post->title}}</div>
-								<div class="col-8">{{$post->description}}</div>
+								<div class="col-7">{{$post->description}}</div>
+								<div class="col-1">
+									<a class="btn btn-success" href="{{route('post.edit',[$post])}}">Red</a>
+								</div>
 								<div class="col-1">
 								<form method="post" action="{{route('post.destroy', [$post])}}">
 									@csrf

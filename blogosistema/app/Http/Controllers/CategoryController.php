@@ -107,7 +107,9 @@ class CategoryController extends Controller
      */
     public function edit(Category $category)
     {
-        //
+		$posts = Post::all()->sortBy('title');
+		$categoryPosts = $category->categoryPosts; 
+		return view('categories.edit', ['category'=>$category, 'posts'=>$posts, 'categoryPosts'=>$categoryPosts]);
     }
 
     /**
@@ -117,9 +119,30 @@ class CategoryController extends Controller
      * @param  \App\Models\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateCategoryRequest $request, Category $category)
+    public function update(Request $request, Category $category)
     {
-        //
+		$category->title = $request->category_title;
+		$category->description = $request->category_description;
+		$category->visibility = $request->category_visibility; 
+		
+		$category->save();
+		
+		if($request->category_newpost){
+			$post_title = $request->post_title; 
+			$total = count($post_title); 
+		  
+			for($i=0; $i<$total; $i++) {
+			
+				   $post = new Post;
+				   $post->title = $request->post_title[$i];
+				   $post->description = $request->post_description[$i];
+				   $post->visibility = $request->post_visibility[$i];
+					$post->category_id = $category->id;
+					
+				   $post->save();
+			}
+		}
+		return redirect()->route('category.index');
     }
 
     /**

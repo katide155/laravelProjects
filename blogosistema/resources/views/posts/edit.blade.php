@@ -3,80 +3,88 @@
 @section('content')
 
 <div class="container">
-  <div class="modal-dialog modal-dialog-centered">
-	<div class="modal-content">
-	  <div class="modal-header">
-		<h5 class="modal-title" id="exampleModalLabel">Studento duomenys</h5>
-	  </div>
-			<form action="{{route('student.update', [$student])}}" method="POST">
-			  <div class="modal-body">
-				<div class="row g-3 align-items-center">
-				  <div class="col-3">
-					<label for="student_name" class="col-form-label">Vardas</label>
-				  </div>
-				  <div class="col-9">
-					<input type="text" id="student_name" name="student_name" class="form-control" value="{{$student->student_name}}">
-				  </div>
+	<div class="row">
+		<div class="col-12">
+			<h2>Sukurti postą</h2>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-12">
+			<form action="{{route('post.update',[$post])}}" method="post"> 
+				@csrf
+
+				<div class="form-group">
+					<label for="post_title" class="col-form-label">Posto pavadinimas</label>
+					<input type="text" id="post_title" name="post_title" class="form-control" value="{{$post->title}}">
 				</div>
-			  </div>
-			  <div class="modal-body">
-				<div class="row g-3 align-items-center">
-				  <div class="col-3">
-					<label for="student_surname" class="col-form-label">Pavardė</label>
-				  </div>
-				  <div class="col-9">
-					<input type="text" id="student_surname" name="student_surname" class="form-control" value="{{$student->student_surname}}">
-				  </div>
+				<div class="form-group">
+					<label for="post_description" class="col-form-label">Aprašymas</label>
+					<textarea class="form-control" name="post_description">{{$post->description}}</textarea>
 				</div>
-			  </div>
-			  <div class="modal-body">
-				<div class="row g-3 align-items-center">
-				  <div class="col-3">
-					<label for="student_attendance_group_id" class="col-form-label">Grupė</label>
-				  </div>
-					<div class="col-5">
-						
-						<select class="form-select" aria-label=".form-select-sm example" name="student_attendance_group_id">
-							@foreach ($attendanceGroups as $attendanceGroup)
-								@if($attendanceGroup->id == $student->student_attendance_group_id)
-									<option selected value="{{$attendanceGroup->id}}">{{$attendanceGroup->attendance_group_name}}</option>
+				<div class="form-group">
+					<label for="post_visibility" class="col-form-label">Posto matomumas</label>
+					<input type="number" min="0" max="1" id="post_visibility" name="post_visibility" class="form-control" value="{{$post->visibility}}">
+				</div>
+				<div class="form-group cat_select">
+					<label for="post_category_id" class="col-form-label">Kategorija</label>
+					<select class="form-select" name="post_category_id">
+							@foreach($categories as $category)
+								@if($category->id == $post->category_id)
+									<option value="{{$category->id}}" selected>{{$category->title}}</option>
 								@else
-									<option value="{{$attendanceGroup->id}}">{{$attendanceGroup->attendance_group_name}}</option>
+									<option value="{{$category->id}}">{{$category->title}}</option>
 								@endif
 							@endforeach
 						</select>
-					</div>
-				  <div class="col-4">
-					<button class="btn btn-success" type="button" name="" onclick="pop_up('{{route('attendancegroup.create')}}')">Įvesti naują</button>
-				  </div>
+						
+					</select>
 				</div>
-			  </div>
-
-			  <div class="modal-body">
-				<div class="row g-3 align-items-center">
-				  <div class="col-4">
-					<label for="student_image_url" class="col-form-label">Nuotraukos kelias</label>
-				  </div>
-				  <div class="col-8">
-					<input type="text" id="student_image_url" name="student_image_url" class="form-control" value="{{$student->student_image_url}}">
-				  </div>
+				<div class="form-group">
+					<label for="post_newcategory" class="col-form-label">Įtraukti naują kategoriją</label>
+					<input type="checkbox" name="post_newcategory" id="post_newcategory">
 				</div>
-			  </div>
-
-			@csrf  
-			  <div class="modal-footer">
-				<a class="btn btn-secondary" href="{{route('student.index')}}">Grįžti</a>
-				<button class="btn btn-success" type="submit" name="save_child">Saugoti</button>
-			  </div>
+			
+				<div class="category_info d-none">
+					<div class="form-group">
+						<label for="category_title" class="col-form-label">Kategorijos pavadinimas</label>
+						<input type="text" id="category_title" name="category_title" class="form-control">
+					</div>	
+					<div class="form-group">
+						<label for="category_description" class="col-form-label">Kategorijos aprašymas</label>
+						<textarea class="form-control" id="category_description" name="category_description"></textarea>
+					</div>	
+					<div class="form-group">
+						<label for="category_visibility" class="col-form-label">Kategorijos matomumas</label>
+						<input type="number" min="0" max="1" id="category_visibility" name="category_visibility" class="form-control">
+					</div>					
+				</div>
+				<button class="btn btn-success" type="submit">Saugoti</button>
 			</form>
+		</div>
 	</div>
-  </div>
-			<script>
-			function pop_up(url){
-				window.open(url, "_blank", "toolbar=yes,scrollbars=yes,resizable=yes,top=200,left=500,width=1000,height=600", true); 
-			}
-			</script>
+<script>
 
-</div>
+	$(document).ready(
+	
+		function(){
+			$('#post_newcategory').prop( "checked", false );
+			$('#post_newcategory').click(
+				function(){
+					
+					$('.category_info').toggleClass('d-none');
+					$('.cat_select').toggleClass('d-none');
+				}
+			);
+	
+		}
+	
+	);
+	
+	
+	
+</script>
+
+</div>	
 
 @endsection

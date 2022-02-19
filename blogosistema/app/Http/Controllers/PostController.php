@@ -102,7 +102,8 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
-        //
+     	$postCategory = $post->postCategory->title;
+        return view('posts.show', ['post'=>$post],['postCategory'=>$postCategory]);
     }
 
     /**
@@ -113,7 +114,8 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
-        //
+		$categories = Category::all()->sortBy('title');
+		return view('posts.edit', ['post'=>$post, 'categories'=>$categories]);
     }
 
     /**
@@ -125,7 +127,24 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
-        //
+		$post->title = $request->post_title;
+		$post->description = $request->post_description;
+		$post->visibility = $request->post_visibility;
+		if($request->post_newcategory){
+			$category = new Category;
+			
+			$category->title = $request->category_title;
+			$category->description = $request->category_description;
+			$category->visibility = $request->category_visibility;
+			$category->save();
+			$post->category_id = $category->id;
+		}else{
+			$post->category_id = $request->post_category_id;
+		}
+		
+		$post->save();
+		
+		return redirect()->route('post.index');
     }
 
     /**
@@ -140,12 +159,5 @@ class PostController extends Controller
 		return redirect()->route('post.index')->with('success_message', 'Sėkmingai ištrinta');
     }
 	
-	public function filter(Request $request){
-		
-		$category_id = $request->category_id;
-		
-		$posts = Post::where('category_id', '=', $category_id)->get();
-		
-		return view('posts.filter', ['posts'=>$posts]);
-	}
+
 }
