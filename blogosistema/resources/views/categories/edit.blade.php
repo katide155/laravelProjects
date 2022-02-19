@@ -42,29 +42,7 @@
 		</div>
 	  </div>
 	  
-			  <div class="modal-body">
-				<div class="row g-3 align-items-center">
-				  <div class="col-12">Kategorijai priklausantys postai:</div>
-				  <div class="col-12">
-						@foreach($category->categoryPosts as $post)
-							<div class="row g-3 align-items-center">
-								<div class="col-1">{{$post->id}}</div>
-								<div class="col-2">{{$post->title}}</div>
-								<div class="col-7">{{$post->description}}</div>
-								<div class="col-1">
-									<a class="btn btn-success" href="{{route('post.edit',[$post])}}">Red</a>
-								</div>
-								<div class="col-1">
-									<form method="post" action="{{route('post.destroy', [$post])}}">
-										@csrf
-										<button class="btn btn-danger" type="submit">Trinti</button>
-									</form>	
-								</div>
-							</div>
-						@endforeach
-				  </div>
-				</div>
-			  </div>
+
 
 			  
 			<div class="form-group">
@@ -101,6 +79,30 @@
 		<button class="btn btn-success" type="submit" name="save_group">Saugoti</button>
 	  </div>
 	</form>
+	
+				  <div class="modal-body">
+				<div class="row g-3 align-items-center">
+				  <div class="col-12">Kategorijai priklausantys postai:</div>
+				  <div class="col-12">
+						@foreach($category->categoryPosts as $post)
+							<div class="row g-3 align-items-center">
+								<div class="col-1">{{$post->id}}</div>
+								<div class="col-2">{{$post->title}}</div>
+								<div class="col-7">{{$post->description}}</div>
+								<div class="col-1">
+									<a class="btn btn-success" href="{{route('post.edit',[$post])}}">Red</a>
+								</div>
+								<div class="col-1">
+									<form method="post" action="{{route('post.destroy', [$post])}}">
+										@csrf
+										<button class="btn btn-danger" type="submit">Trinti</button>
+									</form>	
+								</div>
+							</div>
+						@endforeach
+				  </div>
+				</div>
+			  </div>
 	</div>
   </div>
 
