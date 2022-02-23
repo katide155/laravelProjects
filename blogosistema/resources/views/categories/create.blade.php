@@ -11,6 +11,16 @@
 	  </div>
 	<form action="{{route('category.store')}}" method="POST">
 	  <div class="modal-body">
+	  
+	  @if ($errors->any())
+			<div class="alert alert-danger">
+				<ul>
+					@foreach ($errors->all() as $error)
+						<li>{{ $error }}</li>
+					@endforeach
+				</ul>
+			</div>
+		@endif
 		<div class="row g-3 align-items-center">
 		  <div class="col-3">
 			<label for="category_title" class="col-form-label">Pavadinimas</label>

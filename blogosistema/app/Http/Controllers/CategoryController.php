@@ -30,21 +30,9 @@ class CategoryController extends Controller
 
  
             if($pages_in_sheet == 1) {
-				
-				//$categories = Category::select('categories.*', DB::raw('count(posts.category_id) as posts'))
-	//->join('posts', 'posts.category_id', '=', 'categories.id')
-	//->groupBy('categories.id')->sortable()->get();
-	$categories = Category:: withCount('categoryPosts')->sortable()->get();
-//dd($categories->first());
-                //$categories = Category::sortable()->get();
+				$categories = Category:: withCount('categoryPosts')->sortable()->get();
             } else {
-				
-		$categories = Category:: withCount('categoryPosts')->sortable()->paginate($pages_in_sheet);
-               // $categories = Category::sortable()->paginate($pages_in_sheet);
-			  // dd($categories->first());
-			   				//$categories = Category::select('categories.*', DB::raw('count(posts.category_id) as posts'))
-	//->join('posts', 'posts.category_id', '=', 'categories.id')
-	//->groupBy('categories.id')->sortable()->paginate($pages_in_sheet);
+				$categories = Category:: withCount('categoryPosts')->sortable()->paginate($pages_in_sheet);
             }
 
       
@@ -75,6 +63,11 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
+		 $validated = $request->validate([
+			'category_title' => 'required|max:16',
+			'category_description' => 'required|max:255',
+		]);
+		
         $category = new Category;
 		
 		$category->title = $request->category_title;

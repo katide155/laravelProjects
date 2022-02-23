@@ -13,7 +13,15 @@
 		<div class="col-12">
 			<form action="{{route('post.store')}}" method="post"> 
 				@csrf
-
+				  @if ($errors->any())
+						<div class="alert alert-danger">
+							<ul>
+								@foreach ($errors->all() as $error)
+									<li>{{ $error }}</li>
+								@endforeach
+							</ul>
+						</div>
+					@endif
 				<div class="form-group">
 					<label for="post_title" class="col-form-label">Posto pavadinimas</label>
 					<input type="text" id="post_title" name="post_title" class="form-control">
