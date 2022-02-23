@@ -7,6 +7,7 @@ use App\Models\Post;
 use App\Http\Requests\StoreCategoryRequest;
 use App\Http\Requests\UpdateCategoryRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class CategoryController extends Controller
 {
@@ -29,9 +30,21 @@ class CategoryController extends Controller
 
  
             if($pages_in_sheet == 1) {
-                $categories = Category::sortable()->get();
+				
+				//$categories = Category::select('categories.*', DB::raw('count(posts.category_id) as posts'))
+	//->join('posts', 'posts.category_id', '=', 'categories.id')
+	//->groupBy('categories.id')->sortable()->get();
+	$categories = Category:: withCount('categoryPosts')->sortable()->get();
+//dd($categories->first());
+                //$categories = Category::sortable()->get();
             } else {
-                $categories = Category::sortable()->paginate($pages_in_sheet);
+				
+		$categories = Category:: withCount('categoryPosts')->sortable()->paginate($pages_in_sheet);
+               // $categories = Category::sortable()->paginate($pages_in_sheet);
+			  // dd($categories->first());
+			   				//$categories = Category::select('categories.*', DB::raw('count(posts.category_id) as posts'))
+	//->join('posts', 'posts.category_id', '=', 'categories.id')
+	//->groupBy('categories.id')->sortable()->paginate($pages_in_sheet);
             }
 
       

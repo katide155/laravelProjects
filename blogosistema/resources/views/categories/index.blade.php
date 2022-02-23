@@ -68,6 +68,7 @@
 				<th style="width: 40px;">@sortablelink('id', 'ID')</th>
 				<th style="width: 200px;">@sortablelink('title', 'Pavadinimas')</th>
 				<th>@sortablelink('description', 'Aprašymas')</th>
+				<th>@sortablelink('category_posts_count', 'Postų skaičius')</th>
 				<th style="width: 160px;">
 					<a class="btn btn-success" href="{{route('category.create')}}">Pridėti kategoriją</a>
 				</th>
@@ -83,6 +84,7 @@
 				<td>{{$category->id}}</td>
 				<td style="text-align: center;">{{$category->title}}</td>
 				<td>{{$category->description}}</td>
+				<td>{{count($category->categoryPosts)}}</td>
 				<td style="text-align: center;">
 					<a class="btn btn-success dbfl" href="{{route('category.edit',[$category])}}">edit</a>
 					<div class="dbfl">
