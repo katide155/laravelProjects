@@ -25,7 +25,7 @@
 			</div>
 		@endif
 	</div>
-	<form action="{{route('author.store')}}" method="POST" enctype="multipart/form-data">
+	<form action="{{route('author.storeval')}}" method="POST" enctype="multipart/form-data">
 	  <div class="modal-body">
 		<div class="row g-3 align-items-center">
 		  <div class="col-3">
@@ -110,16 +110,28 @@
 				<input type="checkbox" name="author_newbook" id="author_newbook">
 			</div>
 			<div class="books-info d-none">
-				<button class="btn btn-success" id="add_field">Add</button>
-				<button class="btn btn-danger" id="remove_field">Remove</button>
+				<button type="button" class="btn btn-success" id="add_field">Add</button>
+				<button type="button" class="btn btn-danger" id="remove_field">Remove</button>
+				<input type="number" class="form-control" name="input_count" id="input_count"/>
+				<button type="button" class="btn btn-success" id="submit_number">Prideti</button>
 				<div class="row g-3" id="liux">
 					<div class="col-md-6">
 						<label for="book_title" class="col-form-label">Knygos pavadinimas</label>
-						<input type="text" id="book_title" name="book_title[]" class="form-control">
+						<input type="text" id="book_title" name="book_title[]" class="form-control @error('book_title'.$i) is-invalid @enderror" value="{{ old('book_title'.$i) }}">
+						@error('book_title'.$i)
+							<span class="invalid-feedback" role="alert">
+								<strong>{{ $message }}</strong>
+							</span>
+						@enderror
 					</div>
 					<div class="col-md-6">
 						<label for="book_description" class="col-form-label">Aprašymas</label>
-						<textarea class="form-control" name="book_description[]" id="book_description"></textarea>
+						<textarea class="form-control @error('book_description'.$i) is-invalid @enderror" name="book_description[]" id="book_description">{{ old('book_title'.$i) }}</textarea>
+						@error('surname')
+							<span class="invalid-feedback" role="alert">
+								<strong>{{ $message }}</strong>
+							</span>
+						@enderror
 					</div>
 				</div>
 				

@@ -58,6 +58,8 @@ Route::prefix('authors')->group(function(){
 	//create
 	 Route::get('create', 'App\Http\Controllers\AuthorController@create')->name('author.create')->middleware('auth');
 	 Route::post('store', 'App\Http\Controllers\AuthorController@store')->name('author.store')->middleware('auth');
+	 Route::get('createval', 'App\Http\Controllers\AuthorController@createval')->name('author.createval')->middleware('auth');
+	 Route::post('storeval', 'App\Http\Controllers\AuthorController@storeval')->name('author.storeval')->middleware('auth');
 	//edit
 	Route::get('edit/{author}', 'App\Http\Controllers\AuthorController@edit')->name('author.edit')->middleware('auth');
 	Route::post('update/{author}', 'App\Http\Controllers\AuthorController@update')->name('author.update')->middleware('auth');

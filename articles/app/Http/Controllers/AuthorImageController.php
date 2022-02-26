@@ -39,6 +39,11 @@ class AuthorImageController extends Controller
      */
     public function store(Request $request, $fromAuthorController = 1)
     {
+		$request->validate([
+			"image_width" => "required|min:1|max:4|integer",
+			"image_height" => "required|min:1|max:4|integer",
+		]);
+		
         $authorImage = new AuthorImage;
 		$authorImage->alt = $request->image_alt;
 		

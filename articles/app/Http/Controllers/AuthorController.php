@@ -56,7 +56,13 @@ class AuthorController extends Controller
     {
         return view('authors.create');
     }
-
+    public function createval(Request $request)
+    {
+		$request->validate([
+			"input_count" => "integer",
+		]);
+        return view('authors.createval');
+    }
     /**
      * Store a newly created resource in storage.
      *
@@ -65,6 +71,47 @@ class AuthorController extends Controller
      */
     public function store(Request $request)
     {
+		
+        //min galime ivesti minimaliai simboliu
+        //max kiek mes galime ivesti maksimaliai simboliu
+        //alpha tikrina ar ivestos tik raides
+        //alpha_num tikrina ar ivestos tik raides arba skaiciai
+        //alpha_dash tikrina ar ivestos tik raides arba skaiciai, bet papildomai priima 2 simbolius: _, -
+        //numeric - tikrina ar skaicius, integer(3.14, -5, 15, 0)
+        //integer - tikrina ar sveikasis skaicius(-, 0, +)
+        
+        //naturalusis skaicius yra nuo 1 - +inf
+        //gt(greater than)  gt:0
+        //gte(greater than or equal) gte:0
+        //lt(less than) lt:0
+        //lte(less than or equal ) lte:0
+        //integer| >0
+
+        //date - tikrina ar data
+        //date_equals -tikrina ar data lygi
+        //before - tikrina ar data yra ansktesne nei nurodyta
+        //before_or_equal -tikrina ar data yra ansktesne nei nurodyta arba lygi
+        //after - tikrina ar data yra velesne nei nurodyta
+        // after_or_equal - tikrina ar data yra velesne nei nurodyta arba lygi
+
+        // Patikrinti ar ivestas lietuviskas telefono numeris
+        
+        // +3706 1234567
+        
+        //+3706
+        //86
+
+        // 861234567 - integer, kiek skaitmenu skaiciuje
+        
+
+        //regex - simboliu paieska pagal tam tikrus kriterijus/sablonus
+		// 'phone' => ["required", 'regex:/(86|\+3706)\d{7}/'],
+		
+		$request->validate([
+			"name" => "required|min:2|max:50|alpha",
+			"surname" => "required|min:2|max:50|alpha",
+		]);
+		
         $author = new Author;
 		$author->name = $request->name;
 		$author->surname = $request->surname;
@@ -120,6 +167,40 @@ class AuthorController extends Controller
 		return redirect()->route('author.index');
     }
 
+
+    public function storeval(Request $request)
+    {
+		$request->validate([
+			"name" => "required|min:2|max:50|alpha",
+			"surname" => "required|min:2|max:50|alpha",
+			"book_title.*" => "required|min:2|max:50|alpha",
+			"book_description.*" => "required|min:2|max:566",
+		]);
+		
+        $author = new Author;
+		$author->name = $request->name;
+		$author->surname = $request->surname;
+		$authorImage_id = (new AuthorImageController)->store($request, 2); 
+		$author->author_image_id = $authorImage_id; 
+		$author->save();
+	
+	
+		if($request->author_newbook){
+			$book_title = $request->book_title;
+			$total = count($book_title);
+		  
+			for($i=0; $i<$total; $i++) {
+
+				   $book = new Book;
+				   $book->title = $request->book_title[$i];
+				   $book->description = $request->book_description[$i];
+					$book->author_id = $author->id;
+					
+				   $book->save();
+			}
+		}
+		return redirect()->route('author.index');		
+	}	
     /**
      * Display the specified resource.
      *
