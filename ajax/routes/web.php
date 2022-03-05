@@ -28,6 +28,7 @@ Route::prefix('articles')->group(function(){
 	//create
 	 Route::get('create', 'App\Http\Controllers\ArticleController@create')->name('article.create')->middleware('auth');
 	 Route::post('store', 'App\Http\Controllers\ArticleController@store')->name('article.store')->middleware('auth');
+	 Route::post('storeAjax', 'App\Http\Controllers\ArticleController@storeAjax')->name('article.storeAjax')->middleware('auth');
 	//edit
 	Route::get('edit/{article}', 'App\Http\Controllers\ArticleController@edit')->name('article.edit')->middleware('auth');
 	Route::post('update/{article}', 'App\Http\Controllers\ArticleController@update')->name('article.update')->middleware('auth');

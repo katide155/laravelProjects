@@ -6,6 +6,7 @@ use App\Models\Article;
 use App\Models\Type;
 use App\Http\Requests\StoreArticleRequest;
 use App\Http\Requests\UpdateArticleRequest;
+use Illuminate\Http\Request;
 
 class ArticleController extends Controller
 {
@@ -37,10 +38,27 @@ class ArticleController extends Controller
      * @param  \App\Http\Requests\StoreArticleRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreArticleRequest $request)
+    public function store(Request $request)
     {
-        //
+        $article = new Article;
+		$article->title = $request->article_title;
+		$article->description = $request->article_description;
+		$article->type_id = $request->article_type_id;
+		
+		$article->save();
+		return redirect()->route('article.index');
     }
+	
+	public function storeAjax(Request $request){
+		
+		$article = new Article;
+		$article->title = $request->article_title;
+		$article->description = $request->article_description;
+		$article->type_id = $request->article_type_id;
+		
+		$article->save();
+		return 'atsakymas';	
+	}
 
     /**
      * Display the specified resource.

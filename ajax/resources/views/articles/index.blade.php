@@ -41,7 +41,7 @@
 			@foreach ($articles as $article)
 			  <tr>
 				<td>{{ $i++; }}</td>
-				<td style="text-align: left;">{{$article->type}}</td>
+				<td style="text-align: left;">{{$article->title}}</td>
 				<td style="text-align: left;">{{$article->description}}</td>
 				<td style="text-align: left;">{{$article->articleType->title}}</td>
 				
@@ -65,27 +65,31 @@
 				  <div class="modal-dialog modal-dialog-centered">
 					<div class="modal-content">
 					  <div class="modal-header">
-						<h5 class="modal-title" id="exampleModalLabel">Kompanijos duomenys</h5>
+						<h5 class="modal-title" id="exampleModalLabel">Article data</h5>
 						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 					  </div>
-						<form action="{{route('article.store')}}" method="POST">
+					  {{--<form action="{{route('article.store')}}" method="POST">--}}
 						  <div class="modal-body">
+						  
+							<div id="alert" class="alert alert-success">
+							
+							</div>
 							<div class="row g-3 align-items-center">
-							  <div class="col-2">
-								<label for="company_name" class="col-form-label">Kompanijos pavadinimas</label>
+							  <div class="col-5">
+								<label for="article_title" class="col-form-label">Article title</label>
 							  </div>
-							  <div class="col-6">
-								<input type="text" id="company_name" name="company_name" class="form-control">
+							  <div class="col-7">
+								<input type="text" id="article_title" name="article_title" class="form-control">
 							  </div>
 							</div>
 						  </div>
 						  <div class="modal-body">
 							<div class="row g-3 align-items-center">
-							  <div class="col-2">
-								<label for="company_type" class="col-form-label">Kompanijos tipas</label>
+							  <div class="col-5">
+								<label for="article_type_id" class="col-form-label">Article type</label>
 							  </div>
-							  <div class="col-6">
-								<select class="form-select" aria-label=".form-select-sm example" name="company_type_id">
+							  <div class="col-7">
+								<select class="form-select" aria-label=".form-select-sm example" name="article_type_id" id="article_type_id">
 								@foreach ($articleTypes as $articleType)
 									<option value="{{$articleType->id}}">{{$articleType->title}}</option>
 								@endforeach
@@ -95,28 +99,65 @@
 						  </div>
 						  <div class="modal-body">
 							<div class="row g-3 align-items-center">
-							  <div class="col-2">
-								<label for="company_description" class="col-form-label">Kompanijos aprašymas</label>
+							  <div class="col-5">
+								<label for="article_description" class="col-form-label">Article description</label>
 							  </div>
-							  <div class="col-6">
-								<input type="textarea" id="company_description" name="company_description" class="form-control">
+							  <div class="col-7">
+								<input type="textarea" id="article_description" name="article_description" class="form-control">
 							  </div>
 							</div>
 						  </div>
-						@csrf  
+						  {{--@csrf--}}  
 						  <div class="modal-footer">
-							<button type="button" class="btn btn-secondary">Uždaryti</button>
-							<button class="btn btn-success" type="submit" name="save_group">Saugoti</button>
+							<button type="button" class="btn btn-secondary" id="close_article">Uždaryti</button>
+							<button class="btn btn-success" type="submit" name="save_article" id="save_article">Saugoti</button>
 						  </div>
-						</form>
+						  {{--</form>--}}
+						  
+				
 					</div>
 				  </div>
 				</div>
 		
 			<script>
-			function pop_up(url){
-				window.open(url, "_blank", "toolbar=yes,scrollbars=yes,resizable=yes,top=200,left=500,width=1000,height=600", true); 
-			}
+			
+			$.ajaxSetup({
+				
+				headers:{
+					"X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr('content')
+				}
+				
+			});
+			
+			$(document).ready(function(){
+				
+				$('#save_article').click(function(){
+					let article_title;
+					let article_description;
+					let article_type_id;
+					
+					article_title = $('#article_title').val();
+					article_description = $('#article_description').val();
+					article_type_id = $('#article_type_id').val();
+					//console.log(article_title + " " + article_description + article_type_id);
+					
+					$.ajax({
+						type: 'POST',
+						url: '{{route("article.storeAjax")}}',
+						data: {article_title:article_title, article_description:article_description, article_type_id:article_type_id},
+						success: function(data){
+							$('#alert').html(data)(
+							)
+						}
+						
+					});
+				})
+				
+				
+				
+			});
+			
+console.log('labas');
 			</script>
 
 
