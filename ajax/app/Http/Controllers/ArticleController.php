@@ -57,7 +57,18 @@ class ArticleController extends Controller
 		$article->type_id = $request->article_type_id;
 		
 		$article->save();
-		return 'atsakymas';	
+		
+		$article_info = array(
+			'success_message' => 'Article saved successfuly',
+			'article_title' => $article->title,
+			'article_description' => $article->description,
+			'article_type_id' => $article->type_id,
+			'article_id' => $article->id,
+		);
+		
+		$jason_response = response()->json($article_info);
+		
+		return $jason_response;	
 	}
 
     /**
@@ -68,9 +79,22 @@ class ArticleController extends Controller
      */
     public function show(Article $article)
     {
-        //
+        return view("articles.index", ['article' => $article]);
     }
-
+    public function showAjax(Article $article)
+    {
+       		$article_info = array(
+			'success_message' => 'Article retrived successfuly',
+			'article_title' => $article->title,
+			'article_description' => $article->description,
+			'article_type_id' => $article->type_id,
+			'article_id' => $article->id,
+		);
+		
+		$jason_response = response()->json($article_info);
+		
+		return $jason_response;	
+    }
     /**
      * Show the form for editing the specified resource.
      *
@@ -81,7 +105,26 @@ class ArticleController extends Controller
     {
         //
     }
-
+	public function updateAjax(Request $request, Article $article){
+		
+		$article->title = $request->article_title;
+		$article->description = $request->article_description;
+		$article->type_id = $request->article_type_id;
+		
+		$article->save();
+		
+		$article_info = array(
+			'success_message' => 'Article updated successfuly',
+			'article_title' => $article->title,
+			'article_description' => $article->description,
+			'article_type_id' => $article->type_id,
+			'article_id' => $article->id,
+		);
+		
+		$jason_response = response()->json($article_info);
+		
+		return $jason_response;	
+	}
     /**
      * Update the specified resource in storage.
      *
@@ -102,6 +145,19 @@ class ArticleController extends Controller
      */
     public function destroy(Article $article)
     {
-        //
+        $article->delete();
+		return redirect()->route('article.index');
+    }
+	
+	public function destroyAjax(Article $article)
+    {
+        $article->delete();
+		$article_info = array(
+			'success_message' => 'Article '.$article->title.' deleted successfuly',
+ 		);
+		
+		$jason_response = response()->json($article_info);
+		
+		return $jason_response;
     }
 }

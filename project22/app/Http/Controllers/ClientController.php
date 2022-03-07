@@ -93,6 +93,7 @@ class ClientController extends Controller
 		$client->client_image_url = $request->client_image_url;
 		
 		$client->save();
+		
 		return redirect()->route('client.index');
     }
 
