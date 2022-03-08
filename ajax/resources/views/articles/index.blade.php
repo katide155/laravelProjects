@@ -29,7 +29,7 @@
 
 			<thead>
 			  <tr>
-				<th style="width: 40px;">Eil. Nr.</th>
+				<th style="width: 40px;">Article ID</th>
 				<th style="width: 200px;">Article title</th>
 				<th >Article description</th>
 				<th style="width: 200px;">Article type</th>
@@ -42,10 +42,10 @@
 			<?php $i=1; ?>
 			@foreach ($articles as $article)
 			  <tr class="article{{$article->id}}">
-				<td>{{ $i++; }}</td>
-				<td style="text-align: left;">{{$article->title}}</td>
-				<td style="text-align: left;">{{$article->description}}</td>
-				<td style="text-align: left;">{{$article->articleType->title}}</td>
+				<td class="col-article-id">{{$article->id}}</td>
+				<td class="col-article-title" style="text-align: left;">{{$article->title}}</td>
+				<td class="col-article-description" style="text-align: left;">{{$article->description}}</td>
+				<td class="col-article-type-id" style="text-align: left;">{{$article->articleType->title}}</td>
 				
 				<td style="text-align: right;">
 					<button data-article-id="{{$article->id}}" type="button" class="btn btn-success dbfl edit-article" data-bs-toggle="modal" data-bs-target="#articleEditModal">ed</button>
@@ -60,6 +60,22 @@
 
 			</tbody>
 			</table>
+			
+				<table class="template d-none">
+				  <tr >
+					<td class="col-article-id"></td>
+					<td class="col-article-title" style="text-align: left;"></td>
+					<td class="col-article-description" style="text-align: left;"></td>
+					<td class="col-article-type-id" style="text-align: left;"></td>
+					
+					<td style="text-align: right;">
+						<button type="button" class="btn btn-success dbfl edit-article" data-bs-toggle="modal" data-bs-target="#articleEditModal">ed</button>
+						<button type="button" class="btn btn-danger dbfl delete-article" name="delete_client" >dl</button>
+						<button type="button" class="btn btn-primary dbfl show-article" data-bs-toggle="modal" data-bs-target="#articleShowModal">sh</button>
+					</td>
+				  </tr>					
+				</table>
+			
 				<div class="modal fade" id="articleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 				  <div class="modal-dialog modal-dialog-centered">
 					<div class="modal-content">
@@ -110,6 +126,8 @@
 					</div>
 				  </div>
 				</div>
+				
+
 
 				<div class="modal fade" id="articleEditModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 				  <div class="modal-dialog modal-dialog-centered">
@@ -155,7 +173,7 @@
 						  </div>
 						  <div class="modal-footer">
 							<button type="button" class="btn btn-secondary" id="closeModal" data-bs-dismiss="modal">Close</button>
-							<button class="btn btn-success" type="submit" name="edit_article" id="edit_article">Edit</button>
+							<button class="btn btn-success edit_article" type="submit" name="edit_article" id="edit_article">Edit</button>
 						  </div>
 					</div>
 				  </div>
@@ -212,7 +230,19 @@
 			
 			$(document).ready(function(){
 				
-
+				function createRowFromHtml(articleId, articleTitle, articleDescription, articleTypeId){
+					$(".template tr").addClass('article'+articleId);
+					$(".template .delete-article").attr('data-article-id', articleId);
+					$(".template .show-article").attr('data-article-id', articleId);
+					$(".template .edit-article").attr('data-article-id', articleId);
+					$(".template .col-article-id").html(articleId);
+					$(".template .col-article-title").html(articleTitle);
+					$(".template .col-article-description").html(articleDescription);
+					$(".template .col-article-type-id").html(articleTypeId);
+					return $(".template tbody").html();
+				}
+				
+				
 				
 				$('#save_article').click(function(){
 					let article_title;
@@ -230,8 +260,8 @@
 						data: {article_title:article_title, article_description:article_description, article_type_id:article_type_id},
 						success: function(data){
 							
-							
-							let tablerow = "<tr class='article"+data.article_id+"'><td></td><td>" + data.article_title + "</td><td>" + data.article_description + "</td><td>" + data.article_type_id + "</td><td><button data-article-id="+data.article_id+" type='submit' name='delete_client' class='btn btn-danger dbfl delete-article'>dl</button><button type='button' class='btn btn-primary dbfl show-article' data-bs-toggle='modal' data-article-id="+data.article_id+" data-bs-target='#articleShowModal'>sh</button></td></tr>";
+						
+							let tablerow = createRowFromHtml(data.article_id, data.article_title, data.article_description, data.article_type_id);
 							
 							$('#articles_table').append(tablerow);
 							$('#alert').removeClass("d-none");
@@ -309,19 +339,39 @@
 					
 				});
 				
+		
+				//$(document).on('click', '#edit_article', function(){
 				$('#edit_article').click(function(){
 					
 					let article_id;
-					article_id = $(this).attr('data-article-id');
+					let article_title;
+					let article_description;
+					let article_type_id;
+					
+					article_id = $('#edit_article_id').val();
+					article_title = $('#edit_article_title').val();
+					article_description = $('#edit_article_description').val();
+					article_type_id = $('#edit_article_type_id').val();
 					
 						$.ajax({
 						type: 'POST',
 						url: '/articles/updateAjax/' + article_id,
+						data: {article_title:article_title, article_description:article_description, article_type_id:article_type_id},
 						success: function(data){
-							$('#edit_article_id').val(data.article_id);
-							$('#edit_article_title').val(data.article_title);
-							$('#edit_article_description').val(data.article_description);
-							$('#edit_article_type_id').val(data.article_type_id);
+							
+							$('.article' + article_id + " " + ".col-article-title").html(data.article_title);
+							$('.article' + article_id + " " + ".col-article-description").html(data.article_description);
+							$('.article' + article_id + " " + ".col-article-type-id").html(data.article_type_id);
+							
+							$('#alert').removeClass("d-none");
+							$('#alert').html(data.success_message);
+							
+							$('#articleEditModal').hide();
+							$('body').removeClass('modal-open');
+							$('.modal-backdrop').remove();
+							$('body').css({overflow:'auto'});			
+							
+							
 						}
 						
 					});
