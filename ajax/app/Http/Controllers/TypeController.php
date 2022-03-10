@@ -15,7 +15,8 @@ class TypeController extends Controller
      */
     public function index()
     {
-        //
+		$types = Type::all();
+		return view('types.index', ['types'=>$types]);
     }
 
     /**
@@ -82,5 +83,28 @@ class TypeController extends Controller
     public function destroy(Type $type)
     {
         //
+    }
+	
+	public function destroyAjax(Type $type)
+    {
+       
+		
+		$articleCount = count($type->typeArticles);
+		
+		if($articleCount > 0)	{
+			$type_info = array(
+				'error_message' => 'Type '.$type->title." can't be deleted, because it hal articles",
+			);		
+		}	
+		else{
+			$type->delete();
+			$type_info = array(
+				'success_message' => 'Type '.$type->title.' deleted successfuly',
+			);
+		};
+		
+		$jason_response = response()->json($type_info);
+		
+		return $jason_response;
     }
 }

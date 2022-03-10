@@ -25,6 +25,7 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 Route::prefix('articles')->group(function(){
 	//Index
 	Route::get('', 'App\Http\Controllers\ArticleController@index')->name('article.index')->middleware('auth');
+	Route::get('indexAjax', 'App\Http\Controllers\ArticleController@indexAjax')->name('article.indexAjax')->middleware('auth');
 	//create
 	 Route::get('create', 'App\Http\Controllers\ArticleController@create')->name('article.create')->middleware('auth');
 	 Route::post('store', 'App\Http\Controllers\ArticleController@store')->name('article.store')->middleware('auth');
@@ -52,6 +53,7 @@ Route::prefix('types')->group(function(){
 	Route::post('update/{type}', 'App\Http\Controllers\TypeController@update')->name('type.update')->middleware('auth');
 	//delete
 	 Route::post('destroy/{type}', 'App\Http\Controllers\TypeController@destroy')->name('type.destroy')->middleware('auth');
+	 Route::post('destroyAjax/{type}', 'App\Http\Controllers\TypeController@destroyAjax')->name('type.destroyAjax')->middleware('auth');
 	//show
 	 Route::get('show/{type}', 'App\Http\Controllers\TypeController@show')->name('type.show')->middleware('auth');	
 });

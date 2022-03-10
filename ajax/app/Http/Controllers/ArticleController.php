@@ -18,9 +18,21 @@ class ArticleController extends Controller
     public function index()
     {
 		$articleTypes = Type::all();
-		$articles = Article::all();
+		$articles = Article::sortable()->get();
 		return view('articles.index', ['articles'=>$articles, 'articleTypes'=>$articleTypes]);
     }
+
+	public function indexAjax(){
+		
+		$articleTypes = Type::all();
+		$articles = Article::sortable()->get();
+		$response_array = $articles;
+
+		$jason_response = response()->json($articles);
+		
+		return $jason_response;			
+		
+	}
 
     /**
      * Show the form for creating a new resource.
@@ -122,6 +134,7 @@ class ArticleController extends Controller
 			'article_description' => $article->description,
 			'article_type_id' => $article->type_id,
 			'article_id' => $article->id,
+			'article_type' => $article->articleType->title,
 		);
 		
 		$jason_response = response()->json($article_info);

@@ -24,13 +24,15 @@
 							<div id="alert" class="alert alert-success d-none">
 							
 							</div>
+							
+			<button id="article-sort" class="btn btn-success" type="button">rikiuoti pagal id mazejimo tvarka</button>
 
 			<table class="table table-success table-striped" id="articles_table">
 
 			<thead>
 			  <tr>
-				<th style="width: 40px;">Article ID</th>
-				<th style="width: 200px;">Article title</th>
+				<th style="width: 40px;">@sortablelink('id', 'Article ID')</th>
+				<th style="width: 200px;">@sortablelink('title','Article title')</th>
 				<th >Article description</th>
 				<th style="width: 200px;">Article type</th>
 				<th style="width: 180px;">
@@ -338,6 +340,7 @@
 							$('#edit_article_id').val(data.article_id);
 							$('#edit_article_title').val(data.article_title);
 							$('#edit_article_description').val(data.article_description);
+							$('#edit_article_type_id option').removeAttr('selected');
 							$('#edit_article_type_id').val(data.article_type_id);
 							$('#edit_article_type_id .article'+data.article_type_id).attr("selected", "selected");
 						}
@@ -368,7 +371,7 @@
 							
 							$('.article' + article_id + " " + ".col-article-title").html(data.article_title);
 							$('.article' + article_id + " " + ".col-article-description").html(data.article_description);
-							$('.article' + article_id + " " + ".col-article-type-id").html(data.article_type_id);
+							$('.article' + article_id + " " + ".col-article-type-id").html(data.article_type);
 							
 							$('#alert').removeClass("d-none");
 							$('#alert').html(data.success_message);
@@ -386,9 +389,21 @@
 				});					
 					
 					
+				$('#article-sort').click(function(){
+					let sort = 'id';
+					let direction = 'asc';
+						$.ajax({
+						type: 'GET',
+						url: '{{route("article.indexAjax")}}',
+						data: {sort:sort, direction: direction},
+						success: function(data){
+							console.log(data);
+						}
+					});						
+				});		
 			});
 			
-console.log('labas');
+//console.log('labas');
 			</script>
 
 
