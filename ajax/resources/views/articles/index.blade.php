@@ -155,7 +155,7 @@
 							  <div class="col-7">
 								<select class="form-select" aria-label=".form-select-sm example" name="article_type_id" id="edit_article_type_id">
 								@foreach ($articleTypes as $articleType)
-									<option value="{{$articleType->id}}">{{$articleType->title}}</option>
+									<option class="article{{$articleType->id}}" value="{{$articleType->id}}">{{$articleType->title}}</option>
 								@endforeach
 								</select>
 							  </div>
@@ -196,18 +196,24 @@
 							  </div>
 							</div>
 							<div class="row g-3 align-items-center">
-							  <div class="col-12 show-article-title">
+							  <div class="col-5">
 								Article title: 
 							  </div>
-							</div>
-							<div class="row g-3 align-items-center">
-							  <div class="col-5 show-article-type-id">
-								Article type: 
+							  <div class="col-7 show-article-title">
 							  </div>
 							</div>
 							<div class="row g-3 align-items-center">
-							  <div class="col-5 show-article-description">
-								Article description
+							  <div class="col-5">
+								Article type: 
+							  </div>
+							  <div class="col-7 show-article-type-id">
+							  </div>
+							</div>
+							<div class="row g-3 align-items-center">
+							  <div class="col-5">
+								Article description:
+							  </div>
+							  <div class="col-7 show-article-description">
 							  </div>
 							</div>
 						  </div>
@@ -230,7 +236,7 @@
 			
 			$(document).ready(function(){
 				
-				function createRowFromHtml(articleId, articleTitle, articleDescription, articleTypeId){
+				function createRowFromHtml(articleId, articleTitle, articleDescription, articleType){
 					$(".template tr").addClass('article'+articleId);
 					$(".template .delete-article").attr('data-article-id', articleId);
 					$(".template .show-article").attr('data-article-id', articleId);
@@ -238,7 +244,7 @@
 					$(".template .col-article-id").html(articleId);
 					$(".template .col-article-title").html(articleTitle);
 					$(".template .col-article-description").html(articleDescription);
-					$(".template .col-article-type-id").html(articleTypeId);
+					$(".template .col-article-type-id").html(articleType);
 					return $(".template tbody").html();
 				}
 				
@@ -261,7 +267,7 @@
 						success: function(data){
 							
 						
-							let tablerow = createRowFromHtml(data.article_id, data.article_title, data.article_description, data.article_type_id);
+							let tablerow = createRowFromHtml(data.article_id, data.article_title, data.article_description, data.article_type);
 							
 							$('#articles_table').append(tablerow);
 							$('#alert').removeClass("d-none");
@@ -312,7 +318,7 @@
 							$('.show-article-id').html(data.article_id);
 							$('.show-article-title').html(data.article_title);
 							$('.show-article-description').html(data.article_description);
-							$('.show-article-type-id').html(data.article_type_id);
+							$('.show-article-type-id').html(data.article_type);
 						}
 						
 					});
@@ -333,6 +339,7 @@
 							$('#edit_article_title').val(data.article_title);
 							$('#edit_article_description').val(data.article_description);
 							$('#edit_article_type_id').val(data.article_type_id);
+							$('#edit_article_type_id .article'+data.article_type_id).attr("selected", "selected");
 						}
 						
 					});

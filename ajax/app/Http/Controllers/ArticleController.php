@@ -29,7 +29,7 @@ class ArticleController extends Controller
      */
     public function create()
     {
-        //
+        return view('articles.create');
     }
 
     /**
@@ -58,12 +58,14 @@ class ArticleController extends Controller
 		
 		$article->save();
 		
+				
 		$article_info = array(
 			'success_message' => 'Article saved successfuly',
 			'article_title' => $article->title,
 			'article_description' => $article->description,
 			'article_type_id' => $article->type_id,
 			'article_id' => $article->id,
+			'article_type' => $article->articleType->title,
 		);
 		
 		$jason_response = response()->json($article_info);
@@ -89,6 +91,7 @@ class ArticleController extends Controller
 			'article_description' => $article->description,
 			'article_type_id' => $article->type_id,
 			'article_id' => $article->id,
+			'article_type' => $article->articleType->title,
 		);
 		
 		$jason_response = response()->json($article_info);
