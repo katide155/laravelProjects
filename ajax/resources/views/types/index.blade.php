@@ -257,7 +257,7 @@
 						url: '/types/destroyAjax/' + type_id,
 						success: function(data){
 							$('#alert').removeClass("d-none");
-							if($.isEmptyObject(data.error_message){
+							if($.isEmptyObject(data.error_message)){
 								$('#alert').removeClass('alert-danger');
 								$('#alert').addClass('alert-success');
 								$('#alert').html(data.success_message);	
@@ -306,8 +306,8 @@
 						url: '/types/showAjax/' + type_id,
 						success: function(data){
 							$('#edit_type_id').val(data.type_id);
-							$('#edit_type_title').val(data.article_title);
-							$('#edit_type_description').val(data.article_description);
+							$('#edit_type_title').val(data.type_title);
+							$('#edit_type_description').val(data.type_description);
 						}
 						
 					});
@@ -316,32 +316,29 @@
 				
 		
 				//$(document).on('click', '#edit_article', function(){
-				$('#edit_article').click(function(){
+				$('#edit_type').click(function(){
 					
-					let article_id;
-					let article_title;
-					let article_description;
-					let article_type_id;
+					let type_id;
+					let type_title;
+					let type_description;
 					
-					article_id = $('#edit_article_id').val();
-					article_title = $('#edit_article_title').val();
-					article_description = $('#edit_article_description').val();
-					article_type_id = $('#edit_article_type_id').val();
+					type_id = $('#edit_type_id').val();
+					type_title = $('#edit_type_title').val();
+					type_description = $('#edit_type_description').val();
 					
 						$.ajax({
 						type: 'POST',
-						url: '/articles/updateAjax/' + article_id,
-						data: {article_title:article_title, article_description:article_description, article_type_id:article_type_id},
+						url: '/types/updateAjax/' + type_id,
+						data: {type_title:type_title, type_description:type_description},
 						success: function(data){
 							
-							$('.article' + article_id + " " + ".col-article-title").html(data.article_title);
-							$('.article' + article_id + " " + ".col-article-description").html(data.article_description);
-							$('.article' + article_id + " " + ".col-article-type-id").html(data.article_type);
+							$('.type' + type_id + " " + ".col-type-title").html(data.type_title);
+							$('.type' + type_id + " " + ".col-type-description").html(data.type_description);
 							
 							$('#alert').removeClass("d-none");
 							$('#alert').html(data.success_message);
 							
-							$('#articleEditModal').hide();
+							$('#typeEditModal').hide();
 							$('body').removeClass('modal-open');
 							$('.modal-backdrop').remove();
 							$('body').css({overflow:'auto'});			

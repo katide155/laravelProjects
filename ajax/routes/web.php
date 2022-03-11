@@ -40,6 +40,7 @@ Route::prefix('articles')->group(function(){
 	//show
 	 Route::get('show/{article}', 'App\Http\Controllers\ArticleController@show')->name('article.show')->middleware('auth');	
 	 Route::get('showAjax/{article}', 'App\Http\Controllers\ArticleController@showAjax')->name('article.showAjax')->middleware('auth');
+	 Route::get('searchAjax', 'App\Http\Controllers\ArticleController@searchAjax')->name('article.searchAjax')->middleware('auth');
 });
 
 Route::prefix('types')->group(function(){
@@ -50,7 +51,7 @@ Route::prefix('types')->group(function(){
 	 Route::post('store', 'App\Http\Controllers\TypeController@store')->name('type.store')->middleware('auth');
 	//edit
 	Route::get('edit/{type}', 'App\Http\Controllers\TypeController@edit')->name('type.edit')->middleware('auth');
-	Route::post('update/{type}', 'App\Http\Controllers\TypeController@update')->name('type.update')->middleware('auth');
+	Route::post('updateAjax/{type}', 'App\Http\Controllers\TypeController@updateAjax')->name('type.updateAjax')->middleware('auth');
 	//delete
 	 Route::post('destroy/{type}', 'App\Http\Controllers\TypeController@destroy')->name('type.destroy')->middleware('auth');
 	 Route::post('destroyAjax/{type}', 'App\Http\Controllers\TypeController@destroyAjax')->name('type.destroyAjax')->middleware('auth');

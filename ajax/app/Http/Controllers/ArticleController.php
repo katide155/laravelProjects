@@ -25,10 +25,13 @@ class ArticleController extends Controller
 	public function indexAjax(){
 		
 		$articleTypes = Type::all();
-		$articles = Article::sortable()->get();
-		$response_array = $articles;
+		$articles = Article::with('articleType')->sortable()->get();
 
-		$jason_response = response()->json($articles);
+		$response_array = array(
+            'articles' => $articles
+        );
+
+		$jason_response = response()->json($response_array);
 		
 		return $jason_response;			
 		
@@ -63,6 +66,8 @@ class ArticleController extends Controller
 	
 	public function storeAjax(Request $request){
 		
+		
+		
 		$article = new Article;
 		$article->title = $request->article_title;
 		$article->description = $request->article_description;
@@ -70,7 +75,11 @@ class ArticleController extends Controller
 		
 		$article->save();
 		
-				
+		$sort = $request->sort;
+		$direction = $request->direction;
+		
+		$articles = Article::with('articleType')->sortable([$sort => $direction])->get();
+		
 		$article_info = array(
 			'success_message' => 'Article saved successfuly',
 			'article_title' => $article->title,
@@ -78,6 +87,7 @@ class ArticleController extends Controller
 			'article_type_id' => $article->type_id,
 			'article_id' => $article->id,
 			'article_type' => $article->articleType->title,
+			'articles' => $articles,
 		);
 		
 		$jason_response = response()->json($article_info);
@@ -176,4 +186,34 @@ class ArticleController extends Controller
 		
 		return $jason_response;
     }
+	
+	public function searchAjax(Request $request){
+		
+		$searchValue = $request->searchValue;
+		
+		$articles = Article::query()
+		->where('title', 'like', "%{$searchValue}%")
+		->orwhere('description', 'like', "%{$searchValue}%")
+		->orwhere('id', 'like', "%{$searchValue}%")
+		->get();
+		
+		if(count($articles) > 0){
+			$articles_array = array(
+				'articles' => $articles
+			);
+		}else{
+			
+			$articles_array = array(
+				'error_message' => 'No articles'
+			);			
+			
+		}
+		
+
+		
+		$json_response = response()->json($articles_array);
+		
+		return $json_response;
+		
+	}
 }

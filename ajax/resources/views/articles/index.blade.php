@@ -1,6 +1,16 @@
 @extends('layouts.app')
 
 @section('content')
+
+<style>
+.article-sort{
+	cursor:pointer;
+}
+
+.article-sort:hover{
+	color:blue;
+}
+</style>
 <div class="container">
 	<div class="row">
 		<div class="col-12">
@@ -25,58 +35,65 @@
 							
 							</div>
 							
-			<button id="article-sort" class="btn btn-success" type="button">rikiuoti pagal id mazejimo tvarka</button>
+			<input id="searchValue" type="text"/>
+			<button type="button" id="submitSearch">Search</button>
+			<input id="hidden-sort" type="hidden" value="id"/> 
+			<input id="hidden-direction" type="hidden" value="asc"/> 
 
-			<table class="table table-success table-striped" id="articles_table">
-
+		<table class="table table-success table-striped" id="articles_table">
 			<thead>
-			  <tr>
-				<th style="width: 40px;">@sortablelink('id', 'Article ID')</th>
-				<th style="width: 200px;">@sortablelink('title','Article title')</th>
-				<th >Article description</th>
-				<th style="width: 200px;">Article type</th>
-				<th style="width: 180px;">
-					<button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#articleModal">Add article</button>
-				</th>
-			  </tr>
+				<tr>
+					<th style="width: 40px;">
+						<div class="article-sort" class="btn btn-success" data-sort="id" data-direction="asc">ID</div>
+					</th>
+					<th style="width: 200px;">
+						<div class="article-sort" class="btn btn-success" data-sort="title" data-direction="asc">Article title</div>
+					</th>
+					<th >
+						<div class="article-sort" class="btn btn-success" data-sort="description" data-direction="asc">Description</div>
+					</th>
+					<th style="width: 200px;">
+						<div class="article-sort" class="btn btn-success" data-sort="type_id" data-direction="asc">Article type</div>
+					</th>
+					<th style="width: 180px;">
+						<button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#articleModal">Add article</button>
+					</th>
+				</tr>
 			</thead>
 			<tbody>
-			<?php $i=1; ?>
-			@foreach ($articles as $article)
-			  <tr class="article{{$article->id}}">
-				<td class="col-article-id">{{$article->id}}</td>
-				<td class="col-article-title" style="text-align: left;">{{$article->title}}</td>
-				<td class="col-article-description" style="text-align: left;">{{$article->description}}</td>
-				<td class="col-article-type-id" style="text-align: left;">{{$article->articleType->title}}</td>
-				
-				<td style="text-align: right;">
-					<button data-article-id="{{$article->id}}" type="button" class="btn btn-success dbfl edit-article" data-bs-toggle="modal" data-bs-target="#articleEditModal">ed</button>
-	
-					<button data-article-id="{{$article->id}}" type="submit" name="delete_client" class="btn btn-danger dbfl delete-article">dl</button>
-
-					<button data-article-id="{{$article->id}}" type="button" class="btn btn-primary dbfl show-article" data-bs-toggle="modal" data-bs-target="#articleShowModal">sh</button>
-				</td>
-			  </tr>
-			  
-			@endforeach
-
-			</tbody>
-			</table>
-			
-				<table class="template d-none">
-				  <tr >
-					<td class="col-article-id"></td>
-					<td class="col-article-title" style="text-align: left;"></td>
-					<td class="col-article-description" style="text-align: left;"></td>
-					<td class="col-article-type-id" style="text-align: left;"></td>
+				@foreach ($articles as $article)
+				<tr class="article{{$article->id}}">
+					<td class="col-article-id">{{$article->id}}</td>
+					<td class="col-article-title" style="text-align: left;">{{$article->title}}</td>
+					<td class="col-article-description" style="text-align: left;">{{$article->description}}</td>
+					<td class="col-article-type-id" style="text-align: left;">{{$article->articleType->title}}</td>
 					
 					<td style="text-align: right;">
-						<button type="button" class="btn btn-success dbfl edit-article" data-bs-toggle="modal" data-bs-target="#articleEditModal">ed</button>
-						<button type="button" class="btn btn-danger dbfl delete-article" name="delete_client" >dl</button>
-						<button type="button" class="btn btn-primary dbfl show-article" data-bs-toggle="modal" data-bs-target="#articleShowModal">sh</button>
+						<button data-article-id="{{$article->id}}" type="button" class="btn btn-success dbfl edit-article" data-bs-toggle="modal" data-bs-target="#articleEditModal">ed</button>
+		
+						<button data-article-id="{{$article->id}}" type="submit" name="delete_client" class="btn btn-danger dbfl delete-article">dl</button>
+
+						<button data-article-id="{{$article->id}}" type="button" class="btn btn-primary dbfl show-article" data-bs-toggle="modal" data-bs-target="#articleShowModal">sh</button>
 					</td>
-				  </tr>					
-				</table>
+				</tr>
+				@endforeach
+			</tbody>
+		</table>
+			
+		<table class="template d-none">
+			<tr >
+				<td class="col-article-id"></td>
+				<td class="col-article-title" style="text-align: left;"></td>
+				<td class="col-article-description" style="text-align: left;"></td>
+				<td class="col-article-type-id" style="text-align: left;"></td>
+
+				<td style="text-align: right;">
+					<button type="button" class="btn btn-success dbfl edit-article" data-bs-toggle="modal" data-bs-target="#articleEditModal">ed</button>
+					<button type="button" class="btn btn-danger dbfl delete-article" name="delete_client" >dl</button>
+					<button type="button" class="btn btn-primary dbfl show-article" data-bs-toggle="modal" data-bs-target="#articleShowModal">sh</button>
+				</td>
+			</tr>					
+		</table>
 			
 				<div class="modal fade" id="articleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 				  <div class="modal-dialog modal-dialog-centered">
@@ -239,6 +256,7 @@
 			$(document).ready(function(){
 				
 				function createRowFromHtml(articleId, articleTitle, articleDescription, articleType){
+					$(".template tr").removeAttr("class");
 					$(".template tr").addClass('article'+articleId);
 					$(".template .delete-article").attr('data-article-id', articleId);
 					$(".template .show-article").attr('data-article-id', articleId);
@@ -262,10 +280,28 @@
 					article_type_id = $('#article_type_id').val();
 					//console.log(article_title + " " + article_description + article_type_id);
 					
+					let sort;
+					let direction;
+					
+					sort = $(this).attr('data-sort');
+					direction = $(this).attr('data-direction');
+					
+					$("#hidden-sort").val(sort);
+					$("#hidden-direction").val(direction);
+					
+					if(direction == 'asc'){
+						
+						$(this).attr('data-direction', 'desc');
+						
+					}else{
+						
+						$(this).attr('data-direction', 'asc');
+					}
+					
 					$.ajax({
 						type: 'POST',
 						url: '{{route("article.storeAjax")}}',
-						data: {article_title:article_title, article_description:article_description, article_type_id:article_type_id},
+						data: {article_title:article_title, article_description:article_description, article_type_id:article_type_id, sort:sort, direction: direction},
 						success: function(data){
 							
 						
@@ -389,18 +425,49 @@
 				});					
 					
 					
-				$('#article-sort').click(function(){
+				$('.article-sort').click(function(){
 					let sort = 'id';
-					let direction = 'asc';
+					let direction = 'desc';
+					
+					sort = $(this).attr('data-sort');
+					direction = $(this).attr('data-direction');
+					
+					$("#hidden-sort").val(sort);
+					$("#hidden-direction").val(direction);
+					
+					if(direction == 'asc'){
+						$(this).attr('data-direction', 'desc');
+					}else{
+						$(this).attr('data-direction', 'asc');
+					}
+					
 						$.ajax({
 						type: 'GET',
 						url: '{{route("article.indexAjax")}}',
 						data: {sort:sort, direction: direction},
 						success: function(data){
-							console.log(data);
+							//console.log(data.articles);
+							let tablerow;
+							$("#articles_table tbody" ).html('');
+							$.each(data.articles, function(key, article){
+								//console.log(article.article_type.title);
+								tablerow = createRowFromHtml(article.id, article.title, article.description, article.article_type.title);
+								
+								$('#articles_table tbody').append(tablerow);
+								
+							});
+							
+							console.log(tablerow);
 						}
 					});						
-				});		
+				});
+
+				$('#submitSearch').click(function(){
+					
+					let searchValue = '';
+					console.log(tablerow);
+				});
+				
 			});
 			
 //console.log('labas');

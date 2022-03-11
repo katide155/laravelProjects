@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Type;
 use App\Http\Requests\StoreTypeRequest;
 use App\Http\Requests\UpdateTypeRequest;
+use Illuminate\Http\Request;
 
 class TypeController extends Controller
 {
@@ -46,9 +47,18 @@ class TypeController extends Controller
      * @param  \App\Models\Type  $type
      * @return \Illuminate\Http\Response
      */
-    public function show(Type $type)
+    public function showAjax(Type $type)
     {
-        //
+        $type_info = array(
+			'success_message' => 'Type retrived successfuly',
+			'type_title' => $type->title,
+			'type_description' => $type->description,
+			'type_id' => $type->id,
+		);
+		
+		$jason_response = response()->json($type_info);
+		
+		return $jason_response;	
     }
 
     /**
@@ -69,9 +79,23 @@ class TypeController extends Controller
      * @param  \App\Models\Type  $type
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateTypeRequest $request, Type $type)
+    public function updateAjax(Request $request, Type $type)
     {
-        //
+        $type->title = $request->article_title;
+		$type->description = $request->article_description;
+		
+		$type->save();
+		
+		$type_info = array(
+			'success_message' => 'type updated successfuly',
+			'type_title' => $type->title,
+			'type_description' => $type->description,
+			'type_id' => $type->id,
+		);
+		
+		$jason_response = response()->json($type_info);
+		
+		return $jason_response;
     }
 
     /**
