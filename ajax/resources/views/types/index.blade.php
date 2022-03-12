@@ -265,6 +265,7 @@
 							}else{
 								$('#alert').removeClass('alert-success');
 								$('#alert').addClass('alert-danger');
+								$('#alert').removeClass('d-none');
 								$('#alert').html(data.error_message);
 							}
 							

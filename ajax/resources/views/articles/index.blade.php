@@ -31,12 +31,13 @@
 	<div class="row">
 		
 		<div class="col-12">
-							<div id="alert" class="alert alert-success d-none">
+			<div id="alert" class="alert alert-success d-none">
+			</div>
 							
-							</div>
-							
-			<input id="searchValue" type="text"/>
-			<button type="button" id="submitSearch">Search</button>
+			<div class="searchAjaxForm">				
+				<input id="searchValue" type="text"/>
+				<button type="button" id="submitSearch">Search</button>
+			</div>
 			
 			
 			<input id="hidden-sort" type="hidden" value="id"/> 
@@ -464,8 +465,37 @@
 
 				$('#submitSearch').click(function(){
 					
-					let searchValue = '';
-					console.log(tablerow);
+					let searchValue = $('#searchValue').val();
+					
+					
+					
+					$.ajax({
+						type: 'GET',
+						url: '{{route("article.searchAjax")}}',
+						data: {searchValue: searchValue},
+						success: function(data){
+							
+							if($.isEmptyObject(data.error_message)){
+								let tablerow;
+								$("#articles_table" ).show();
+								$('#alert').addClass('d-none');
+								$("#articles_table tbody" ).html('');
+								$.each(data.articles, function(key, article){
+									tablerow = createRowFromHtml(article.id, article.title, article.description, article.type_id);
+									
+									$('#articles_table tbody').append(tablerow);
+									
+								});		
+							}else{
+								$("#articles_table" ).hide();
+								$('#alert').removeClass('alert-success');
+								$('#alert').addClass('alert-danger');
+								$('#alert').removeClass('d-none');
+								$('#alert').html(data.error_message);
+							}
+						}
+						
+					});
 				});
 				
 			});
