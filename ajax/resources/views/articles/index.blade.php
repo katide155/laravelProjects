@@ -37,6 +37,8 @@
 							
 			<input id="searchValue" type="text"/>
 			<button type="button" id="submitSearch">Search</button>
+			
+			
 			<input id="hidden-sort" type="hidden" value="id"/> 
 			<input id="hidden-direction" type="hidden" value="asc"/> 
 
@@ -53,7 +55,7 @@
 						<div class="article-sort" class="btn btn-success" data-sort="description" data-direction="asc">Description</div>
 					</th>
 					<th style="width: 200px;">
-						<div class="article-sort" class="btn btn-success" data-sort="type_id" data-direction="asc">Article type</div>
+						<div class="article-sort" class="btn btn-success" data-sort="articleType.title" data-direction="asc">Article type</div>
 					</th>
 					<th style="width: 180px;">
 						<button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#articleModal">Add article</button>
@@ -283,31 +285,29 @@
 					let sort;
 					let direction;
 					
-					sort = $(this).attr('data-sort');
-					direction = $(this).attr('data-direction');
+					sort = $("#hidden-sort").val();
+					direction = $("#hidden-direction").val();
 					
-					$("#hidden-sort").val(sort);
-					$("#hidden-direction").val(direction);
-					
-					if(direction == 'asc'){
-						
-						$(this).attr('data-direction', 'desc');
-						
-					}else{
-						
-						$(this).attr('data-direction', 'asc');
-					}
-					
+				
 					$.ajax({
 						type: 'POST',
 						url: '{{route("article.storeAjax")}}',
 						data: {article_title:article_title, article_description:article_description, article_type_id:article_type_id, sort:sort, direction: direction},
 						success: function(data){
 							
-						
-							let tablerow = createRowFromHtml(data.article_id, data.article_title, data.article_description, data.article_type);
+							let tablerow;
+							$("#articles_table tbody" ).html('');
+							$.each(data.articles, function(key, article){
+								tablerow = createRowFromHtml(article.id, article.title, article.description, article.article_type.title);
+								
+								$('#articles_table tbody').append(tablerow);
+								
+							});							
 							
-							$('#articles_table').append(tablerow);
+						
+							//let tablerow = createRowFromHtml(data.article_id, data.article_title, data.article_description, data.article_type);
+							
+							//$('#articles_table').append(tablerow);
 							$('#alert').removeClass("d-none");
 							$('#alert').html(data.success_message);
 							
@@ -426,8 +426,8 @@
 					
 					
 				$('.article-sort').click(function(){
-					let sort = 'id';
-					let direction = 'desc';
+					let sort;
+					let direction;
 					
 					sort = $(this).attr('data-sort');
 					direction = $(this).attr('data-direction');

@@ -67,7 +67,6 @@ class ArticleController extends Controller
 	public function storeAjax(Request $request){
 		
 		
-		
 		$article = new Article;
 		$article->title = $request->article_title;
 		$article->description = $request->article_description;
