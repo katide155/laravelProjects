@@ -36,6 +36,7 @@
 							
 			<div class="searchAjaxForm">				
 				<input id="searchValue" type="text"/>
+				<span class="search-feedback"></span>
 				<button type="button" id="submitSearch">Search</button>
 			</div>
 			
@@ -463,39 +464,49 @@
 					});						
 				});
 
-				$('#submitSearch').click(function(){
-					
+				//$('#submitSearch').click(function(){
+				$(document).on('input', '#searchValue', function(){	
 					let searchValue = $('#searchValue').val();
 					
-					
-					
-					$.ajax({
-						type: 'GET',
-						url: '{{route("article.searchAjax")}}',
-						data: {searchValue: searchValue},
-						success: function(data){
-							
-							if($.isEmptyObject(data.error_message)){
-								let tablerow;
-								$("#articles_table" ).show();
-								$('#alert').addClass('d-none');
-								$("#articles_table tbody" ).html('');
-								$.each(data.articles, function(key, article){
-									tablerow = createRowFromHtml(article.id, article.title, article.description, article.type_id);
-									
-									$('#articles_table tbody').append(tablerow);
-									
-								});		
-							}else{
-								$("#articles_table" ).hide();
-								$('#alert').removeClass('alert-success');
-								$('#alert').addClass('alert-danger');
-								$('#alert').removeClass('d-none');
-								$('#alert').html(data.error_message);
+					let searchFieldCount = searchValue.length;
+					console.log(searchFieldCount);
+					if(searchFieldCount == 0){
+						$('.search-feedback').css('display', 'block');
+						$('.search-feedback').html('Search field is empty!');
+					}else if(searchFieldCount != 0 && searchFieldCount < 3 ){
+						$('.search-feedback').css('display', 'block');
+						$('.search-feedback').html('Need to write more than 3 symbols!');						
+					}else{
+						$('.search-feedback').css('display', 'none');
+						$.ajax({
+							type: 'GET',
+							url: '{{route("article.searchAjax")}}',
+							data: {searchValue: searchValue},
+							success: function(data){
+								
+								if($.isEmptyObject(data.error_message)){
+									let tablerow;
+									$("#articles_table" ).show();
+									$('#alert').addClass('d-none');
+									$("#articles_table tbody" ).html('');
+									$.each(data.articles, function(key, article){
+										tablerow = createRowFromHtml(article.id, article.title, article.description, article.type_id);
+										
+										$('#articles_table tbody').append(tablerow);
+										
+									});		
+								}else{
+									$("#articles_table" ).hide();
+									$('#alert').removeClass('alert-success');
+									$('#alert').addClass('alert-danger');
+									$('#alert').removeClass('d-none');
+									$('#alert').html(data.error_message);
+								}
 							}
-						}
-						
-					});
+							
+						});
+					
+					}
 				});
 				
 			});

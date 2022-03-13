@@ -203,7 +203,7 @@ class ArticleController extends Controller
 		}else{
 			
 			$articles_array = array(
-				'error_message' => 'No articles by seach phrase '.$searchValue.' where found!'
+				'error_message' => 'By seach phrase "'.$searchValue.'" no articles where found!'
 			);			
 			
 		}
