@@ -7,6 +7,7 @@ use App\Models\Type;
 use App\Http\Requests\StoreArticleRequest;
 use App\Http\Requests\UpdateArticleRequest;
 use Illuminate\Http\Request;
+use Validator;
 
 class ArticleController extends Controller
 {
@@ -66,29 +67,59 @@ class ArticleController extends Controller
 	
 	public function storeAjax(Request $request){
 		
+		$input = [
+			'article_title' => $request->article_title,
+			'article_description' => $request->article_description,
+			'article_type_id' => $request->article_type_id,
+		];
 		
-		$article = new Article;
-		$article->title = $request->article_title;
-		$article->description = $request->article_description;
-		$article->type_id = $request->article_type_id;
+		$rules = [
+			'article_title' => 'required',
+			'article_description' => 'required',
+			'article_type_id' => 'required|integer',
+		];
 		
-		$article->save();
+		$customMessages = [
+			'required' => 'The field  is required',//"'..'"
 		
-		$sort = $request->sort;
-		$direction = $request->direction;
+		];
 		
-		$articles = Article::with('articleType')->sortable([$sort => $direction])->get();
+		$validator = Validator::make($input, $rules/*, $customMessages nebūtinas argumentas*/);
 		
-		$article_info = array(
-			'success_message' => 'Article saved successfuly',
-			'article_title' => $article->title,
-			'article_description' => $article->description,
-			'article_type_id' => $article->type_id,
-			'article_id' => $article->id,
-			'article_type' => $article->articleType->title,
-			'articles' => $articles,
-		);
-		
+		if($validator->fails()){
+			
+			$errors = $validator->messages()->get('*');
+			$article_info = array(
+				'error_message' => 'Nepraejo',
+				'errors' => $errors
+			);			
+			
+			
+		}
+		else{
+			
+			$article = new Article;
+			$article->title = $request->article_title;
+			$article->description = $request->article_description;
+			$article->type_id = $request->article_type_id;
+			
+			$article->save();
+			
+			$sort = $request->sort;
+			$direction = $request->direction;
+			
+			$articles = Article::with('articleType')->sortable([$sort => $direction])->get();
+			
+			$article_info = array(
+				'success_message' => 'Article saved successfuly',
+				'article_title' => $article->title,
+				'article_description' => $article->description,
+				'article_type_id' => $article->type_id,
+				'article_id' => $article->id,
+				'article_type' => $article->articleType->title,
+				'articles' => $articles,
+			);
+		}
 		$jason_response = response()->json($article_info);
 		
 		return $jason_response;	

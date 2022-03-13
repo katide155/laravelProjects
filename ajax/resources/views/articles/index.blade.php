@@ -60,7 +60,7 @@
 						<div class="article-sort" class="btn btn-success" data-sort="articleType.title" data-direction="asc">Article type</div>
 					</th>
 					<th style="width: 180px;">
-						<button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#articleModal">Add article</button>
+						<button type="button" class="btn btn-success" id="create_article" data-bs-toggle="modal" data-bs-target="#articleModal">Add article</button>
 					</th>
 				</tr>
 			</thead>
@@ -115,6 +115,7 @@
 							  </div>
 							  <div class="col-7">
 								<input type="text" id="article_title" name="article_title" class="form-control">
+								<span class="invalid-feedback input_article_title">Article title field is required</span>
 							  </div>
 							</div>
 						  </div>
@@ -129,6 +130,7 @@
 									<option value="{{$articleType->id}}">{{$articleType->title}}</option>
 								@endforeach
 								</select>
+								<span class="invalid-feedback input_article_type_id">Article title field is required</span>
 							  </div>
 							</div>
 						  </div>
@@ -139,6 +141,7 @@
 							  </div>
 							  <div class="col-7">
 								<input type="textarea" id="article_description" name="article_description" class="form-control">
+								<span class="invalid-feedback input_article_description">Article title field is required</span>
 							  </div>
 							</div>
 						  </div>
@@ -272,7 +275,11 @@
 					return $(".template tbody").html();
 				}
 				
-				
+				$('#create_article').click(function(){
+					
+					$('.is-invalid').removeClass('is-invalid');
+					
+				});
 				
 				$('#save_article').click(function(){
 					let article_title;
@@ -297,30 +304,39 @@
 						data: {article_title:article_title, article_description:article_description, article_type_id:article_type_id, sort:sort, direction: direction},
 						success: function(data){
 							
-							let tablerow;
-							$("#articles_table tbody" ).html('');
-							$.each(data.articles, function(key, article){
-								tablerow = createRowFromHtml(article.id, article.title, article.description, article.article_type.title);
+							if($.isEmptyObject(data.error_message)){
+								let tablerow;
+								$("#articles_table tbody" ).html('');
+								$.each(data.articles, function(key, article){
+									tablerow = createRowFromHtml(article.id, article.title, article.description, article.article_type.title);
+									
+									$('#articles_table tbody').append(tablerow);
+									
+								});							
+
+								$('#alert').removeClass("d-none");
+								$('#alert').html(data.success_message);
 								
-								$('#articles_table tbody').append(tablerow);
+								$('#articleModal').hide();
+								$('body').removeClass('modal-open');
+								$('.modal-backdrop').remove();
+								$('body').css({overflow:'auto'});
 								
-							});							
+								$('#article_title').val('');
+								$('#article_description').val('');
+								$('#article_type_id').val('');
+							}else{
+								console.log(data.error_message);
+								console.log(data.errors);
+								$('.is-invalid').removeClass('is-invalid');
+								$.each(data.errors, function(key, error){
+									//console.log(key);
+									$('#'+key).addClass('is-invalid');
+									$('.input_'+key).html(error);
+								});
+							}
 							
-						
-							//let tablerow = createRowFromHtml(data.article_id, data.article_title, data.article_description, data.article_type);
-							
-							//$('#articles_table').append(tablerow);
-							$('#alert').removeClass("d-none");
-							$('#alert').html(data.success_message);
-							
-							$('#articleModal').hide();
-							$('body').removeClass('modal-open');
-							$('.modal-backdrop').remove();
-							$('body').css({overflow:'auto'});
-							
-							$('#article_title').val('');
-							$('#article_description').val('');
-							$('#article_type_id').val('');
+
 						}
 						
 					});
