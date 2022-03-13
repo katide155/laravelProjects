@@ -62,6 +62,7 @@
 					<th style="width: 180px;">
 						<button type="button" class="btn btn-success" id="create_article" data-bs-toggle="modal" data-bs-target="#articleModal">Add article</button>
 					</th>
+					<th style="width: 40px;"><button type="button" class="btn btn-success" id="deleteSelectedArticles">Delete selected</button></th>
 				</tr>
 			</thead>
 			<tbody>
@@ -79,6 +80,7 @@
 
 						<button data-article-id="{{$article->id}}" type="button" class="btn btn-primary dbfl show-article" data-bs-toggle="modal" data-bs-target="#articleShowModal">sh</button>
 					</td>
+					<td><input class="form-check-input col-article-checked" value="{{$article->id}}" name="delete_article[]" type="checkbox"/></td>
 				</tr>
 				@endforeach
 			</tbody>
@@ -96,6 +98,7 @@
 					<button type="button" class="btn btn-danger dbfl delete-article" name="delete_client" >dl</button>
 					<button type="button" class="btn btn-primary dbfl show-article" data-bs-toggle="modal" data-bs-target="#articleShowModal">sh</button>
 				</td>
+				<td><input class="form-check-input col-article-checked" name="delete_article[]" type="checkbox"/></td>
 			</tr>					
 		</table>
 			
@@ -262,6 +265,12 @@
 			
 			$(document).ready(function(){
 				
+				$('[type=checkbox]').prop("checked", false);
+				
+					// $(".col-article-checked").each(function() {
+						// $(this).attr('checked',false);
+					// });	
+				
 				function createRowFromHtml(articleId, articleTitle, articleDescription, articleType){
 					$(".template tr").removeAttr("class");
 					$(".template tr").addClass('article'+articleId);
@@ -272,6 +281,7 @@
 					$(".template .col-article-title").html(articleTitle);
 					$(".template .col-article-description").html(articleDescription);
 					$(".template .col-article-type-id").html(articleType);
+					$(".template .col-article-checked").val(articleId);
 					return $(".template tbody").html();
 				}
 				
@@ -360,6 +370,8 @@
 					});
 					
 				});
+				
+				
 				
 				
 				$(document).on('click', '.show-article', function(){	
@@ -523,6 +535,42 @@
 						});
 					
 					}
+				});
+				
+
+				
+				$('#deleteSelectedArticles').click(function(){
+					let deletionList = [];
+					
+					 $("input:checked").each(function() {
+							deletionList.push($(this).val());
+						});
+					
+					console.log(deletionList);
+					
+					
+					$.ajax({
+						type: 'POST',
+						url: '{{route("article.destroyAjaxMany")}}',
+						data: {deletionList:deletionList},
+						success: function(data){
+							let tablerow;
+							$("#articles_table tbody" ).html('');
+							$.each(data.articles, function(key, article){
+								tablerow = createRowFromHtml(article.id, article.title, article.description, article.article_type.title);
+								
+								$('#articles_table tbody').append(tablerow);
+								$('#alert').removeClass("d-none");
+								$('#alert').html(data.success_message);
+								
+							});
+
+						}
+						
+					});
+					
+
+					
 				});
 				
 			});

@@ -246,4 +246,31 @@ class ArticleController extends Controller
 		return $json_response;
 		
 	}
+	
+		public function destroyAjaxMany(Request $request, Article $article)
+    {
+				
+		
+		$deletionList = $request->deletionList;
+		  
+			foreach($deletionList as $article) {
+
+				Article::where('id', $article)->delete();
+	
+			}
+			
+			$articles = Article::with('articleType')->sortable()->get();
+			
+			$article_info = array(
+				'success_message' => 'Articles deleted successfuly',
+				 'articles' => $articles
+			);
+	
+        
+
+		
+		$jason_response = response()->json($article_info);
+		
+		return $jason_response;
+    }
 }

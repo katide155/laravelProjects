@@ -37,6 +37,7 @@ Route::prefix('articles')->group(function(){
 	//delete
 	 Route::post('destroy/{article}', 'App\Http\Controllers\ArticleController@destroy')->name('article.destroy')->middleware('auth');
 	 Route::post('destroyAjax/{article}', 'App\Http\Controllers\ArticleController@destroyAjax')->name('article.destroyAjax')->middleware('auth');
+	 Route::post('destroyAjaxMany', 'App\Http\Controllers\ArticleController@destroyAjaxMany')->name('article.destroyAjaxMany')->middleware('auth');
 	//show
 	 Route::get('show/{article}', 'App\Http\Controllers\ArticleController@show')->name('article.show')->middleware('auth');	
 	 Route::get('showAjax/{article}', 'App\Http\Controllers\ArticleController@showAjax')->name('article.showAjax')->middleware('auth');
