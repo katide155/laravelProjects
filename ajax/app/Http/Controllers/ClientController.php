@@ -12,12 +12,20 @@ class ClientController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-          $clients = Client::paginate(15);
+		$csrf = $request->csrf;
+		
+		if( isset($csrf) && !empty($csrf) && $csrf == '123456789' ){
+			 $clients = Client::paginate(15);
+			  return response()->json($clients);
+		}
+       
 		  //$clients = Client::all();
 
-        return response()->json($clients);
+        return response()->json(array(
+				'error' => 'error message'
+		));
     }
 
     /**
@@ -28,7 +36,26 @@ class ClientController extends Controller
      */
     public function store(Request $request)
     {
-        //
+		$client = new Client;
+        // $client = Client::create([
+			// 'name' => $request->client_name,
+			// 'surname' => $request->client_surname,
+			// 'description' => $request->client_description,
+		
+		// ]);
+		
+		$client->name = $request->client_name;
+		$client->surname = $request->client_surname;
+		$client->description = $request->client_description;
+		
+		$client->save();
+		
+		return response()->json(array(
+			'success' => 'Client added',
+			'name' => $client->name,
+			'surname' => $client->surname,
+			
+		));
     }
 
     /**
