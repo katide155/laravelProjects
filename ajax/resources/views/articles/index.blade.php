@@ -546,7 +546,7 @@
 							deletionList.push($(this).val());
 						});
 					
-					console.log(deletionList);
+					//console.log(deletionList);
 					
 					
 					$.ajax({
