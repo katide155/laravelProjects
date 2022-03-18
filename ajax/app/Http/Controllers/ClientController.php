@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Client;
 use Illuminate\Http\Request;
+use Validator;
 
 class ClientController extends Controller
 {
@@ -36,26 +37,48 @@ class ClientController extends Controller
      */
     public function store(Request $request)
     {
-		$client = new Client;
-        // $client = Client::create([
-			// 'name' => $request->client_name,
-			// 'surname' => $request->client_surname,
-			// 'description' => $request->client_description,
+
+			$input = [
+			'client_name' => $request->client_name,
+			'client_surname' => $request->client_surname,
+			'client_description' => $request->client_description,
+		];
 		
-		// ]);
+		$rules = [
+			'client_name' => 'required',
+			'client_surname' => 'required',
+			'client_description' => 'required',
+		];
 		
-		$client->name = $request->client_name;
-		$client->surname = $request->client_surname;
-		$client->description = $request->client_description;
+
 		
-		$client->save();
+		$validator = Validator::make($input, $rules);
 		
-		return response()->json(array(
-			'success' => 'Client added',
-			'name' => $client->name,
-			'surname' => $client->surname,
+		if($validator->fails()){
 			
-		));
+			$errors = $validator->messages()->get('*');
+			return response()->json(array(
+				'error_message' => 'Nepraejo',
+				'errors' => $errors
+			));			
+			
+			
+		}else{
+			$client = new Client;
+			
+			$client->name = $request->client_name;
+			$client->surname = $request->client_surname;
+			$client->description = $request->client_description;
+			
+			$client->save();
+			
+			return response()->json(array(
+				'success' => 'Client added',
+				'name' => $client->name,
+				'surname' => $client->surname,
+				
+			));
+		}
     }
 
     /**
@@ -66,7 +89,9 @@ class ClientController extends Controller
      */
     public function show($id)
     {
-        //
+        $client = Client::find($id);
+		
+		return response()->json($client);
     }
 
     /**
@@ -78,7 +103,48 @@ class ClientController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+		
+		$input = [
+			'client_name' => $request->client_name,
+			'client_surname' => $request->client_surname,
+			'client_description' => $request->client_description,
+		];
+		
+		$rules = [
+			'client_name' => 'required',
+			'client_surname' => 'required',
+			'client_description' => 'required',
+		];
+		
+
+		
+		$validator = Validator::make($input, $rules);
+		
+		if($validator->fails()){
+			
+			$errors = $validator->messages()->get('*');
+			return response()->json(array(
+				'error_message' => 'Nepraejo',
+				'errors' => $errors
+			));			
+			
+			
+		}else{
+			
+			$client = Client::find($id);
+			$client->name = $request->client_name;
+			$client->surname = $request->client_surname;
+			$client->description = $request->client_description;
+			
+			$client->save();
+			
+			return response()->json(array(
+				'success' => 'Client edited',
+				'name' => $client->name,
+				'surname' => $client->surname,
+				
+			));
+		}
     }
 
     /**
@@ -89,6 +155,11 @@ class ClientController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $client = Client::find($id);
+		$client->delete();
+		
+		return response()->json(array(
+			'successMessage' => 'Client deleted'
+		));
     }
 }
