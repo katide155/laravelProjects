@@ -15,6 +15,8 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> 
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
         <!-- Styles -->
 
 
@@ -89,7 +91,10 @@
 								<label for="image_url" class="col-form-label">Image url</label>
 							  </div>
 							  <div class="col-7">
-								<input type="text" id="image_url" name="image_url" class="form-control">
+							  
+							  	<select class="form-select select-image" aria-label=".form-select-sm example" name="image_url" id="image_url">
+								</select>
+								{{--<input type="text" id="image_url" name="image_url" class="form-control">--}}
 							  </div>
 							</div>
 						  </div>
@@ -155,7 +160,9 @@
 								<label for="image_url" class="col-form-label">Image url</label>
 							  </div>
 							  <div class="col-7">
-								<input type="text" id="edit_image_url" name="image_url" class="form-control">
+							  	<select class="form-select select-image" aria-label=".form-select-sm example" name="image_url" id="edit_image_url">
+								</select>
+								{{--<input type="text" id="edit_image_url" name="image_url" class="form-control">--}}
 							  </div>
 							</div>
 						  </div>
@@ -265,8 +272,11 @@
 				
 				$.each(data, function(key, image){
 					let imagetag = '<img width="70px" src="'+image.urls.regular+'" alt="test" />';
+					
 					$('.imagesapi').append(imagetag);
 					
+					let imageopt = '<option value="'+image.urls.regular+'">'+image.urls.regular+'</option>';
+					$('.select-image').append(imageopt);
 				});
 			}
 		});
