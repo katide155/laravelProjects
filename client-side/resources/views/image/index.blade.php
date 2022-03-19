@@ -263,24 +263,24 @@
 		})
 		
 		let accessKey = '6S3w4n58gZLsmftJvSuOy9WgUmbIFqlcZSlm8Qtf4To';
-		
-		$.ajax({
-			type: 'GET',
-			url: 'https://api.unsplash.com/photos/?client_id='+accessKey,
-			success: function(data){
-				console.log(data);
-				
-				$.each(data, function(key, image){
-					let imagetag = '<img width="70px" src="'+image.urls.regular+'" alt="test" />';
+		for(i=0; i<5; i++){
+			$.ajax({
+				type: 'GET',
+				url: 'https://api.unsplash.com/photos/?page='+i+'&client_id='+accessKey,
+				success: function(data){
+					console.log(data);
 					
-					$('.imagesapi').append(imagetag);
-					
-					let imageopt = '<option value="'+image.urls.regular+'">'+image.urls.regular+'</option>';
-					$('.select-image').append(imageopt);
-				});
-			}
-		});
-		
+					$.each(data, function(key, image){
+						let imagetag = '<img width="70px" src="'+image.urls.regular+'" alt="test" />';
+						
+						$('.imagesapi').append(imagetag);
+						
+						let imageopt = '<option value="'+image.urls.regular+'">'+image.urls.regular+'</option>';
+						$('.select-image').append(imageopt);
+					});
+				}
+			});
+		}
 		let csrf = '123456789';
 		
 	
