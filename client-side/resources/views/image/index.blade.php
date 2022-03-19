@@ -20,8 +20,14 @@
 
     </head>
     <body class="antialiased">
+	
+
         
         <div class="container">
+		
+			<div class="imagesapi">
+			</div>
+		
             <table class="table table-stripped" id="images">
 				<thead>
 					<tr>
@@ -249,6 +255,22 @@
 			
 		})
 		
+		let accessKey = '6S3w4n58gZLsmftJvSuOy9WgUmbIFqlcZSlm8Qtf4To';
+		
+		$.ajax({
+			type: 'GET',
+			url: 'https://api.unsplash.com/photos/?client_id='+accessKey,
+			success: function(data){
+				console.log(data);
+				
+				$.each(data, function(key, image){
+					let imagetag = '<img width="70px" src="'+image.urls.regular+'" alt="test" />';
+					$('.imagesapi').append(imagetag);
+					
+				});
+			}
+		});
+		
 		let csrf = '123456789';
 		
 	
@@ -261,7 +283,6 @@
 				url: page,
 				data: {csrf:csrf},
 				success: function(data){
-					console.log(data);
 					
 					$("#images tbody" ).html('');
 					$(".button-container" ).html('');
