@@ -35,12 +35,13 @@ class ClientController extends Controller
 			// $i++;
 	   // };
 	   
-	   $clients = Client::leftJoin('companies', function($join){
+	   $clients = Client::select("clients.*","clients.id as clientId","companies.id as companyId")
+			->leftJoin('companies', function($join){
 		   $join->on('companies.title', '=', 'clients.company_title');
-	   })->get();
+	   })->orderBy('clients.id', 'asc')->get();
 	   
 	   
-	  //  dd($clients);
+	  //dd($clients->toArray());
 	   return view('client.test',['clients'=> $clients]);
     }
 
