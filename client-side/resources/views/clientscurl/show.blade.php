@@ -46,8 +46,7 @@
 						<td class="col-article-type-id" style="text-align: left;">{{$client->api_client_id}}</td>
 						<td class="col-article-type-id" style="text-align: left;">{{$client->contact}}</td>
 						<td style="text-align: right;">
-						{{--<button type="button" class="btn btn-success dbfl edit-client" data-bs-toggle="modal" data-bs-target="#editClientModal">ed</button>--}}
-						<a class="btn btn-success" href="{{route('client.edit', $client->api_client_id)}}">ed</a>
+							<button type="button" class="btn btn-success dbfl edit-client" data-bs-toggle="modal" data-bs-target="#editClientModal">ed</button>
 							<button type="button" class="btn btn-danger dbfl delete-client" name="delete_client" >dl</button>
 							<button type="button" class="btn btn-primary dbfl show-client" data-bs-toggle="modal" data-bs-target="#showClientModal">sh</button>
 						</td>

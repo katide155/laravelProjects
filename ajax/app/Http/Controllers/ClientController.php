@@ -49,12 +49,14 @@ class ClientController extends Controller
 			'client_name' => $request->client_name,
 			'client_surname' => $request->client_surname,
 			'client_description' => $request->client_description,
+			'client_company_title' => $request->client_company_title,
 		];
 		
 		$rules = [
 			'client_name' => 'required',
 			'client_surname' => 'required',
 			'client_description' => 'required',
+			'client_company_title' => 'required',
 		];
 		
 
@@ -76,14 +78,14 @@ class ClientController extends Controller
 			$client->name = $request->client_name;
 			$client->surname = $request->client_surname;
 			$client->description = $request->client_description;
+			$client->company_title = $request->client_company_title;
 			
 			$client->save();
 			
 			return response()->json(array(
 				'success' => 'Client added',
 				'name' => $client->name,
-				'surname' => $client->surname,
-				
+				'surname' => $client->surname
 			));
 		}
     }
@@ -115,12 +117,14 @@ class ClientController extends Controller
 			'client_name' => $request->client_name,
 			'client_surname' => $request->client_surname,
 			'client_description' => $request->client_description,
+			'client_company_title' => $request->client_company_title,
 		];
 		
 		$rules = [
 			'client_name' => 'required',
 			'client_surname' => 'required',
 			'client_description' => 'required',
+			'client_company_title' => 'required',
 		];
 		
 
@@ -142,6 +146,7 @@ class ClientController extends Controller
 			$client->name = $request->client_name;
 			$client->surname = $request->client_surname;
 			$client->description = $request->client_description;
+			$client->company_title = $request->client_company_title;
 			
 			$client->save();
 			

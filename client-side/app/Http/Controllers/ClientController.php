@@ -6,6 +6,7 @@ use App\Models\Client;
 use App\Models\Company;
 use App\Http\Requests\StoreClientRequest;
 use App\Http\Requests\UpdateClientRequest;
+use Illuminate\Http\Request;
 
 class ClientController extends Controller
 {
@@ -52,7 +53,7 @@ class ClientController extends Controller
      */
     public function create()
     {
-        //
+         return view('clientscurl.create');
     }
 
     /**
@@ -61,9 +62,36 @@ class ClientController extends Controller
      * @param  \App\Http\Requests\StoreClientRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreClientRequest $request)
+    public function store(Request $request)
     {
-        //
+		$data = [
+			'client_name' => $request->client_name,
+			'client_surname' => $request->client_surname,
+			'client_description' => $request->client_description,
+			'client_company_title' => $request->client_company_title,
+		];
+		
+        $curl = curl_init();
+		curl_setopt_array($curl, array(
+			CURLOPT_URL => "http://127.0.0.1:8000/api/clients",
+			CURLOPT_CUSTOMREQUEST => "POST",
+			CURLOPT_ENCODING => "",
+			CURLOPT_TIMEOUT => 30000,
+			CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+			CURLOPT_RETURNTRANSFER => true,
+			CURLOPT_POSTFIELDS => json_encode($data),
+			CURLOPT_HTTPHEADER => array(
+				'Content-Type: application/json',
+			),
+		));
+		
+		$response = curl_exec($curl);
+		$err = curl_error($curl);
+		curl_close($curl);
+		
+		$this->loadDataFromApi();
+		
+		return redirect()->route('client.index');
     }
 
     /**
@@ -83,9 +111,10 @@ class ClientController extends Controller
      * @param  \App\Models\Client  $client
      * @return \Illuminate\Http\Response
      */
-    public function edit(Client $client)
+    public function edit($id)
     {
-        //
+		$client = Client::where('api_client_id', '=', $id)->first();
+        return view('clientscurl.edit', ['id'=> $id, 'client'=>$client]);
     }
 
     /**
@@ -95,9 +124,36 @@ class ClientController extends Controller
      * @param  \App\Models\Client  $client
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateClientRequest $request, Client $client)
+    public function update(Request $request, $id)
     {
-        //
+       		$data = [
+			'client_name' => $request->client_name,
+			'client_surname' => $request->client_surname,
+			'client_description' => $request->client_description,
+			'client_company_title' => $request->client_company_title,
+		];
+		
+        $curl = curl_init();
+		curl_setopt_array($curl, array(
+			CURLOPT_URL => "http://127.0.0.1:8000/api/clients/".$id,
+			CURLOPT_CUSTOMREQUEST => "PUT",
+			CURLOPT_ENCODING => "",
+			CURLOPT_TIMEOUT => 30000,
+			CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+			CURLOPT_RETURNTRANSFER => true,
+			CURLOPT_POSTFIELDS => json_encode($data),
+			CURLOPT_HTTPHEADER => array(
+				'Content-Type: application/json',
+			),
+		));
+		
+		$response = curl_exec($curl);
+		$err = curl_error($curl);
+		curl_close($curl);
+		
+		$this->loadDataFromApi();
+		
+		return redirect()->route('client.index');
     }
 
     /**
