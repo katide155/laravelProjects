@@ -25,3 +25,7 @@ Route::get('/clients', function () {
 Route::get('/images', function () {
     return view('image.index');
 });
+
+Route::prefix('clie')->group(function(){
+	Route::get('', 'App\Http\Controllers\ClientController@index')->name('client.index');
+});

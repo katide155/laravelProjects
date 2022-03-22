@@ -16,10 +16,17 @@ class ClientController extends Controller
     public function index(Request $request)
     {
 		$csrf = $request->csrf;
+		$clientsAll = $request->clientsAll;
 		
 		if( isset($csrf) && !empty($csrf) && $csrf == '123456789' ){
-			 $clients = Client::paginate(15);
-			  return response()->json($clients);
+			
+			if( isset($clientsAll) && !empty($clientsAll) &&  $clientsAll == 'all'){
+				$clients = Client::all();
+				return response()->json($clients);
+			}else{
+				$clients = Client::paginate(15);
+				return response()->json($clients);
+			}
 		}
        
 		  //$clients = Client::all();

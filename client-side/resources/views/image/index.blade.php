@@ -9,14 +9,14 @@
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
  <!-- Latest compiled and minified CSS -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+
 
 <!-- Latest compiled JavaScript -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> 
-<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
         <!-- Styles -->
 
 
@@ -127,7 +127,7 @@
 				</div>
 				
 				
-						<div class="modal fade" id="editImageModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+				<div class="modal fade" id="editImageModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 				  <div class="modal-dialog modal-dialog-centered">
 					<div class="modal-content">
 					  <div class="modal-header">
@@ -377,7 +377,7 @@
 				data: {image_title:image_title,image_url:image_url,image_alt:image_alt, image_description:image_description},
 				success: function(data){
 					
-					$('#createClientModal').hide();
+					$('#createImageModal').hide();
 					$('body').removeClass('modal-open');
 					$('.modal-backdrop').remove();
 					$('body').css({overflow:'auto'});
@@ -438,12 +438,12 @@
 				url: 'http://127.0.0.1:8000/api/images/'+imageId,
 				data: {csrf:csrf, image_title:image_title,image_url:image_url,image_alt:image_alt, image_description:image_description},
 				success: function(data){
-					
-					$('#editClientModal').hide();
+
+					$('#editImageModal').hide();
 					$('body').removeClass('modal-open');
 					$('.modal-backdrop').remove();
 					$('body').css({overflow:'auto'});
-					console.log(data);
+					// console.log(data);
 						
 				}
 				

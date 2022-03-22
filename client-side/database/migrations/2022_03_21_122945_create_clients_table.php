@@ -19,13 +19,14 @@ class CreateClientsTable extends Migration
             $table->string('surname');
             $table->longText('description');
 			$table->string('company_title');
+			$table->string('api_client_id');
             $table->timestamps();
         });
     }
 
     /**
      * Reverse the migrations.
-     *
+     * php artisan migrate:refresh --path=/database/migrations/2022_03_21_122945_create_clients_table.php
      * @return void
      */
     public function down()
