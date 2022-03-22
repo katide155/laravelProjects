@@ -19,7 +19,7 @@ class CreateClientsTable extends Migration
             $table->string('surname');
             $table->longText('description');
 			$table->string('company_title');
-			$table->string('api_client_id');
+			$table->unsignedBigInteger('api_client_id');
             $table->timestamps();
         });
     }

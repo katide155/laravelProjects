@@ -39,7 +39,7 @@ class ClientController extends Controller
 	   $clients = Client::select("clients.*","clients.id as clientId","companies.id as companyId")
 			->leftJoin('companies', function($join){
 		   $join->on('companies.title', '=', 'clients.company_title');
-	   })->orderBy('clients.id', 'asc')->get();
+	   })->orderBy('clients.api_client_id', 'asc')->get();
 	   
 	   
 	  //dd($clients->toArray());
