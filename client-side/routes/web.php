@@ -36,6 +36,6 @@ Route::prefix('clientscurl')->group(function(){
 	Route::post('store', 'App\Http\Controllers\ClientController@store')->name('client.store');
 	Route::get('edit/{id}', 'App\Http\Controllers\ClientController@edit')->name('client.edit');
 	Route::post('update/{id}', 'App\Http\Controllers\ClientController@update')->name('client.update');
-	Route::get('show/{client}', 'App\Http\Controllers\ClientController@show')->name('client.show');
-	Route::post('delete/{client}', 'App\Http\Controllers\ClientController@destroy')->name('client.delete');
+	Route::get('show/{id}', 'App\Http\Controllers\ClientController@show')->name('client.show');
+	Route::post('delete/{id}', 'App\Http\Controllers\ClientController@destroy')->name('client.delete');
 });

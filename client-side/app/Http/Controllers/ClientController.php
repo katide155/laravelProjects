@@ -162,9 +162,30 @@ class ClientController extends Controller
      * @param  \App\Models\Client  $client
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Client $client)
+    public function destroy($id)
     {
-        //
+        $client = Client::where('api_client_id', '=', $id)->first();
+		
+		$curl = curl_init();
+		curl_setopt_array($curl, array(
+			CURLOPT_URL => "http://127.0.0.1:8000/api/clients/".$id,
+			CURLOPT_CUSTOMREQUEST => "DELETE",
+			CURLOPT_ENCODING => "",
+			CURLOPT_TIMEOUT => 30000,
+			CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+			CURLOPT_RETURNTRANSFER => true,
+			CURLOPT_HTTPHEADER => array(
+				'Content-Type: application/json',
+			),
+		));
+		
+		$response = curl_exec($curl);
+		$err = curl_error($curl);
+		curl_close($curl);
+		
+		$this->loadDataFromApi();
+		
+		return redirect()->route('client.index');
     }
 	
 	public function loadDataFromApi(){
