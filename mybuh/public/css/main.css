@@ -56,9 +56,13 @@ body {
 	border-radius: 5px;
 	font-weight: bold;
 	color: #025D6B;
+	border-color:transparent;
+	
 }
 .pageLink:hover{
 	color:#B8286D;
+	border-color:transparent;
+	cursor: pointer;
 	background: linear-gradient(35deg, #B8A404 0%, rgba(255,255,255,0.85) 60%, rgba(255,255,255,0.85) 1000%);
 }
 
@@ -77,4 +81,69 @@ body {
 .dbfl{
 	display: block;
 	float:left;
+}
+.act-item{
+	border-radius: 50%;
+	padding: 10px 6px;
+	line-height: 0px;
+	margin-right: 6px;
+	position: relative;
+}
+.tooltipas{
+  visibility: hidden;
+  width: 80px;
+  height: 22px;
+  background-color: inherit;
+  color: inherit;
+  border-radius: 10px;
+  padding: 2px;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Position the tooltip */
+  left: 5px;
+  top: -15px;
+  position: absolute;
+  z-index: 1;
+}
+
+.act-item:hover .tooltipas{
+  visibility: visible;
+}
+
+.table-buttons{
+	min-width: 130px;
+	font-size: 13px;
+	padding: 5px 10px;	
+}
+.ceckbox-col{
+	width: 132px;
+}
+.table{
+	border-radius: 5px;
+	overflow: hidden;
+	font-size: 13px;
+}
+
+.table tfoot td{
+	border-bottom-width: 0;
+}
+.btn-container{
+	padding: 2px 9px 2px 15px;
+	display: inline-block;
+	vertical-align: middle;
+}
+.col-item-checked{
+	width: 1.25em;
+	height: 1.25em;
+}
+
+.btn-dangeris{
+	background-color: #B8286D;
+	color: white;
+}
+.btn-dangeris:hover{
+	color: white;
+	background-color: #922057;
 }
