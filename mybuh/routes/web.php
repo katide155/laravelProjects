@@ -25,6 +25,8 @@ Route::prefix('accounts-plan')->group(function(){
 	//Index
 	Route::get('', 'App\Http\Controllers\PlanAccountController@index')->name('accountplan.index')->middleware('auth');
 	Route::get('indexAjax', 'App\Http\Controllers\PlanAccountController@indexAjax')->name('accountplan.indexAjax')->middleware('auth');
+	
+	Route::post('importData', 'App\Http\Controllers\PlanAccountController@importData')->name('accountplan.importData')->middleware('auth');
 	//create
 	 Route::get('create', 'App\Http\Controllers\PlanAccountController@create')->name('accountplan.create')->middleware('auth');
 	 Route::post('store', 'App\Http\Controllers\PlanAccountController@store')->name('accountplan.store')->middleware('auth');

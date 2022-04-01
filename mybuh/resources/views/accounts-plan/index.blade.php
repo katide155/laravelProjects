@@ -29,22 +29,45 @@
 		</div>
 	@endif
 	<div class="row">
-		
-		<div class="col-6">
-		
-			<div class="row g-3 align-items-center searchAjaxForm">
-				<div class="col-auto">
-					<input id="searchValue" class="form-control" type="text"/>
-				</div>
-				<div class="col-auto">
-					<span class="search-feedback"></span>
-					<button class="btn btn-success table-buttons" type="button" id="submitSearch">Ieškoti</button>
-				</div>
-			</div>
-		</div>
-		<div class="col-6 ">	
+		<div class="col-12 mb-2">
 			<div class="pageLink float-end ceckbox-col" id="create_item" data-bs-toggle="modal" data-bs-target="#createAccountModal">Įvesti naują sąskaitą</div>
-		</div>	
+			<div class="row">
+				<div class="col-6">
+					<div class="row g-3 align-items-center searchAjaxForm">
+						<div class="col-auto">
+							<input id="searchValue" class="form-control" type="text"/>
+						</div>
+						<div class="col-auto">
+							<span class="search-feedback"></span>
+							<button class="btn btn-success table-buttons" type="button" id="submitSearch">Ieškoti</button>
+						</div>
+					</div>
+				</div>
+				<div class="col-6 ">
+				
+		            <form action="{{route('accountplan.importData')}}" method="post" enctype="multipart/form-data">
+                       @csrf
+                       <fieldset>
+                           
+                           <div class="input-group">
+                               <input type="file" required class="form-control" name="uploaded_file" id="uploaded_file">
+                               @if ($errors->has('uploaded_file'))
+                                   <p class="text-right mb-0">
+                                       <small class="danger text-muted" id="file-error">{{ $errors->first('uploaded_file') }}</small>
+                                   </p>
+                               @endif
+                               <div class="input-group-append" id="button-addon2">
+                                   <button class="btn btn-success square" type="submit"><i class="ft-upload mr-1"></i>Importuoti sąskaitų planą</button>
+                               </div>
+                           </div>
+						   <label>Pasirinkite failą importavimui  <small class="warning text-muted">{{__('Prašome rinktis tik Excel (.xlsx or .xls) failus')}}</small></label>
+                       </fieldset>
+                   </form>		
+					
+				</div>	
+			</div>	
+			
+		</div>
 		
 			<input id="hidden-sort" type="hidden" value="id"/> 
 			<input id="hidden-direction" type="hidden" value="asc"/> 

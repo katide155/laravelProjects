@@ -7,6 +7,12 @@ use App\Http\Requests\StorePlanAccountRequest;
 use App\Http\Requests\UpdatePlanAccountRequest;
 use Illuminate\Http\Request;
 use Validator;
+use Illuminate\Support\Facades\DB;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Reader\Exception;
+use PhpOffice\PhpSpreadsheet\Writer\Xls;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+
 
 class PlanAccountController extends Controller
 {
@@ -17,6 +23,7 @@ class PlanAccountController extends Controller
      */
     public function index()
     {
+
 		//$articleTypes = Type::all();
 		//$accounts = PlanAccount::with('articleType')->sortable()->get();
 		$accounts = PlanAccount::sortable()->get();
@@ -104,4 +111,42 @@ class PlanAccountController extends Controller
     {
         //
     }
+	
+	function importData(Request $request){
+	   
+       $this->validate($request, [
+           'uploaded_file' => 'required|file|mimes:xls,xlsx'
+
+       ]);
+
+       $the_file = $request->file('uploaded_file');
+
+       try{
+
+           $spreadsheet = IOFactory::load($the_file->getRealPath());
+           $sheet        = $spreadsheet->getActiveSheet();
+           $row_limit    = $sheet->getHighestDataRow();
+           $column_limit = $sheet->getHighestDataColumn();
+           $row_range    = range( 1, $row_limit );
+           $column_range = range( 'D', $column_limit );
+           $startcount = 1;
+
+           $data = array();
+           foreach ( $row_range as $row ) {
+               $data[] = [
+                   'account_number' =>$sheet->getCell( 'A' . $row )->getValue(),
+                   'account_title' => $sheet->getCell( 'B' . $row )->getValue(),
+                   'grouped_account' => $sheet->getCell( 'C' . $row )->getValue(),
+                   'account_type' => $sheet->getCell( 'D' . $row )->getValue(),
+               ];
+               $startcount++;
+           }
+           DB::table('plan_accounts')->insert($data);
+
+       } catch (Exception $e) {
+           $error_code = $e->errorInfo[1];
+           return back()->withErrors('There was a problem uploading the data!');
+       }
+       return back()->with('success_message','Great! Data has been successfully uploaded.');
+   }
 }
