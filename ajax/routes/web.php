@@ -59,3 +59,8 @@ Route::prefix('types')->group(function(){
 	//show
 	 Route::get('show/{type}', 'App\Http\Controllers\TypeController@show')->name('type.show')->middleware('auth');	
 });
+
+
+Route::get('{any}', function(){
+	return view('app');
+})->where('any', '.*');

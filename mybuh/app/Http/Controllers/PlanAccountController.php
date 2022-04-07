@@ -26,7 +26,7 @@ class PlanAccountController extends Controller
 
 		//$articleTypes = Type::all();
 		//$accounts = PlanAccount::with('articleType')->sortable()->get();
-		$accounts = PlanAccount::sortable()->get();
+		$accounts = PlanAccount::sortable()->orderBy('account_number')->paginate(20);
 		return view('accounts-plan.index', ['accounts'=>$accounts]);
     }
 	
@@ -109,8 +109,46 @@ class PlanAccountController extends Controller
      */
     public function destroy(PlanAccount $planAccount)
     {
-        //
+        $planAccount->delete();
+		$response_info = array(
+			'success_message' => 'Sąskaita '.$planAccount->title.' sėkmingai ištrinta',
+ 		);
+		
+		$json_response = response()->json($response_info);
+		
+		return $json_response;
     }
+
+	// -----------------------------------------------
+	// -----------------------------------------------
+	// -----------------------------------------------
+	
+	public function destroyMany(Request $request)
+    {
+		$deletionList = $request->deletionList;
+		  
+			foreach($deletionList as $account) {
+
+				PlanAccount::where('id', $account)->delete();
+	
+			}
+			
+			//$accounts = PlanAccount::with('articleType')->sortable()->get();
+			$accounts = PlanAccount::sortable()->get();
+			
+			$response_info = array(
+				'success_message' => 'Sąskaitos sėkmigai ištrintos',
+				 'accounts' => $accounts
+			);
+		
+		$json_response = response()->json($response_info);
+		
+		return $json_response;
+    }
+	
+	// -----------------------------------------------
+	// ----------DuomenuImportas is excel--------------------
+	// -----------------------------------------------
 	
 	function importData(Request $request){
 	   
@@ -149,4 +187,37 @@ class PlanAccountController extends Controller
        }
        return back()->with('success_message','Great! Data has been successfully uploaded.');
    }
+   
+   	// -----------------------------------------------
+	// ---------Paieška------------
+	// -----------------------------------------------
+   
+   	public function searchAccount(Request $request){
+		
+		$searchValue = $request->searchValue;
+		
+		$accounts = PlanAccount::query()
+		->where('account_number', 'like', "%{$searchValue}%")
+		->orwhere('account_title', 'like', "%{$searchValue}%")
+		->orwhere('account_type', 'like', "%{$searchValue}%")
+		->orwhere('id', 'like', "%{$searchValue}%")
+		->get();
+		
+		if(count($accounts) > 0){
+			$response_info = array(
+				'accounts' => $accounts
+			);
+		}else{
+			
+			$response_info = array(
+				'error_message' => 'Pagal ieškomą frazę "'.$searchValue.'" nieko nerasta!'
+			);			
+			
+		}
+	
+		$json_response = response()->json($response_info);
+		
+		return $json_response;
+		
+	}
 }

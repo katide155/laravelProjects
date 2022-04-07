@@ -80,13 +80,13 @@
 					<tr>
 						<th style="width: 100px;">Veiksmai</th>
 						<th style="width: 160px; ">
-							<div class="sort-list"  data-sort="id" data-direction="asc">Sąskaitos numeris</div>
+							<div class="sort-list"  data-sort="account_number" data-direction="asc">@sortablelink('account_number', 'Sąskaitos numeris')</div>
 						</th>
 						<th style="text-align: left;">
-							<div class="sort-list"  data-sort="account_title" data-direction="asc">Sąskaitos pavadinimas</div>
+							<div class="sort-list"  data-sort="account_title" data-direction="asc">@sortablelink('account_title', 'Sąskaitos pavadinimas')</div>
 						</th>
 						<th style="width: 200px;">
-							<div class="sort-list"  data-sort="itemType.account_title" data-direction="asc">Sąskaitos tipas</div>
+							<div class="sort-list"  data-sort="account_type" data-direction="asc">@sortablelink('account_type', 'Sąskaitos tipas')</div>
 						</th>
 						<th class="ceckbox-col">
 							<button type="button" class="btn btn-success table-buttons" id="selectAll" data-selected="false">Užžymėti visus</button>
@@ -95,17 +95,45 @@
 				</thead>
 				<tbody>
 				@foreach ($accounts as $account)
-					<tr class="item{{$account->id}}">
+					<tr class="item{{$account->id}}" ondblclick="showEditModal({{$account->id}})">
 						<td>
 							<div class="btn-container">
 								<button data-item-id="{{$account->id}}" type="button" class="btn btn-success dbfl edit-item act-item" data-bs-toggle="modal" data-bs-target="#itemEditModal">..<span class="tooltipas">Redaguoti</span></button>
 								
-								<button data-item-id="{{$account->id}}" type="button" class="btn btn-dangeris dbfl delete-item act-item">-<span class="tooltipas">Ištrinti</span></button>
+								<button data-item-id="{{$account->id}}" type="button" class="btn btn-dangeris dbfl delete-item act-item">x<span class="tooltipas">Ištrinti</span></button>
 								
 							</div>
 						</td>
-						<td class="col-item-col1">{{$account->account_number}}</td>
-						<td class="col-item-col2" style="text-align: left;">{{$account->account_title}}</td>
+						<td class="col-item-col1" style="text-align: left;">
+							@if(strlen($account->account_number)==1)
+								<span class="level1">{{$account->account_number}}</span>
+							@elseif(strlen($account->account_number)==2)
+								<span class="level2">{{$account->account_number}}</span>
+							@elseif(strlen($account->account_number)==3)
+								<span class="level3">{{$account->account_number}}</span>
+							@elseif(strlen($account->account_number)==4)
+								<span class="level4">{{$account->account_number}}</span>
+							@elseif(strlen($account->account_number)==5)
+								<span class="level5">{{$account->account_number}}</span>
+							@else
+								<span class="level6">{{$account->account_number}}</span>
+							@endif
+						</td>
+						<td class="col-item-col2" style="text-align: left;">
+							@if(strlen($account->account_number)==1)
+								<span class="level1">{{$account->account_title}}</span>
+							@elseif(strlen($account->account_number)==2)
+								<span class="level2">{{$account->account_title}}</span>
+							@elseif(strlen($account->account_number)==3)
+								<span class="level3">{{$account->account_title}}</span>
+							@elseif(strlen($account->account_number)==4)
+								<span class="level4">{{$account->account_title}}</span>
+							@elseif(strlen($account->account_number)==5)
+								<span class="level5">{{$account->account_title}}</span>
+							@else
+								<span class="level6">{{$account->account_title}}</span>
+							@endif
+						</td>
 						<td class="col-item-col3" style="text-align: left;"></td>
 						<td>
 							<input class="form-check-input col-item-checked" value="{{$account->id}}" name="delete_item[]" type="checkbox"/>
@@ -132,7 +160,6 @@
 						<button type="button" class="btn btn-dangeris dbfl delete-item act-item" name="delete_item" >-</button>
 					</div>
 				</td>
-				<td class="col-item-id"></td>
 				<td class="col-item-col1" style="text-align: left;"></td>
 				<td class="col-item-col2" style="text-align: left;"></td>
 				<td class="col-item-col3" style="text-align: left;"></td>
@@ -338,10 +365,9 @@
 				}
 				
 				$('#create_item').click(function(){
-					
 					$('.is-invalid').removeClass('is-invalid');
-					
 				});
+				
 				
 				$('#save_item').click(function(){
 					let item_title;
@@ -405,45 +431,9 @@
 				});
 				
 				
-				$(document).on('click', '.delete-item', function(){	
+				//showEditModal
+
 				
-					let item_id;
-					item_id = $(this).attr('data-item-id');
-					
-						$.ajax({
-						type: 'POST',
-						url: '/items/destroyAjax/' + item_id,
-						success: function(data){
-							$('#alert').removeClass("d-none");
-							$('#alert').html(data.success_message);
-							$('.item'+item_id).remove();
-						}
-						
-					});
-					
-				});
-				
-				
-				
-				
-				$(document).on('click', '.show-item', function(){	
-				
-					let item_id;
-					item_id = $(this).attr('data-item-id');
-					
-						$.ajax({
-						type: 'GET',
-						url: '/items/showAjax/' + item_id,
-						success: function(data){
-							$('.show-item-id').html(data.item_id);
-							$('.show-item-title').html(data.item_title);
-							$('.show-item-description').html(data.item_description);
-							$('.show-item-type-id').html(data.item_type);
-						}
-						
-					});
-					
-				});
 				
 				
 				$(document).on('click', '.edit-item', function(){	
@@ -453,7 +443,7 @@
 					
 						$.ajax({
 						type: 'GET',
-						url: '/items/showAjax/' + item_id,
+						url: '/accounts-plan/showAjax/' + item_id,
 						success: function(data){
 							$('#edit_item_id').val(data.item_id);
 							$('#edit_item_title').val(data.item_title);
@@ -530,12 +520,9 @@
 						success: function(data){
 							let tablerow;
 							$("#list_table tbody" ).html('');
-							$.each(data.items, function(key, item){
-								//console.log(item.item_type.title);
-								tablerow = createRowFromHtml(item.id, item.title, item.description, item.item_type.title);
-								
+							$.each(data.accounts, function(key, account){
+								tablerow = createRowFromHtml(account.id, account.account_number, account.account_title, account.account_type);
 								$('#list_table tbody').append(tablerow);
-								
 							});
 							
 							console.log(tablerow);
@@ -559,7 +546,7 @@
 						$('.search-feedback').css('display', 'none');
 						$.ajax({
 							type: 'GET',
-							url: '{{route("accountplan.searchAjax")}}',
+							url: '{{route("accountplan.searchAccount")}}',
 							data: {searchValue: searchValue},
 							success: function(data){
 								
@@ -568,8 +555,8 @@
 									$("#list_table" ).show();
 									$('#alert').addClass('d-none');
 									$("#list_table tbody" ).html('');
-									$.each(data.items, function(key, item){
-										tablerow = createRowFromHtml(item.id, item.title, item.description, item.type_id);
+									$.each(data.accounts, function(key, account){
+										tablerow = createRowFromHtml(account.id, account.account_number, account.account_title, account.account_type);
 										
 										$('#list_table tbody').append(tablerow);
 										
@@ -588,32 +575,49 @@
 					}
 				});
 				
-
+				$(document).on('click', '.delete-item', function(){	
+				
+					let item_id;
+					item_id = $(this).attr('data-item-id');
+					
+						$.ajax({
+						type: 'POST',
+						url: '/accounts-plan/destroy/' + item_id,
+						success: function(data){
+							$('#alert').removeClass("d-none");
+							$('#alert').html(data.success_message);
+							$('.item'+item_id).remove();
+						}
+						
+					});
+					
+				});
 				
 				$('#deleteSelectedItems').click(function(){
 					let deletionList = [];
 					
-					 $("input:checked").each(function() {
+					 $(".col-item-checked:checked").each(function() {
 							deletionList.push($(this).val());
 						});
 					
-					//console.log(deletionList);
+					console.log(deletionList);
 					
 					
 					$.ajax({
 						type: 'POST',
-						url: '{{route("accountplan.destroyAjaxMany")}}',
+						url: '{{route("accountplan.destroyMany")}}',
 						data: {deletionList:deletionList},
 						success: function(data){
 							let tablerow;
 							$("#list_table tbody" ).html('');
-							$.each(data.items, function(key, item){
-								tablerow = createRowFromHtml(item.id, item.title, item.description, item.item_type.title);
-								
+							//console.log(data);
+							$.each(data.accounts, function(key, account){
+								tablerow = createRowFromHtml(account.id, account.account_number, account.account_title, account.account_type);
 								$('#list_table tbody').append(tablerow);
+								
 								$('#alert').removeClass("d-none");
 								$('#alert').html(data.success_message);
-								
+							
 							});
 
 						}
