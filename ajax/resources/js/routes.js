@@ -6,7 +6,7 @@ export const routes = [
     {
         name: 'home',
         path: '/products/',
-        component: AllProduct
+        component: AllProducts
     },
     {
         name: 'create',

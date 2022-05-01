@@ -17,8 +17,9 @@ class CreatePlanAccountsTable extends Migration
             $table->id();
 			$table->string('account_number');
 			$table->string('account_title');
-			$table->boolean('grouped_account');
-			$table->integer('account_type');
+			$table->boolean('grouped_account')->nullable()->default(null);
+			$table->unsignedBigInteger('account_type_id')->nullable()->default(null);
+			$table->foreign('account_type_id')->references('id')->on('account_types');
             $table->timestamps();
         });
     }

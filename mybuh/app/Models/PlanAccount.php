@@ -12,5 +12,12 @@ class PlanAccount extends Model
 	
 	use Sortable;
 	
-	public $sortable = ['account_number', 'account_title', 'account_type'];
+	public $sortable = ['account_number', 'account_title', 'account_type_id'];
+	
+	public function planAccountType(){
+		
+		return $this->belongsTo(AccountType::class, 'account_type_id', 'id');
+		
+	}
+	
 }

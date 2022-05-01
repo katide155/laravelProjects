@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\PlanAccount;
+use App\Models\AccountType;
 use App\Http\Requests\StorePlanAccountRequest;
 use App\Http\Requests\UpdatePlanAccountRequest;
 use Illuminate\Http\Request;
@@ -24,17 +25,18 @@ class PlanAccountController extends Controller
     public function index()
     {
 
-		//$articleTypes = Type::all();
-		//$accounts = PlanAccount::with('articleType')->sortable()->get();
-		$accounts = PlanAccount::sortable()->orderBy('account_number')->paginate(20);
-		return view('accounts-plan.index', ['accounts'=>$accounts]);
+		$acountsTypes = AccountType::all();
+		$accounts = PlanAccount::with('planAccountType')->sortable()->orderBy('account_number')->paginate(20);
+		//$accounts = PlanAccount::sortable()->orderBy('account_number')->paginate(20);
+		//dd($accounts->toarray($accounts));
+		return view('accounts-plan.index', ['accounts'=>$accounts, 'acountsTypes'=>$acountsTypes]);
     }
 	
     public function indexAjax()
     {
-		//$articleTypes = Type::all();
-		//$accounts = PlanAccount::with('articleType')->sortable()->get();
-		$accounts = PlanAccount::sortable()->get();
+		$acountsTypes = AccountType::all();
+		$accounts = PlanAccount::with('planAccountType')->sortable()->orderBy('account_number')->paginate(20);
+		
 
 		$response_array = array(
             'accounts' => $accounts
@@ -62,11 +64,75 @@ class PlanAccountController extends Controller
      * @param  \App\Http\Requests\StorePlanAccountRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StorePlanAccountRequest $request)
-    {
-        //
-    }
 
+	public function store(Request $request){
+		
+		$input = [
+			'account_number' => $request->account_number,
+			'account_title' => $request->account_title,
+			'account_type_id' => $request->account_type_id,
+		];
+		
+		$rules = [
+			'account_number' => 'required',
+			'account_title' => 'required',
+			'account_type_id' => 'nullable|integer',
+		];
+		
+		$customMessages = [
+			'required' => 'The field  is required',//"'..'"
+		
+		];
+		
+		$validator = Validator::make($input, $rules/*, $customMessages nebūtinas argumentas*/);
+		
+		if($validator->fails()){
+			
+			$errors = $validator->messages()->get('*');
+			$response_info = array(
+				'error_message' => 'Nepraejo',
+				'errors' => $errors
+			);			
+			
+			
+		}
+		else{
+			
+			$planAccount = new PlanAccount;
+			$planAccount->account_number = $request->account_number;
+			$planAccount->account_title = $request->account_title;
+			$planAccount->account_type_id = $request->account_type_id;
+			$planAccount->grouped_account = $request->grouped_account;
+			
+			$planAccount->save();
+			
+			$sort = $request->sort;
+			$direction = $request->direction;
+			
+			//$accounts = PlanAccount::with('planAccountType')->sortable()->orderBy('account_number')->paginate(20);
+			$accounts = PlanAccount::with('planAccountType')->sortable([$sort => $direction])->paginate(20);
+			
+			//dd($accounts->toarray($accounts));
+			$account_type_title = "";
+			
+			if( isset($planAccount->planAccountType->account_type_title) )
+				$account_type_title = $planAccount->planAccountType->account_type_title;
+			
+			
+			$response_info = array(
+				'success_message' => 'Article saved successfuly',
+				'account_number' => $planAccount->account_number,
+				'account_title' => $planAccount->account_title,
+				'account_type_id' => $planAccount->account_type_id,
+				'plan_account_id' => $planAccount->id,
+				'account_type' => $account_type_title,
+				'accounts' => $accounts,
+			);
+		}
+		$jason_response = response()->json($response_info);
+		
+		return $jason_response;	
+	}
     /**
      * Display the specified resource.
      *
@@ -132,8 +198,12 @@ class PlanAccountController extends Controller
 				PlanAccount::where('id', $account)->delete();
 	
 			}
+
+			$sort = $request->sort;
+			$direction = $request->direction;
 			
-			//$accounts = PlanAccount::with('articleType')->sortable()->get();
+	//		$accounts = PlanAccount::with('planAccountType')->sortable([$sort => $direction])->paginate(20);			
+
 			$accounts = PlanAccount::sortable()->get();
 			
 			$response_info = array(
@@ -171,11 +241,16 @@ class PlanAccountController extends Controller
 
            $data = array();
            foreach ( $row_range as $row ) {
+			   
+			   $account_type_id = $sheet->getCell( 'D' . $row )->getValue();
+			   if(!$account_type_id)
+				   $account_type_id = 1;
+			   
                $data[] = [
                    'account_number' =>$sheet->getCell( 'A' . $row )->getValue(),
                    'account_title' => $sheet->getCell( 'B' . $row )->getValue(),
                    'grouped_account' => $sheet->getCell( 'C' . $row )->getValue(),
-                   'account_type' => $sheet->getCell( 'D' . $row )->getValue(),
+                   'account_type_id' => $account_type_id,
                ];
                $startcount++;
            }
@@ -199,7 +274,7 @@ class PlanAccountController extends Controller
 		$accounts = PlanAccount::query()
 		->where('account_number', 'like', "%{$searchValue}%")
 		->orwhere('account_title', 'like', "%{$searchValue}%")
-		->orwhere('account_type', 'like', "%{$searchValue}%")
+		->orwhere('account_type_id', 'like', "%{$searchValue}%")
 		->orwhere('id', 'like', "%{$searchValue}%")
 		->get();
 		

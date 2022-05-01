@@ -86,7 +86,7 @@
 							<div class="sort-list"  data-sort="account_title" data-direction="asc">@sortablelink('account_title', 'Sąskaitos pavadinimas')</div>
 						</th>
 						<th style="width: 200px;">
-							<div class="sort-list"  data-sort="account_type" data-direction="asc">@sortablelink('account_type', 'Sąskaitos tipas')</div>
+							<div class="sort-list"  data-sort="account_type" data-direction="asc">@sortablelink('account_type_id', 'Sąskaitos tipas')</div>
 						</th>
 						<th class="ceckbox-col">
 							<button type="button" class="btn btn-success table-buttons" id="selectAll" data-selected="false">Užžymėti visus</button>
@@ -99,9 +99,7 @@
 						<td>
 							<div class="btn-container">
 								<button data-item-id="{{$account->id}}" type="button" class="btn btn-success dbfl edit-item act-item" data-bs-toggle="modal" data-bs-target="#itemEditModal">..<span class="tooltipas">Redaguoti</span></button>
-								
 								<button data-item-id="{{$account->id}}" type="button" class="btn btn-dangeris dbfl delete-item act-item">x<span class="tooltipas">Ištrinti</span></button>
-								
 							</div>
 						</td>
 						<td class="col-item-col1" style="text-align: left;">
@@ -134,7 +132,13 @@
 								<span class="level6">{{$account->account_title}}</span>
 							@endif
 						</td>
-						<td class="col-item-col3" style="text-align: left;"></td>
+						<td class="col-item-col3" style="text-align: left;">
+		
+							@isset($account->planAccountType->account_type_title) 
+								{{$account->planAccountType->account_type_title}}
+							@endisset
+							
+						</td>
 						<td>
 							<input class="form-check-input col-item-checked" value="{{$account->id}}" name="delete_item[]" type="checkbox"/>
 						</td>
@@ -156,13 +160,13 @@
 			<tr >
 				<td>
 					<div class="btn-container">
-						<button type="button" class="btn btn-success dbfl edit-item act-item" data-bs-toggle="modal" data-bs-target="#itemEditModal">..</button>
-						<button type="button" class="btn btn-dangeris dbfl delete-item act-item" name="delete_item" >-</button>
+						<button type="button" class="btn btn-success dbfl edit-item act-item" data-bs-toggle="modal" data-bs-target="#itemEditModal">..<span class="tooltipas">Redaguoti</span></button>
+						<button type="button" class="btn btn-dangeris dbfl delete-item act-item">x<span class="tooltipas">Ištrinti</span></button>
 					</div>
 				</td>
-				<td class="col-item-col1" style="text-align: left;"></td>
-				<td class="col-item-col2" style="text-align: left;"></td>
-				<td class="col-item-col3" style="text-align: left;"></td>
+				<td class="col-item-col1" style="text-align: left;"><span></span></td>
+				<td class="col-item-col2" style="text-align: left;"><span></span></td>
+				<td class="col-item-col3" style="text-align: left;"><span></span></td>
 				<td>
 					<input class="form-check-input col-item-checked" name="delete_item[]" type="checkbox"/>
 				</td>
@@ -177,41 +181,50 @@
 						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 					  </div>
 						  <div class="modal-body">
-						  
-
 							<div class="row g-3 align-items-center">
 							  <div class="col-5">
-								<label for="item_title" class="col-form-label">item title</label>
+								<label for="account_number" class="col-form-label">Sąskaitos numeris</label>
 							  </div>
 							  <div class="col-7">
-								<input type="text" id="item_title" name="item_title" class="form-control">
-								<span class="invalid-feedback input_item_title">item title field is required</span>
+								<input type="text" id="account_number" name="account_number" class="form-control">
+								<span class="invalid-feedback input_item_account_number">Laukas „Sąskaitos numeris“ yra privalomas</span>
 							  </div>
 							</div>
 						  </div>
 						  <div class="modal-body">
 							<div class="row g-3 align-items-center">
 							  <div class="col-5">
-								<label for="item_type_id" class="col-form-label">item type</label>
+								<label for="account_title" class="col-form-label">Sąskaitos pavadinimas</label>
 							  </div>
 							  <div class="col-7">
-								<select class="form-select" aria-label=".form-select-sm example" name="item_type_id" id="item_type_id">
-								{{--	@foreach ($itemTypes as $itemType)
-									<option value="{{$itemType->id}}">{{$itemType->title}}</option>
-								@endforeach--}}
+								<input type="textarea" id="account_title" name="account_title" class="form-control">
+								<span class="invalid-feedback input_item_account_title">Laukas „Sąskaitos pavadinimas“ yra privalomas</span>
+							  </div>
+							</div>
+						  </div>
+						  <div class="modal-body">
+							<div class="row g-3 align-items-center">
+							  <div class="col-5">
+								<label for="grouped_account" class="col-form-label">Grupinė sąskaita</label>
+							  </div>
+							  <div class="col-7">
+									<input type="checkbox" name="grouped_account" id="grouped_account">
+									<span>Pažymėti, jei sąskaita grupinė</span>
+							  </div>
+							</div>
+						  </div>
+						  <div class="modal-body">
+							<div class="row g-3 align-items-center">
+							  <div class="col-5">
+								<label for="account_type_id" class="col-form-label">Sąskaitos tipas</label>
+							  </div>
+							  <div class="col-7">
+								<select class="form-select" aria-label=".form-select-sm example" name="account_type_id" id="account_type_id">
+									<option value="" selected></option>
+								@foreach ($acountsTypes as $acountsType)
+									<option value="{{$acountsType->id}}">{{$acountsType->account_type_title}}</option>
+								@endforeach
 								</select>
-								<span class="invalid-feedback input_item_type_id">item title field is required</span>
-							  </div>
-							</div>
-						  </div>
-						  <div class="modal-body">
-							<div class="row g-3 align-items-center">
-							  <div class="col-5">
-								<label for="item_description" class="col-form-label">item description</label>
-							  </div>
-							  <div class="col-7">
-								<input type="textarea" id="item_description" name="item_description" class="form-control">
-								<span class="invalid-feedback input_item_description">item title field is required</span>
 							  </div>
 							</div>
 						  </div>
@@ -336,7 +349,7 @@
 				
 				$('#selectAll').click(function(){
 					let selectedValue = $(this).attr('data-selected');
-					console.log(selectedValue);
+					//console.log(selectedValue);
 					if(selectedValue == 'true'){
 						$(".col-item-checked").each(function() {
 							$(this).prop("checked", false);
@@ -357,9 +370,33 @@
 					$(".template tr").addClass('item'+itemId);
 					$(".template .edit-item").attr('data-item-id', itemId);
 					$(".template .delete-item").attr('data-item-id', itemId);
-					$(".template .col-item-col1").html(tableCol1);
-					$(".template .col-item-col2").html(tableCol2);
-					$(".template .col-item-col3").html(tableCol3);
+					let account_number_length;
+					account_number_length = tableCol1.length;
+					console.log(account_number_length);
+					$(".template tr > td > span").removeAttr("class");
+					switch(account_number_length) {
+							case 1:
+								$(".template tr > td > span").addClass('level1');
+							break;
+							case 2:
+								$(".template tr > td > span").addClass('level2');
+							break;
+							case 3:
+								$(".template tr > td > span").addClass('level3');
+							break;
+							case 4:
+								$(".template tr > td > span").addClass('level4');
+							break;
+							case 5:
+								$(".template tr > td > span").addClass('level5');
+							break;
+							case 6:
+								$(".template tr > td > span").addClass('level6');
+							break;
+						} 
+					$(".template .col-item-col1 span").html(tableCol1);
+					$(".template .col-item-col2 span").html(tableCol2);
+					$(".template .col-item-col3 span").html(tableCol3);
 					$(".template .col-item-checked").val(itemId);
 					return $(".template tbody").html();
 				}
@@ -370,14 +407,18 @@
 				
 				
 				$('#save_item').click(function(){
-					let item_title;
-					let item_description;
-					let item_type_id;
+					let account_number;
+					let account_title;
+					let account_type_id;
+					let grouped_account = 0;
 					
-					item_title = $('#item_title').val();
-					item_description = $('#item_description').val();
-					item_type_id = $('#item_type_id').val();
-					//console.log(item_title + " " + item_description + item_type_id);
+					account_number = $('#account_number').val();
+					account_title = $('#account_title').val();
+					account_type_id = $('#account_type_id').val();
+					
+					if($('#grouped_account').is(":checked"))
+						grouped_account = 1;
+					//console.log(account_number + " " + account_title + "st-" + account_type_id + "-ff-" + grouped_account);
 					
 					let sort;
 					let direction;
@@ -388,31 +429,40 @@
 				
 					$.ajax({
 						type: 'POST',
-						url: '{{route("accountplan.storeAjax")}}',
-						data: {item_title:item_title, item_description:item_description, item_type_id:item_type_id, sort:sort, direction: direction},
+						url: '{{route("accountplan.store")}}',
+						data: {account_number:account_number, account_title:account_title, account_type_id:account_type_id, grouped_account:grouped_account, sort:sort, direction: direction},
 						success: function(data){
-							
+							//console.log(data);
 							if($.isEmptyObject(data.error_message)){
 								let tablerow;
 								$("#list_table tbody" ).html('');
-								$.each(data.items, function(key, item){
-									tablerow = createRowFromHtml(item.id, item.title, item.description, item.item_type.title);
+								//console.log(data.accounts.data);
+								$.each(data.accounts.data, function(key, account){
+									
+									let account_type_title = "";
+									if(!account.plan_account_type == null)
+										account_type_title = account.plan_account_type.account_type_title;
+									tablerow = createRowFromHtml(account.id, account.account_number, account.account_title, account_type_title);
 									
 									$('#list_table tbody').append(tablerow);
 									
-								});							
+									$('#alert').removeClass("d-none");
+									$('#alert').html(data.success_message);
+								
+													
 
-								$('#alert').removeClass("d-none");
-								$('#alert').html(data.success_message);
-								
-								$('#itemModal').hide();
-								$('body').removeClass('modal-open');
-								$('.modal-backdrop').remove();
-								$('body').css({overflow:'auto'});
-								
-								$('#item_title').val('');
-								$('#item_description').val('');
-								$('#item_type_id').val('');
+									$('#alert').removeClass("d-none");
+									$('#alert').html(data.success_message);
+									
+									$('#createAccountModal').hide();
+									$('body').removeClass('modal-open');
+									$('.modal-backdrop').remove();
+									$('body').css({overflow:'auto'});
+									
+									$('#account_number').val('');
+									$('#account_title').val('');
+									$('#account_type_id').val('');
+								});	
 							}else{
 								console.log(data.error_message);
 								console.log(data.errors);
