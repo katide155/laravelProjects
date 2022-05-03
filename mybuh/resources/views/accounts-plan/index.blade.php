@@ -34,12 +34,28 @@
 			<div class="row">
 				<div class="col-6">
 					<div class="row g-3 align-items-center searchAjaxForm">
-						<div class="col-auto">
-							<input id="searchValue" class="form-control" type="text"/>
-						</div>
-						<div class="col-auto">
+						<div class="col-5">
+							<input id="searchValue" class="form-control" type="text" placeholder="Įveskite ieškomą frazę..."/>
 							<span class="search-feedback"></span>
-							<button class="btn btn-success table-buttons" type="button" id="submitSearch">Ieškoti</button>
+						</div>
+					
+						<div class="col-3">
+							<select name="pages_in_sheet" class="form-select" id="pages_in_sheet">
+							{{-- @foreach ($paginationSettings as $pagin)
+									@if($pagin->value == $pages_in_sheet)
+									<option value="{{$pagin->value}}" selected>{{$pagin->title}}</option>
+									@else
+									<option value="{{$pagin->value}}">{{$pagin->title}}</option>	
+									@endif
+							@endforeach --}}
+									<option value="20">20</option>	
+									<option value="50">50</option>
+									<option value="100">100</option>								
+									<option value="1">Visi</option>	
+							</select>
+						</div>
+						<div class="col-4">	
+							<button class="btn btn-success table-buttons" type="button" id="pages-qtt">Pasirinkti</button>
 						</div>
 					</div>
 				</div>
@@ -155,6 +171,9 @@
 					</tr>			
 				</tfoot>
 			</table>
+			
+			<div class="button-container">
+			</div>
 			
 		<table class="template d-none">
 			<tr >
@@ -372,28 +391,8 @@
 					$(".template .delete-item").attr('data-item-id', itemId);
 					let account_number_length;
 					account_number_length = tableCol1.length;
-					console.log(account_number_length);
 					$(".template tr > td > span").removeAttr("class");
-					switch(account_number_length) {
-							case 1:
-								$(".template tr > td > span").addClass('level1');
-							break;
-							case 2:
-								$(".template tr > td > span").addClass('level2');
-							break;
-							case 3:
-								$(".template tr > td > span").addClass('level3');
-							break;
-							case 4:
-								$(".template tr > td > span").addClass('level4');
-							break;
-							case 5:
-								$(".template tr > td > span").addClass('level5');
-							break;
-							case 6:
-								$(".template tr > td > span").addClass('level6');
-							break;
-						} 
+					$(".template tr > td > span").addClass('level'+account_number_length);
 					$(".template .col-item-col1 span").html(tableCol1);
 					$(".template .col-item-col2 span").html(tableCol2);
 					$(".template .col-item-col3 span").html(tableCol3);
@@ -501,6 +500,29 @@
 							$('#edit_item_type_id option').removeAttr('selected');
 							$('#edit_item_type_id').val(data.item_type_id);
 							$('#edit_item_type_id .item'+data.item_type_id).attr("selected", "selected");
+							
+							$(".button-container" ).html('');
+							
+							console.log(data.links);
+							
+							$.each(data.links, function(key, link){
+						
+								let button;
+								if(link.url != null){
+									
+									let active_class = "";
+									if(link.active == true)
+									{
+										let active_class = "active";
+									}
+									
+									button = "<button class='btn btn-primary "+active_class+"' type='button' data-page='"+link.url+"' >"+link.label+"</button>";
+									
+								}
+								
+								$('.button-container').append(button);
+								
+							});	
 						}
 						
 					});
@@ -547,7 +569,8 @@
 				});					
 					
 					
-				$('.sort-list').click(function(){
+				//$('.sort-list').click(function(){
+				$(document).on('click', '.sort-list', function(){
 					let sort;
 					let direction;
 					
@@ -563,19 +586,54 @@
 						$(this).attr('data-direction', 'asc');
 					}
 					
+					console.log("xxx");
+					
 						$.ajax({
 						type: 'GET',
 						url: '{{route("accountplan.indexAjax")}}',
 						data: {sort:sort, direction: direction},
 						success: function(data){
+							
+							
 							let tablerow;
 							$("#list_table tbody" ).html('');
-							$.each(data.accounts, function(key, account){
-								tablerow = createRowFromHtml(account.id, account.account_number, account.account_title, account.account_type);
+
+							$.each(data.accounts.data, function(key, account){
+								
+															
+								let account_type_title = "";
+									if(!account.plan_account_type == null)
+										account_type_title = account.plan_account_type.account_type_title;
+									
+								tablerow = createRowFromHtml(account.id, account.account_number, account.account_title, account_type_title);
 								$('#list_table tbody').append(tablerow);
 							});
 							
-							console.log(tablerow);
+							
+							$(".button-container" ).html('');
+							
+							
+							
+							$.each(data.links, function(key, link){
+						
+								let button;
+								if(link.url != null){
+									
+									let active_class = "";
+									if(link.active == true)
+									{
+										let active_class = "active";
+									}
+									
+									button = "<button class='btn btn-primary "+active_class+"' type='button' data-page='"+link.url+"' >"+link.label+"</button>";
+									
+								}
+								
+								$('.button-container').append(button);
+								
+							});	
+							
+							//console.log(tablerow);
 						}
 					});						
 				});
@@ -605,8 +663,12 @@
 									$("#list_table" ).show();
 									$('#alert').addClass('d-none');
 									$("#list_table tbody" ).html('');
-									$.each(data.accounts, function(key, account){
-										tablerow = createRowFromHtml(account.id, account.account_number, account.account_title, account.account_type);
+									$.each(data.accounts.data, function(key, account){
+										let account_type_title = "";
+										if(!account.plan_account_type == null)
+											account_type_title = account.plan_account_type.account_type_title;
+										
+										tablerow = createRowFromHtml(account.id, account.account_number, account.account_title, account_type_title);
 										
 										$('#list_table tbody').append(tablerow);
 										
@@ -637,6 +699,29 @@
 							$('#alert').removeClass("d-none");
 							$('#alert').html(data.success_message);
 							$('.item'+item_id).remove();
+							
+							$(".button-container" ).html('');
+							
+							console.log(data);
+							
+							$.each(data.links, function(key, link){
+						
+								let button;
+								if(link.url != null){
+									
+									let active_class = "";
+									if(link.active == true)
+									{
+										let active_class = "active";
+									}
+									
+									button = "<button class='btn btn-primary "+active_class+"' type='button' data-page='"+link.url+"' >"+link.label+"</button>";
+									
+								}
+								
+								$('.button-container').append(button);
+								
+							});	
 						}
 						
 					});
@@ -661,8 +746,14 @@
 							let tablerow;
 							$("#list_table tbody" ).html('');
 							//console.log(data);
-							$.each(data.accounts, function(key, account){
-								tablerow = createRowFromHtml(account.id, account.account_number, account.account_title, account.account_type);
+							$.each(data.accounts.data, function(key, account){
+								
+								let account_type_title = "";
+								if(!account.plan_account_type == null)
+									account_type_title = account.plan_account_type.account_type_title;
+
+								
+								tablerow = createRowFromHtml(account.id, account.account_number, account.account_title, account_type_title);
 								$('#list_table tbody').append(tablerow);
 								
 								$('#alert').removeClass("d-none");
@@ -673,8 +764,78 @@
 						}
 						
 					});
+				});
 					
+				$('#pages-qtt').click(function(){
+				//$(document).on('change', '#pages_in_sheet', function(){	
 
+					let pages_in_sheet = $("#pages_in_sheet" ).val();
+					let sort;
+					let direction;
+					
+					sort = $("#hidden-sort").val();
+					direction = $("#hidden-direction").val();
+					
+					if(direction == 'asc'){
+						$(this).attr('data-direction', 'desc');
+					}else{
+						$(this).attr('data-direction', 'asc');
+					}
+					
+					var base_url = window.location.origin;
+					
+					console.log(base_url);
+			
+					$.ajax({
+						type: 'POST',
+						url: '{{route("accountplan.show")}}',
+						data: {pages_in_sheet:pages_in_sheet, sort:sort, direction: direction},
+						success: function(data){
+							let tablerow;
+							$("#list_table tbody" ).html('');
+							console.log(data);
+							$.each(data.accounts.data, function(key, account){
+								
+								let account_type_title = "";
+								if(!account.plan_account_type == null)
+									account_type_title = account.plan_account_type.account_type_title;
+
+								
+								tablerow = createRowFromHtml(account.id, account.account_number, account.account_title, account_type_title);
+								$('#list_table tbody').append(tablerow);
+								
+								$('#alert').removeClass("d-none");
+								$('#alert').html(data.success_message);
+							
+							});
+							
+							
+							$(".button-container" ).html('');
+							
+							console.log(data);
+							
+							$.each(data.accounts.links, function(key, link){
+						
+								let button;
+								if(link.url != null){
+									
+									let active_class = "";
+									if(link.active == true)
+									{
+										let active_class = "active";
+									}
+									
+									button = "<a class='btn btn-primary' "+active_class+"' href='"+base_url+"/accounts-plan?page="+link.label+"&sort="+data.sort+"&direction="+data.direction+"' >"+link.label+"</a>";
+									
+								}
+								
+								$('.button-container').append(button);
+								
+							});
+
+						}
+						
+					});
 					
 				});
 				

@@ -39,7 +39,7 @@ Route::prefix('accounts-plan')->group(function(){
 	 Route::post('destroy/{planAccount}', 'App\Http\Controllers\PlanAccountController@destroy')->name('accountplan.destroy')->middleware('auth');//p
 	 Route::post('destroyMany', 'App\Http\Controllers\PlanAccountController@destroyMany')->name('accountplan.destroyMany')->middleware('auth');//p
 	//show
-	 Route::get('show/{planAccount}', 'App\Http\Controllers\PlanAccountController@show')->name('accountplan.show')->middleware('auth');	
+	 Route::post('show', 'App\Http\Controllers\PlanAccountController@show')->name('accountplan.show')->middleware('auth');	
 	 Route::get('showAjax/{planAccount}', 'App\Http\Controllers\PlanAccountController@showAjax')->name('accountplan.showAjax')->middleware('auth');
 	 Route::get('searchAccount', 'App\Http\Controllers\PlanAccountController@searchAccount')->name('accountplan.searchAccount')->middleware('auth');//p
 });

@@ -24,22 +24,23 @@ class PlanAccountController extends Controller
      */
     public function index()
     {
-
+		$pages_in_sheet = 20;
 		$acountsTypes = AccountType::all();
-		$accounts = PlanAccount::with('planAccountType')->sortable()->orderBy('account_number')->paginate(20);
+		$accounts = PlanAccount::with('planAccountType')->sortable()->orderBy('account_number')->paginate($pages_in_sheet);
 		//$accounts = PlanAccount::sortable()->orderBy('account_number')->paginate(20);
 		//dd($accounts->toarray($accounts));
-		return view('accounts-plan.index', ['accounts'=>$accounts, 'acountsTypes'=>$acountsTypes]);
+		return view('accounts-plan.index', ['accounts'=>$accounts, 'acountsTypes'=>$acountsTypes, 'pages_in_sheet' => $pages_in_sheet]);
     }
 	
     public function indexAjax()
     {
 		$acountsTypes = AccountType::all();
-		$accounts = PlanAccount::with('planAccountType')->sortable()->orderBy('account_number')->paginate(20);
+		$accounts = PlanAccount::with('planAccountType')->sortable()->orderBy('account_number')->paginate($pages_in_sheet);
 		
 
 		$response_array = array(
-            'accounts' => $accounts
+            'accounts' => $accounts,
+			'pages_in_sheet' => $pages_in_sheet
         );
 
 		$json_response = response()->json($response_array);
@@ -139,9 +140,31 @@ class PlanAccountController extends Controller
      * @param  \App\Models\PlanAccount  $planAccount
      * @return \Illuminate\Http\Response
      */
-    public function show(PlanAccount $planAccount)
+    public function show(Request $request)
     {
-        //
+		$pages_in_sheet = $request->pages_in_sheet;
+		$sort = $request->sort;
+		$direction = $request->direction;
+		$count_accounts = count(PlanAccount::all());
+		
+		if($pages_in_sheet == 1) {
+			$pages_in_sheet = $count_accounts;
+		} 
+			$accounts = PlanAccount::with('planAccountType')->sortable([$sort => $direction])->paginate($pages_in_sheet);
+	
+		
+		$acountsTypes = AccountType::all();
+
+
+		$response_array = array(
+            'accounts' => $accounts,
+			'sort' => $sort,
+			'direction' => $direction
+        );
+
+		$json_response = response()->json($response_array);
+		
+		return $json_response;	
     }
 
     /**
@@ -175,8 +198,10 @@ class PlanAccountController extends Controller
      */
     public function destroy(PlanAccount $planAccount)
     {
+		$accounts = PlanAccount::with('planAccountType')->sortable([$sort => $direction])->paginate($pages_in_sheet);
         $planAccount->delete();
 		$response_info = array(
+			
 			'success_message' => 'Sąskaita '.$planAccount->title.' sėkmingai ištrinta',
  		);
 		
@@ -202,9 +227,9 @@ class PlanAccountController extends Controller
 			$sort = $request->sort;
 			$direction = $request->direction;
 			
-	//		$accounts = PlanAccount::with('planAccountType')->sortable([$sort => $direction])->paginate(20);			
+			$accounts = PlanAccount::with('planAccountType')->sortable([$sort => $direction])->paginate(20);			
 
-			$accounts = PlanAccount::sortable()->get();
+			//$accounts = PlanAccount::sortable()->get();
 			
 			$response_info = array(
 				'success_message' => 'Sąskaitos sėkmigai ištrintos',
@@ -276,7 +301,7 @@ class PlanAccountController extends Controller
 		->orwhere('account_title', 'like', "%{$searchValue}%")
 		->orwhere('account_type_id', 'like', "%{$searchValue}%")
 		->orwhere('id', 'like', "%{$searchValue}%")
-		->get();
+		->paginate(20);
 		
 		if(count($accounts) > 0){
 			$response_info = array(
