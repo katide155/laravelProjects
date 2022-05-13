@@ -67,15 +67,17 @@ body {
 }
 
 .homebuttons .pageLink{
-	min-width: 209px;
-	width: 209px;
 	padding: 10px;
-	height: 130px;
+	min-height: 250px;
 	font-size: 1.5rem;
+	display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .homebuttdiv{
 	margin-bottom: 15px;
+
 }
 
 .dbfl{
