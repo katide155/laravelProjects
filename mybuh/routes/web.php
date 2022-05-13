@@ -34,12 +34,12 @@ Route::prefix('accounts-plan')->group(function(){
 	//edit
 	Route::get('edit/{planAccount}', 'App\Http\Controllers\PlanAccountController@edit')->name('accountplan.edit')->middleware('auth');
 	Route::post('update/{planAccount}', 'App\Http\Controllers\PlanAccountController@update')->name('accountplan.update')->middleware('auth');
-	Route::post('updateAjax/{planAccount}', 'App\Http\Controllers\PlanAccountController@updateAjax')->name('accountplan.updateAjax')->middleware('auth');
+	Route::post('updateItem/{planAccount}', 'App\Http\Controllers\PlanAccountController@updateItem')->name('accountplan.updateItem')->middleware('auth');
 	//delete
 	 Route::post('destroy/{planAccount}', 'App\Http\Controllers\PlanAccountController@destroy')->name('accountplan.destroy')->middleware('auth');//p
 	 Route::post('destroyMany', 'App\Http\Controllers\PlanAccountController@destroyMany')->name('accountplan.destroyMany')->middleware('auth');//p
 	//show
 	 Route::post('show', 'App\Http\Controllers\PlanAccountController@show')->name('accountplan.show')->middleware('auth');	
-	 Route::get('showAjax/{planAccount}', 'App\Http\Controllers\PlanAccountController@showAjax')->name('accountplan.showAjax')->middleware('auth');
+	 Route::get('showItem/{planAccount}', 'App\Http\Controllers\PlanAccountController@showItem')->name('accountplan.showItem')->middleware('auth');
 	 Route::get('searchAccount', 'App\Http\Controllers\PlanAccountController@searchAccount')->name('accountplan.searchAccount')->middleware('auth');//p
 });

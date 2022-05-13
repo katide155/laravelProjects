@@ -121,7 +121,7 @@ class PlanAccountController extends Controller
 			
 			
 			$response_info = array(
-				'success_message' => 'Article saved successfuly',
+				'success_message' => 'Account saved successfuly',
 				'account_number' => $planAccount->account_number,
 				'account_title' => $planAccount->account_title,
 				'account_type_id' => $planAccount->account_type_id,
@@ -166,6 +166,28 @@ class PlanAccountController extends Controller
 		
 		return $json_response;	
     }
+	
+	
+	public function showItem(PlanAccount $planAccount)
+	{
+		$account_type_title = "";
+		
+		if( isset($planAccount->planAccountType->account_type_title) )
+			$account_type_title = $planAccount->planAccountType->account_type_title;		
+		
+		$response_info = array(
+			'account_number' => $planAccount->account_number,
+			'account_title' => $planAccount->account_title,
+			'account_type_id' => $planAccount->account_type_id,
+			'grouped_account' => $planAccount->grouped_account,
+			'plan_account_id' => $planAccount->id,
+			'plan_account_type' => $account_type_title,
+		);
+		
+		$jason_response = response()->json($response_info);
+		
+		return $jason_response;	
+	}
 
     /**
      * Show the form for editing the specified resource.
@@ -185,9 +207,73 @@ class PlanAccountController extends Controller
      * @param  \App\Models\PlanAccount  $planAccount
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdatePlanAccountRequest $request, PlanAccount $planAccount)
+    public function updateItem(Request $request, PlanAccount $planAccount)
     {
-        //
+		
+		$input = [
+			'account_number' => $request->account_number,
+			'account_title' => $request->account_title,
+			'account_type_id' => $request->account_type_id,
+		];
+		
+		$rules = [
+			'account_number' => 'required',
+			'account_title' => 'required',
+			'account_type_id' => 'nullable|integer',
+		];
+		
+		$customMessages = [
+			'required' => 'The field  is required',//"'..'"
+		
+		];
+		
+		$validator = Validator::make($input, $rules/*, $customMessages nebūtinas argumentas*/);
+		
+		if($validator->fails()){
+			
+			$errors = $validator->messages()->get('*');
+			$response_info = array(
+				'error_message' => 'Nepraejo',
+				'errors' => $errors
+			);			
+			
+			
+		}
+		else{
+			
+			$planAccount->account_number = $request->account_number;
+			$planAccount->account_title = $request->account_title;
+			$planAccount->account_type_id = $request->account_type_id;
+			$planAccount->grouped_account = $request->grouped_account;
+			
+			$planAccount->save();
+			
+			$sort = $request->sort;
+			$direction = $request->direction;
+			
+			//$accounts = PlanAccount::with('planAccountType')->sortable()->orderBy('account_number')->paginate(20);
+			$accounts = PlanAccount::with('planAccountType')->sortable([$sort => $direction])->paginate(20);
+			
+			//dd($accounts->toarray($accounts));
+			$account_type_title = "";
+			
+			if( isset($planAccount->planAccountType->account_type_title) )
+				$account_type_title = $planAccount->planAccountType->account_type_title;
+			
+			
+			$response_info = array(
+				'success_message' => 'Article saved successfuly',
+				'account_number' => $planAccount->account_number,
+				'account_title' => $planAccount->account_title,
+				'account_type_id' => $planAccount->account_type_id,
+				'plan_account_id' => $planAccount->id,
+				'account_type' => $account_type_title,
+				'accounts' => $accounts,
+			);
+		}
+		$jason_response = response()->json($response_info);
+		
+		return $jason_response;	
     }
 
     /**

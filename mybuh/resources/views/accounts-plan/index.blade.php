@@ -114,7 +114,7 @@
 					<tr class="item{{$account->id}}" ondblclick="showEditModal({{$account->id}})">
 						<td>
 							<div class="btn-container">
-								<button data-item-id="{{$account->id}}" type="button" class="btn btn-success dbfl edit-item act-item" data-bs-toggle="modal" data-bs-target="#itemEditModal">..<span class="tooltipas">Redaguoti</span></button>
+								<button data-item-id="{{$account->id}}" type="button" class="btn btn-success dbfl edit-item act-item" data-bs-toggle="modal" data-bs-target="#editAccountModal">..<span class="tooltipas">Redaguoti</span></button>
 								<button data-item-id="{{$account->id}}" type="button" class="btn btn-dangeris dbfl delete-item act-item">x<span class="tooltipas">Ištrinti</span></button>
 							</div>
 						</td>
@@ -179,7 +179,7 @@
 			<tr >
 				<td>
 					<div class="btn-container">
-						<button type="button" class="btn btn-success dbfl edit-item act-item" data-bs-toggle="modal" data-bs-target="#itemEditModal">..<span class="tooltipas">Redaguoti</span></button>
+						<button type="button" class="btn btn-success dbfl edit-item act-item" data-bs-toggle="modal" data-bs-target="#editAccountModal">..<span class="tooltipas">Redaguoti</span></button>
 						<button type="button" class="btn btn-dangeris dbfl delete-item act-item">x<span class="tooltipas">Ištrinti</span></button>
 					</div>
 				</td>
@@ -257,51 +257,65 @@
 				
 
 
-				<div class="modal fade" id="itemEditModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+				<div class="modal fade" id="editAccountModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 				  <div class="modal-dialog modal-dialog-centered">
 					<div class="modal-content">
 					  <div class="modal-header">
-						<h5 class="modal-title" id="exampleModalLabel">Edit item data</h5>
+						<h5 class="modal-title" id="exampleModalLabel">item data</h5>
 						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 					  </div>
 						  <div class="modal-body">
-							<input type="hidden" id="edit_item_id" name="item_id" />
 							<div class="row g-3 align-items-center">
+							<input type="hidden" id="plan_account_id" name="plan_account_id" />
 							  <div class="col-5">
-								<label for="item_title" class="col-form-label">item title</label>
+								<label for="account_number" class="col-form-label">Sąskaitos numeris</label>
 							  </div>
 							  <div class="col-7">
-								<input type="text" id="edit_item_title" name="item_title" class="form-control">
+								<input type="text" id="edit_account_number" name="account_number" class="form-control">
+								<span class="invalid-feedback input_item_account_number">Laukas „Sąskaitos numeris“ yra privalomas</span>
 							  </div>
 							</div>
 						  </div>
 						  <div class="modal-body">
 							<div class="row g-3 align-items-center">
 							  <div class="col-5">
-								<label for="item_type_id" class="col-form-label">item type</label>
+								<label for="account_title" class="col-form-label">Sąskaitos pavadinimas</label>
 							  </div>
 							  <div class="col-7">
-							  {{--	<select class="form-select" aria-label=".form-select-sm example" name="item_type_id" id="edit_item_type_id">
-								@foreach ($itemTypes as $itemType)
-									<option class="item{{$itemType->id}}" value="{{$itemType->id}}">{{$itemType->title}}</option>
+								<input type="textarea" id="edit_account_title" name="account_title" class="form-control">
+								<span class="invalid-feedback input_item_account_title">Laukas „Sąskaitos pavadinimas“ yra privalomas</span>
+							  </div>
+							</div>
+						  </div>
+						  <div class="modal-body">
+							<div class="row g-3 align-items-center">
+							  <div class="col-5">
+								<label for="grouped_account" class="col-form-label">Grupinė sąskaita</label>
+							  </div>
+							  <div class="col-7">
+									<input type="checkbox" name="grouped_account" id="edit_grouped_account">
+									<span>Pažymėti, jei sąskaita grupinė</span>
+							  </div>
+							</div>
+						  </div>
+						  <div class="modal-body">
+							<div class="row g-3 align-items-center">
+							  <div class="col-5">
+								<label for="account_type_id" class="col-form-label">Sąskaitos tipas</label>
+							  </div>
+							  <div class="col-7">
+								<select class="form-select" aria-label=".form-select-sm example" name="account_type_id" id="edit_account_type_id">
+									<option value="" selected></option>
+								@foreach ($acountsTypes as $acountsType)
+									<option value="{{$acountsType->id}}">{{$acountsType->account_type_title}}</option>
 								@endforeach
-							  </select>--}}
-							  </div>
-							</div>
-						  </div>
-						  <div class="modal-body">
-							<div class="row g-3 align-items-center">
-							  <div class="col-5">
-								<label for="item_description" class="col-form-label">item description</label>
-							  </div>
-							  <div class="col-7">
-								<input type="textarea" id="edit_item_description" name="item_description" class="form-control">
+								</select>
 							  </div>
 							</div>
 						  </div>
 						  <div class="modal-footer">
-							<button type="button" class="btn btn-secondary" id="closeModal" data-bs-dismiss="modal">Close</button>
-							<button class="btn btn-success edit_item" type="submit" name="edit_item" id="edit_item">Edit</button>
+							<button type="button" class="btn btn-secondary" id="closeModal" data-bs-dismiss="modal">Uždaryti</button>
+							<button class="btn btn-success" type="submit" name="edit_item" id="edit_item">Saugoti</button>
 						  </div>
 					</div>
 				  </div>
@@ -490,39 +504,27 @@
 					let item_id;
 					item_id = $(this).attr('data-item-id');
 					
-						$.ajax({
+					$.ajax({
 						type: 'GET',
-						url: '/accounts-plan/showAjax/' + item_id,
+						url: '/accounts-plan/showItem/' + item_id,
 						success: function(data){
-							$('#edit_item_id').val(data.item_id);
-							$('#edit_item_title').val(data.item_title);
-							$('#edit_item_description').val(data.item_description);
-							$('#edit_item_type_id option').removeAttr('selected');
-							$('#edit_item_type_id').val(data.item_type_id);
-							$('#edit_item_type_id .item'+data.item_type_id).attr("selected", "selected");
 							
-							$(".button-container" ).html('');
+							$('#plan_account_id').val(data.plan_account_id);
+							$('#edit_account_number').val(data.account_number);
+							$('#edit_account_title').val(data.account_title);
 							
-							console.log(data.links);
+							let grouped_account = data.grouped_account;
 							
-							$.each(data.links, function(key, link){
-						
-								let button;
-								if(link.url != null){
-									
-									let active_class = "";
-									if(link.active == true)
-									{
-										let active_class = "active";
-									}
-									
-									button = "<button class='btn btn-primary "+active_class+"' type='button' data-page='"+link.url+"' >"+link.label+"</button>";
-									
-								}
-								
-								$('.button-container').append(button);
-								
-							});	
+							if(grouped_account)
+								$('#edit_grouped_account').prop("checked", true);
+							else
+								$('#edit_grouped_account').prop("checked", false);
+							
+							$('#edit_grouped_account').val(data.grouped_account);
+							$('#edit_account_type_id option').removeAttr('selected');
+							$('#edit_account_type_id').val(data.account_type_id);
+							$('#edit_account_type_id .item'+data.account_type_id).attr("selected", "selected");
+							
 						}
 						
 					});
@@ -534,29 +536,32 @@
 				$('#edit_item').click(function(){
 					
 					let item_id;
-					let item_title;
-					let item_description;
-					let item_type_id;
+					let account_number;
+					let account_title;
+					let account_type_id;
 					
-					item_id = $('#edit_item_id').val();
-					item_title = $('#edit_item_title').val();
-					item_description = $('#edit_item_description').val();
-					item_type_id = $('#edit_item_type_id').val();
+					item_id = $('#plan_account_id').val();
+					account_number = $('#edit_account_number').val();
+					account_title = $('#edit_account_title').val();
+					grouped_account = 0;
+					if($('#edit_grouped_account').is(":checked"))
+						grouped_account = 1;
+					account_type_id = $('#edit_account_type_id').val();
 					
 						$.ajax({
 						type: 'POST',
-						url: '/items/updateAjax/' + item_id,
-						data: {item_title:item_title, item_description:item_description, item_type_id:item_type_id},
+						url: '/accounts-plan/updateItem/' + item_id,
+						data: {account_number:account_number, account_title:account_title, grouped_account:grouped_account, account_type_id:account_type_id},
 						success: function(data){
 							
-							$('.item' + item_id + " " + ".col-item-title").html(data.item_title);
-							$('.item' + item_id + " " + ".col-item-description").html(data.item_description);
-							$('.item' + item_id + " " + ".col-item-type-id").html(data.item_type);
+							$('.item' + item_id + " " + ".col-item-title").html(data.account_number);
+							$('.item' + item_id + " " + ".col-item-description").html(data.account_title);
+							$('.item' + item_id + " " + ".col-item-type-id").html(data.account_type_id);
 							
 							$('#alert').removeClass("d-none");
 							$('#alert').html(data.success_message);
 							
-							$('#itemEditModal').hide();
+							$('#editAccountModal').hide();
 							$('body').removeClass('modal-open');
 							$('.modal-backdrop').remove();
 							$('body').css({overflow:'auto'});			
@@ -735,7 +740,7 @@
 							deletionList.push($(this).val());
 						});
 					
-					console.log(deletionList);
+					//console.log(deletionList);
 					
 					
 					$.ajax({
