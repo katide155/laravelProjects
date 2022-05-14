@@ -284,7 +284,7 @@ class PlanAccountController extends Controller
      */
     public function destroy(PlanAccount $planAccount)
     {
-		$accounts = PlanAccount::with('planAccountType')->sortable([$sort => $direction])->paginate($pages_in_sheet);
+		
         $planAccount->delete();
 		$response_info = array(
 			
@@ -355,13 +355,13 @@ class PlanAccountController extends Controller
 			   
 			   $account_type_id = $sheet->getCell( 'D' . $row )->getValue();
 			   if(!$account_type_id)
-				   $account_type_id = 1;
+				   $account_type_id = null;
 			   
                $data[] = [
                    'account_number' =>$sheet->getCell( 'A' . $row )->getValue(),
                    'account_title' => $sheet->getCell( 'B' . $row )->getValue(),
                    'grouped_account' => $sheet->getCell( 'C' . $row )->getValue(),
-                   'account_type_id' => $account_type_id,
+                   'account_type_id' => null /*$account_type_id*/,
                ];
                $startcount++;
            }

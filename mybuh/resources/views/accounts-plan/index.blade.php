@@ -54,9 +54,9 @@
 									<option value="1">Visi</option>	
 							</select>
 						</div>
-						<div class="col-4">	
+						{{-- <div class="col-4">	
 							<button class="btn btn-success table-buttons" type="button" id="pages-qtt">Pasirinkti</button>
-						</div>
+						</div> --}}
 					</div>
 				</div>
 				<div class="col-6 ">
@@ -771,8 +771,8 @@
 					});
 				});
 					
-				$('#pages-qtt').click(function(){
-				//$(document).on('change', '#pages_in_sheet', function(){	
+				//$('#pages-qtt').click(function(){
+				$(document).on('change', '#pages_in_sheet', function(){	
 
 					let pages_in_sheet = $("#pages_in_sheet" ).val();
 					let sort;

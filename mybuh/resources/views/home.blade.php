@@ -26,7 +26,7 @@
 					<a href="{{ route('accountplan.index') }}" class="pageLink">Sąskaitų planas</a>
 				</div>
 				<div class="col homebuttdiv">
-					<a href="{{ route('login') }}" class="pageLink">Vaikų sąrašas</a>
+					<a href="{{ route('child.index') }}" class="pageLink">Vaikų sąrašas</a>
 				</div>
 				<div class="col homebuttdiv">
 					<a href="{{ route('login') }}"  class="pageLink">Nustatymai</a>

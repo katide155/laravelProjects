@@ -30,6 +30,32 @@
 					@endif
 				@else
 					<li class="nav-item dropdown">
+						<a id="navbarDropdown" class="nav-link" href="{{ route('accountplan.index') }}">
+							Sąskaitų planas
+						</a>
+					</li>				
+					<li class="nav-item dropdown">
+						<a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+							Vaikai
+						</a>
+
+						<div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+							<a class="dropdown-item" href="{{ route('child.index') }}">Vaikų sąrašas</a>
+							<a class="dropdown-item" href="{{ route('child.create') }}">Įvesti naują vaiką</a>
+						</div>
+					</li>					
+					<li class="nav-item dropdown">
+						<a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+							Grupės
+						</a>
+
+						<div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+							<a class="dropdown-item" href="{{ route('group.index') }}">Grupių sąrašas</a>
+							<a class="dropdown-item" href="{{ route('group.create') }}">Įvesti naują grupę</a>
+						</div>
+					</li>
+				
+					<li class="nav-item dropdown">
 						<a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
 							{{ Auth::user()->name }}
 						</a>

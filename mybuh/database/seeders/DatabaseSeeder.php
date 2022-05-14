@@ -4,6 +4,8 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\AccountType;
+use App\Models\Group;
+use App\Models\Child;
 
 class DatabaseSeeder extends Seeder
 {
@@ -18,7 +20,9 @@ class DatabaseSeeder extends Seeder
 		
 		
 		$this->call([
-			AccountTypeSeeder::class
+			AccountTypeSeeder::class,
+			GroupSeeder::class,
+			ChildSeeder::class
 		]);
     }
 }
