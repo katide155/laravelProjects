@@ -39,18 +39,20 @@
 			@foreach ($groups as $group)
 			  <tr>
 				<td>{{ $i++; }}</td>
-				<td style="text-align: center;"><div id="group_number_{{$group->id}}">{{$group->group_number}}</td>
+				<td><div id="group_number_{{$group->id}}">{{$group->group_number}}</td>
 				<td style="text-align: left;"><div id="group_title_{{$group->id}}">{{$group->group_title}}</td>
-				<td style="text-align: center;">
-					<!--<a class="btn btn-success dbfl" href="{{route('group.edit',[$group])}}">edit</a>-->
-					<button type="button" class="btn btn-success dbfl" data-bs-id="1" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="setIdToEdit({{$group->id}})">red</button>
-					<div class="dbfl">
-						<form method="post" action="{{route('group.destroy',[$group,$page='index'])}}">
+				<td>
+					<div class="btn-container">
+						<button type="button" class="btn btn-success dbfl edit-item act-item" data-bs-id="1" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="setIdToEdit({{$group->id}})">
+							..<span class="tooltipas">Redaguoti</span>
+						</button>
+
+						<form method="post" action="{{route('group.destroy',[$group,$page='index'])}}" class="dbfl">
 							@csrf
-							<button type="submit" name="delete_child" class="btn btn-danger"><b>-</b></button>
+							<button type="submit" name="delete_child" class="btn btn-dangeris dbfl delete-item act-item">x<span class="tooltipas">Ištrinti</span></button>
 						</form>
+						<a  type="button" href="{{route('group.show',[$group])}}" class="btn btn-primary dbfl show-item act-item"><span class="tooltipas">Rodyti</span></a>
 					</div>
-					<a class="btn btn-primary dbfl" href="{{route('group.show',[$group])}}">rod</a>
 				</td>
 			  </tr>
 			  

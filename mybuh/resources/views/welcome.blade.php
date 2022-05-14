@@ -13,6 +13,9 @@
 				<div class="col homebuttdiv">
 					<a class="pageLink" href="/saskaitaPDF">HTML failo generavimas į PDF su DomPDF</a>
 				</div>
+				<div class="col homebuttdiv">
+					<a class="pageLink" href="/frontend">Pilnai reponsive frontend projektas be Bootstrapo</a>
+				</div>
 			</div>
 		</div>
 	</div>

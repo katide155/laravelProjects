@@ -624,13 +624,15 @@
 								let button;
 								if(link.url != null){
 									
+									
+									
 									let active_class = "";
 									if(link.active == true)
 									{
 										let active_class = "active";
 									}
 									
-									button = "<button class='btn btn-primary "+active_class+"' type='button' data-page='"+link.url+"' >"+link.label+"</button>";
+									button = "<button class='btn btn-success "+active_class+"' type='button' data-page='"+link.url+"' >"+link.label+"</button>";
 									
 								}
 								
@@ -720,7 +722,7 @@
 										let active_class = "active";
 									}
 									
-									button = "<button class='btn btn-primary "+active_class+"' type='button' data-page='"+link.url+"' >"+link.label+"</button>";
+									button = "<button class='btn btn-success "+active_class+"' type='button' data-page='"+link.url+"' >"+link.label+"</button>";
 									
 								}
 								
@@ -809,8 +811,6 @@
 								tablerow = createRowFromHtml(account.id, account.account_number, account.account_title, account_type_title);
 								$('#list_table tbody').append(tablerow);
 								
-								$('#alert').removeClass("d-none");
-								$('#alert').html(data.success_message);
 							
 							});
 							
@@ -830,7 +830,7 @@
 										let active_class = "active";
 									}
 									
-									button = "<a class='btn btn-primary' "+active_class+"' href='"+base_url+"/accounts-plan?page="+link.label+"&sort="+data.sort+"&direction="+data.direction+"' >"+link.label+"</a>";
+									button = "<a class='btn btn-success' "+active_class+"' href='"+base_url+"/accounts-plan?page="+link.label+"&sort="+data.sort+"&direction="+data.direction+"' >"+link.label+"</a>";
 									
 								}
 								

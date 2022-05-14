@@ -68,16 +68,18 @@
 				<td style="text-align: right;"><div id="child_parents_email_{{$child->id}}">{{$child->child_parents_email}}</div></td>
 				<td style="text-align: right;"><div id="child_parents_telno_{{$child->id}}">{{$child->child_parents_telno}}</div></td>
 				<td style="text-align: right;"><div id="child_birthdate_{{$child->id}}">{{$child->child_birthdate}}</div></td>
-				<td style="text-align: right;">
-					<!--<a class="btn btn-success dbfl" href="{{route('child.edit',[$child])}}">edit</a>-->
-					<button type="button" class="btn btn-success dbfl" data-bs-id="1" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="setIdToEdit({{$child->id}})">red</button>
-					<div class="dbfl">
-						<form method="post" action="{{route('child.destroy',[$child])}}">
+				<td>
+					<div class="btn-container">
+						<button type="button" class="btn btn-success dbfl edit-item act-item" data-bs-id="1" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="setIdToEdit({{$child->id}})">
+							..<span class="tooltipas">Redaguoti</span>
+						</button>
+
+						<form method="post" action="{{route('child.destroy',[$child])}}" class="dbfl">
 							@csrf
-							<button type="submit" name="delete_child" class="btn btn-danger"><b>-</b></button>
+							<button type="submit" name="delete_child" class="btn btn-dangeris dbfl delete-item act-item">x<span class="tooltipas">Ištrinti</span></button>
 						</form>
+						<a  type="button" href="{{route('child.show',[$child])}}" class="btn btn-primary dbfl show-item act-item"><span class="tooltipas">Rodyti</span></a>
 					</div>
-					<a class="btn btn-primary dbfl" href="{{route('child.show',[$child])}}">rod</a>
 				</td>
 			  </tr>
 			  
@@ -85,7 +87,7 @@
 
 			</tbody>
 			</table>
-			
+			{!! $children->links() !!}
 			@endif
 			<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 				  <div class="modal-dialog modal-dialog-centered">

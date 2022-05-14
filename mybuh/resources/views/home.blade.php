@@ -29,7 +29,7 @@
 					<a href="{{ route('child.index') }}" class="pageLink">Vaikų sąrašas</a>
 				</div>
 				<div class="col homebuttdiv">
-					<a href="{{ route('login') }}"  class="pageLink">Nustatymai</a>
+					<a href="{{ route('login') }}"  class="pageLink">Nustatymai (kol kas nėra)</a>
 				</div>
 			</div>
 		</div>

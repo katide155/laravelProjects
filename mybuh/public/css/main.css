@@ -91,6 +91,11 @@ body {
 	margin-right: 6px;
 	position: relative;
 }
+.show-item{
+	background: #0d6efd  url("../images/icons/eye.png") no-repeat center center;
+	width: 21px;
+	height: 20px;
+}
 .tooltipas{
   visibility: hidden;
   width: 80px;
